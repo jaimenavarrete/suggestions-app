@@ -1,0 +1,47 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "SuggestionsApp.WebUI/1.0.0": {
+        "dependencies": {
+          "SuggestionsApp.Models": "1.0.0",
+          "SuggestionsApp.Services": "1.0.0"
+        },
+        "runtime": {
+          "SuggestionsApp.WebUI.dll": {}
+        }
+      },
+      "SuggestionsApp.Models/1.0.0": {
+        "runtime": {
+          "SuggestionsApp.Models.dll": {}
+        }
+      },
+      "SuggestionsApp.Services/1.0.0": {
+        "runtime": {
+          "SuggestionsApp.Services.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SuggestionsApp.WebUI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SuggestionsApp.Models/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SuggestionsApp.Services/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

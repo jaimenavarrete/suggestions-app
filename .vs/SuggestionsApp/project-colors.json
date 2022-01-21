@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "96198fe5-4a1c-4237-9277-c12fa73d9765": {
+      "ProjectGuid": "96198fe5-4a1c-4237-9277-c12fa73d9765",
+      "DisplayName": "SuggestionsApp.WebUI",
+      "ColorIndex": 0
+    },
+    "8a5fe98d-2534-411c-82a3-e7b1ecb3f670": {
+      "ProjectGuid": "8a5fe98d-2534-411c-82a3-e7b1ecb3f670",
+      "DisplayName": "SuggestionsApp.Models",
+      "ColorIndex": 1
+    },
+    "90cd496a-100f-4441-9fb7-eefc69217f2c": {
+      "ProjectGuid": "90cd496a-100f-4441-9fb7-eefc69217f2c",
+      "DisplayName": "SuggestionsApp.Services",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Archivos varios",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 3
+}

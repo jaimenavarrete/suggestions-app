@@ -1,0 +1,11 @@
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\bin\Debug\net6.0\SuggestionsApp.Services.deps.json
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\bin\Debug\net6.0\SuggestionsApp.Services.dll
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\bin\Debug\net6.0\ref\SuggestionsApp.Services.dll
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\bin\Debug\net6.0\SuggestionsApp.Services.pdb
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.AssemblyInfoInputs.cache
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.AssemblyInfo.cs
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.csproj.CoreCompileInputs.cache
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.dll
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\ref\SuggestionsApp.Services.dll
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.pdb
