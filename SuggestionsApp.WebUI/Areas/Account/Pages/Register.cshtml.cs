@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using SuggestionsApp.Models.Data.Identity;
 
-namespace SuggestionsApp.WebUI.Areas.Identity.Pages.Account
+namespace SuggestionsApp.WebUI.Areas.Account.Pages
 {
     public class RegisterModel : PageModel
     {

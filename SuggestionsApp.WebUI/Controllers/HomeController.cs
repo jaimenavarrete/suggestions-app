@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
 using System.Diagnostics;
 
@@ -12,6 +13,7 @@ namespace SuggestionsApp.WebUI.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 

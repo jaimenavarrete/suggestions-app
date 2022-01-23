@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.Data.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,12 +10,18 @@ var configutation = builder.Configuration;
 
 var connectionString = configutation.GetConnectionString("SuggestionsApp");
 
+// Identity DB Context
 services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
+// SuggestionsApp DB Context
+services.AddDbContext<SuggestionsAppContext>(options => options.UseSqlServer(connectionString));
+
 services.AddDefaultIdentity<ApplicationUser>(options => 
     options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationContext>();
 
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
 services.AddRazorPages();
+
+
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -34,14 +40,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
+app.UseEndpoints(endpoint =>
 {
-    endpoints.MapControllerRoute(
+    endpoint.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"
     );
-
-    endpoints.MapRazorPages();
+    
+    endpoint.MapRazorPages();
 });
 
 app.Run();

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using SuggestionsApp.Models.Data.Identity;
 
-namespace SuggestionsApp.WebUI.Areas.Identity.Pages.Account
+namespace SuggestionsApp.WebUI.Areas.Account.Pages
 {
     public class ResetPasswordModel : PageModel
     {

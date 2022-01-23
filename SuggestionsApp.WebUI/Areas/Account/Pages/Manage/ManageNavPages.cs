@@ -5,7 +5,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace  SuggestionsApp.WebUI.Areas.Identity.Pages.Account.Manage
+namespace SuggestionsApp.WebUI.Areas.Account.Pages.Manage
 {
     /// <summary>
     ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

@@ -4,7 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace SuggestionsApp.WebUI.Areas.Identity.Pages.Account
+namespace SuggestionsApp.WebUI.Areas.Account.Pages
 {
     /// <summary>
     ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
