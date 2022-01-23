@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SuggestionsApp.DataModels.Models;
+using SuggestionsApp.Models.DataModels;
 using System.Diagnostics;
 
 namespace SuggestionsApp.WebUI.Controllers

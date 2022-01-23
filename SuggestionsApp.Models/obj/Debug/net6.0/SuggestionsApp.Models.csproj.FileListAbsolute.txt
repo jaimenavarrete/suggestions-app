@@ -10,3 +10,5 @@ C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Models\obj\Debug\net6.0\S
 C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Models\obj\Debug\net6.0\SuggestionsApp.Models.dll
 C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Models\obj\Debug\net6.0\ref\SuggestionsApp.Models.dll
 C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Models\obj\Debug\net6.0\SuggestionsApp.Models.pdb
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Models\bin\Debug\net6.0\SuggestionsApp.Models.runtimeconfig.json
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Models\obj\Debug\net6.0\SuggestionsApp.Models.genruntimeconfig.cache
