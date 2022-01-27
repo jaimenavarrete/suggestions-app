@@ -8,6 +8,8 @@ namespace SuggestionsApp.Models.ViewModels
 {
     public class IndexViewModel
     {
-        public SuggestionViewModel SuggestionsList { get; set; } = null!;
+        public List<SuggestionViewModel> SuggestionsList { get; set; } = null!;
+
+        public List<CategoryViewModel> CategoriesList { get; set; } = null!;
     }
 }
