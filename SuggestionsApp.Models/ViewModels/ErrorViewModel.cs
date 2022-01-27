@@ -1,4 +1,4 @@
-namespace SuggestionsApp.Models.DataModels
+namespace SuggestionsApp.Models.ViewModels
 {
     public class ErrorViewModel
     {

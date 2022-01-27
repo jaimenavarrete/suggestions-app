@@ -103,7 +103,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Proyectos\\Backend\\ASP\\SuggestionsApp\\SuggestionsApp.Models\\SuggestionsApp.Models.csproj": {
+                "projectPath": "C:\\Proyectos\\Backend\\ASP\\SuggestionsApp\\SuggestionsApp.Models\\SuggestionsApp.Models.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

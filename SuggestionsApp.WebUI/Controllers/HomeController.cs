@@ -1,20 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SuggestionsApp.Models.Data.Database;
-using SuggestionsApp.Models.DataModels;
+using SuggestionsApp.Models.Interfaces;
+using SuggestionsApp.Models.ViewModels;
 using System.Diagnostics;
 
 namespace SuggestionsApp.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
+        private readonly ISuggestionsService _suggestionsService;
+
+        public HomeController(ISuggestionsService suggestionsService)
         {
+            _suggestionsService = suggestionsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var suggestions = await _suggestionsService.GetSuggestions();
 
-            return View();
+            return View(suggestions);
         }
 
         public IActionResult Privacy()

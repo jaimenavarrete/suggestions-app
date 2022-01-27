@@ -3225,6 +3225,9 @@
       "SuggestionsApp.Services/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "SuggestionsApp.Models": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/SuggestionsApp.Services.dll": {}
         },

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.Data.Identity;
+using SuggestionsApp.Models.Interfaces;
+using SuggestionsApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +17,31 @@ services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connec
 // SuggestionsApp DB Context
 services.AddDbContext<SuggestionsAppContext>(options => options.UseSqlServer(connectionString));
 
-services.AddDefaultIdentity<ApplicationUser>(options => 
-    options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationContext>();
+// Identity implementation and configuration
+services.AddDefaultIdentity<ApplicationUser>(options => {
+    options.SignIn.RequireConfirmedAccount = true;
+
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+
+}).AddEntityFrameworkStores<ApplicationContext>();
 
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
 services.AddRazorPages();
 
+// Dependency Injection - Services
+services.AddTransient<ISuggestionsService, SuggestionsService>();
 
 
 // Configure the HTTP request pipeline.

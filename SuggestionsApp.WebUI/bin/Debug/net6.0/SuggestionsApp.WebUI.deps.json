@@ -2861,6 +2861,9 @@
         }
       },
       "SuggestionsApp.Services/1.0.0": {
+        "dependencies": {
+          "SuggestionsApp.Models": "1.0.0"
+        },
         "runtime": {
           "SuggestionsApp.Services.dll": {}
         },

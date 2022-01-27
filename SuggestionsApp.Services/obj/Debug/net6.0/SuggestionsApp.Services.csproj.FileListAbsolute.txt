@@ -9,3 +9,7 @@ C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0
 C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.dll
 C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\ref\SuggestionsApp.Services.dll
 C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.pdb
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\bin\Debug\net6.0\SuggestionsApp.Models.dll
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\bin\Debug\net6.0\SuggestionsApp.Models.pdb
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.csproj.AssemblyReference.cache
+C:\Proyectos\Backend\ASP\SuggestionsApp\SuggestionsApp.Services\obj\Debug\net6.0\SuggestionsApp.Services.csproj.CopyComplete

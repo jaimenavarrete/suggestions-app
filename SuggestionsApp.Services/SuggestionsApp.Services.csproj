@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SuggestionsApp.Models\SuggestionsApp.Models.csproj" />
+  </ItemGroup>
+
 </Project>
