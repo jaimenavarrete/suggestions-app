@@ -32,6 +32,9 @@ namespace SuggestionsApp.WebUI.Controllers
             _userManager = userManager;
         }
 
+        
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var suggestions = await _suggestionsService.GetSuggestions();
@@ -42,8 +45,15 @@ namespace SuggestionsApp.WebUI.Controllers
             var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
             var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
 
-            var indexModel = new IndexViewModel
+            foreach(var suggestion in suggestionsViewModel)
             {
+                var user = suggestions.First(s => s.Id == suggestion.Id);
+                suggestion.UserName = await GetUserName(user.UserId);
+            }
+
+            IndexViewModel indexModel = new()
+            {
+                SuggestionsAmount = suggestionsViewModel.Count(),
                 SuggestionsList = suggestionsViewModel,
                 CategoriesList = categoriesViewModel,
                 StatesList = statesViewModel
@@ -52,6 +62,7 @@ namespace SuggestionsApp.WebUI.Controllers
             return View(indexModel);
         }
 
+        [HttpGet]
         public IActionResult Privacy()
         {
             return View();
@@ -62,5 +73,20 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+        #region HelperMethods
+
+        private async Task<string> GetUserName(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                throw new Exception("El usuario no existe");
+
+            return user.UserName;
+        }
+
+        #endregion
     }
 }

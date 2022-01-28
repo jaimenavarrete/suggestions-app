@@ -14,7 +14,19 @@
 <div class="row">
     <section class="col-md-9">
         <div class="row mb-5">
-            <p class="col-md-7 h3 text-md-left text-white fw-bold">32 sugerencias</p>
+            @if(Model.SuggestionsAmount == 0)
+            {
+                <p class="col-md-7 h3 text-md-left text-white fw-bold">Sin sugerencias</p>
+            }
+            else if(Model.SuggestionsAmount == 1)
+            {
+                <p class="col-md-7 h3 text-md-left text-white fw-bold">@Model.SuggestionsAmount sugerencia</p>
+            }
+            else
+            {
+                <p class="col-md-7 h3 text-md-left text-white fw-bold">@Model.SuggestionsAmount sugerencias</p>
+            }
+            
             <section class="col-md-5 btn-group" role="group" aria-label="Botones">
                 <button type="button" class="btn btn-light">Nuevos</button>
                 <button type="button" class="btn btn-light">Populares</button>
@@ -41,7 +53,7 @@
 
                             <div class="d-flex justify-content-between">
                                 <p class="text-muted text-uppercase fw-bold mb-0">@suggestion.CategoryName</p>
-                                <span class="badge rounded-pill bg-success py-2 px-4 fs-6">@suggestion.StateName</span>
+                                <span class="badge rounded-pill py-2 px-4 fs-6" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
                             </div>
                         </section>
                     </div>
@@ -67,7 +79,7 @@
                 
                 @foreach(var state in Model.StatesList)
                 {
-                    <li><a href="#" class="d-block text-decoration-none text-black py-2">@state.Name</a></li>
+                    <li><a href="#" class="d-block text-decoration-none text-black py-1">@state.Name</a></li>
                 }
             </ul>
         </article>
@@ -80,7 +92,7 @@
                 
                 @foreach(var category in Model.CategoriesList)
                 {
-                    <li><a href="#" class="d-block text-decoration-none text-black py-2">@category.Name</a></li>
+                    <li><a href="#" class="d-block text-decoration-none text-black py-1">@category.Name</a></li>
                 }
             </ul>
         </article>
