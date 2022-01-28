@@ -64,8 +64,11 @@
 
             <ul class="card-body list-unstyled mb-0">
                 <li class="fw-bold"><a href="#" class="d-block text-decoration-none text-black py-2">Todos</a></li>
-                <li><a href="#" class="d-block text-decoration-none text-black py-2">Estado 1</a></li>
-                <li><a href="#" class="d-block text-decoration-none text-black py-2">Estado 2</a></li>
+                
+                @foreach(var state in Model.StatesList)
+                {
+                    <li><a href="#" class="d-block text-decoration-none text-black py-2">@state.Name</a></li>
+                }
             </ul>
         </article>
 
@@ -74,8 +77,11 @@
 
             <ul class="card-body list-unstyled mb-0">
                 <li class="fw-bold"><a href="#" class="d-block text-decoration-none text-black py-2">Todos</a></li>
-                <li><a href="#" class="d-block text-decoration-none text-black py-2">Estado 1</a></li>
-                <li><a href="#" class="d-block text-decoration-none text-black py-2">Estado 2</a></li>
+                
+                @foreach(var category in Model.CategoriesList)
+                {
+                    <li><a href="#" class="d-block text-decoration-none text-black py-2">@category.Name</a></li>
+                }
             </ul>
         </article>
     </section>

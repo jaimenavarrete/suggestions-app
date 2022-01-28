@@ -42,6 +42,11 @@ services.AddRazorPages();
 
 // Dependency Injection - Services
 services.AddTransient<ISuggestionsService, SuggestionsService>();
+services.AddTransient<ICategoriesService, CategoriesService>();
+services.AddTransient<IStatesService, StatesService>();
+
+// Depencency Injection - AutoMapper
+services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 // Configure the HTTP request pipeline.
