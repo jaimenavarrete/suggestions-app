@@ -18,7 +18,30 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var suggestions = await _suggestionsService.GetSuggestions();
 
-            return View(suggestions);
+            var list = new List<SuggestionViewModel>();
+
+            foreach (var suggestion in suggestions)
+            {
+                list.Add(new SuggestionViewModel
+                {
+                    Id = suggestion.Id,
+                    Title = suggestion.Title,
+                    Description = suggestion.Description,
+                    UpvotesAmount = suggestion.UpvotesAmount,
+                    CategoryName = suggestion.CategoryId.ToString(),
+                    StateName = suggestion.StateId != null ? suggestion.StateId.ToString() : "NULO",
+                    UserName = suggestion.UserId.ToString(),
+                    Date = suggestion.Date,
+                    Approved = suggestion.Approved
+                });
+            }
+
+            var indexModel = new IndexViewModel
+            {
+                SuggestionsList = list
+            };
+
+            return View(indexModel);
         }
 
         public IActionResult Privacy()

@@ -1,8 +1,10 @@
 ﻿namespace SuggestionsApp.Models.ViewModels
 {
-    public class CategoryViewModel
+    public class StateViewModel
     {
         public int? Id { get; set; }
         public string Name { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public string ColorHexCode { get; set; } = null!;
     }
 }

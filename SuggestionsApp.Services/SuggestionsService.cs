@@ -21,9 +21,11 @@ namespace SuggestionsApp.Services
             return suggestions;
         }
 
-        public Task<Suggestion> GetSuggestionById(int id)
+        public async Task<Suggestion> GetSuggestionById(int id)
         {
-            throw new NotImplementedException();
+            var suggestion = await _context.Suggestions.FindAsync(id);
+
+            return suggestion;
         }
 
         public Task<Suggestion> InsertSuggestion(Suggestion suggestion)
