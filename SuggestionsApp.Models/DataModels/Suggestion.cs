@@ -13,7 +13,7 @@
         public int UpvotesAmount { get; set; }
         public int CategoryId { get; set; }
         public int? StateId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public DateTime Date { get; set; }
         public bool Approved { get; set; }
 
