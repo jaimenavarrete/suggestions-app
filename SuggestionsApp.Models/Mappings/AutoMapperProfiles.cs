@@ -13,6 +13,15 @@ namespace SuggestionsApp.Models.Mappings
         }
     }
 
+    public class SuggestionFormMapping : Profile
+    {
+        public SuggestionFormMapping()
+        {
+            CreateMap<Suggestion, SuggestionFormViewModel>();
+            CreateMap<SuggestionFormViewModel, Suggestion>();
+        }
+    }
+
     public class CategoryMapping : Profile
     {
         public CategoryMapping()

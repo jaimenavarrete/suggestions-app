@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
+using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Interfaces;
 
@@ -28,14 +30,20 @@ namespace SuggestionsApp.Services
             return suggestion;
         }
 
-        public Task<Suggestion> InsertSuggestion(Suggestion suggestion)
+        public async Task<Suggestion> InsertSuggestion(Suggestion suggestion)
         {
-            throw new NotImplementedException();
+            _context.Add(suggestion);
+            await _context.SaveChangesAsync();
+
+            return suggestion;
         }
 
-        public Task<Suggestion> UpdateSuggestion(Suggestion suggestion)
+        public async Task<Suggestion> UpdateSuggestion(Suggestion suggestion)
         {
-            throw new NotImplementedException();
+            _context.Update(suggestion);
+            await _context.SaveChangesAsync();
+
+            return suggestion;
         }
 
         public Task<bool> DeleteSuggestion(int id)

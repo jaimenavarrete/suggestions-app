@@ -10,6 +10,6 @@
 
         public int CategoryId { get; set; }
 
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; }
     }
 }
