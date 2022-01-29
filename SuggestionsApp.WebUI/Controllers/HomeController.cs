@@ -32,8 +32,6 @@ namespace SuggestionsApp.WebUI.Controllers
             _userManager = userManager;
         }
 
-        
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -51,7 +49,7 @@ namespace SuggestionsApp.WebUI.Controllers
                 suggestion.UserName = await GetUserName(user.UserId);
             }
 
-            IndexViewModel indexModel = new()
+            IndexViewModel viewModel = new()
             {
                 SuggestionsAmount = suggestionsViewModel.Count(),
                 SuggestionsList = suggestionsViewModel,
@@ -59,7 +57,7 @@ namespace SuggestionsApp.WebUI.Controllers
                 StatesList = statesViewModel
             };
 
-            return View(indexModel);
+            return View(viewModel);
         }
 
         [HttpGet]

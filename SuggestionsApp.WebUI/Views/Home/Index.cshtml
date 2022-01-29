@@ -4,11 +4,11 @@
 }
 
 <div class="text-center text-white mb-5">
-    <h1 class="display-1 fw-bold mt-5 mb-5">Bienvenido a SuggestionsApp</h1>
+    <h1 class="display-1 text-uppercase fw-bold mt-5 mb-5">Bienvenido a SuggestionsApp</h1>
     
     <p class="h4 mb-5">Nuestro sitio de sugerencias te deja a disposición un área en la que podrás dejar las recomendaciones, que como usuario estimes convenientes para nuestra mejora continua.</p>
 
-    <button class="btn btn-outline-light btn-lg mb-5"><i class="las la-plus"></i> Crear sugerencia</button>
+    <a asp-controller="Suggestions" asp-action="CreateSuggestion" class="btn btn-outline-light btn-lg mb-5"><i class="las la-plus"></i> Crear sugerencia</a>
 </div>
 
 <div class="row">
@@ -37,7 +37,7 @@
 
             @foreach(var suggestion in Model.SuggestionsList)
             {
-                <article class="card border-primary overflow-hidden mb-3">
+                <article class="card shadow border-primary overflow-hidden mb-3">
                     <div class="card-body row p-3 d-flex justify-content-between">
                         <section class="col-2 text-center text-primary border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1" role="button" style="max-width: 100px; max-height: 100px">
                             <p class="h5 fw-bold mb-0">@suggestion.UpvotesAmount</p>
@@ -71,7 +71,7 @@
             </form>
         </article>
 
-        <article class="card mb-3 p-1">
+        <article class="card shadow mb-3 p-1">
             <div class="card-header text-uppercase fw-bold bg-white border-bottom border-2 border-primary">Estados</div>
 
             <ul class="card-body list-unstyled mb-0">
@@ -84,7 +84,7 @@
             </ul>
         </article>
 
-        <article class="card mb-3 p-1">
+        <article class="card shadow mb-3 p-1">
             <div class="card-header text-uppercase fw-bold bg-white border-bottom border-2 border-primary">Categorías</div>
 
             <ul class="card-body list-unstyled mb-0">

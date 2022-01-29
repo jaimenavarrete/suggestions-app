@@ -1,0 +1,43 @@
+﻿@model SuggestionFormViewModel
+@{
+    ViewData["Title"] = "CreateSuggestion";
+}
+
+<h1 class="display-1 text-center text-white fw-bold my-5">Crear sugerencia</h1>
+
+<section class="card shadow py-5">
+    <form asp-controller="Suggestions" asp-action="CreateSuggestion" method="post" class="card-body w-75 mx-auto">
+        <fieldset class="mb-5">
+            <legend class="fs-5 fw-bold text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Título de la sugerencia</legend>
+            <div class="form-group">
+                <label class="col-form-label" for="Title">Define el título de la forma más legible posible. (Max 100 caracteres):</label>
+                <input type="text" asp-for="Title" class="form-control" placeholder="Título">
+            </div>
+        </fieldset>
+
+        <fieldset class="form-group mb-5">
+            <legend class="fs-5 fw-bold text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Categoría de la sugerencia</legend>
+
+            @foreach(var category in Model!.Categories)
+            {
+                <div class="form-check">
+                    <label class="col-form-label">
+                        <input type="radio" asp-for="CategoryId" class="form-check-input" value="@category.Id" data-com.bitwarden.browser.user-edited="yes">
+                        @category.Name
+                    </label>
+                </div>
+            }
+
+        </fieldset>
+
+        <fieldset class="mb-5">
+            <legend class="fs-5 fw-bold text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Descripción de la sugerencia</legend>
+            <div class="form-group">
+                <label for="Description" class="col-form-label">Una descripción puede ayudar a los demás usuarios a comprender de una mejor manera tu sugerencia.</label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+            </div>
+        </fieldset>
+
+        <button class="btn btn-lg btn-primary"><i class="las la-plus"></i> Crear sugerencia</button>
+    </form>
+</section>

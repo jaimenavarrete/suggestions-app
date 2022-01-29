@@ -72,7 +72,7 @@ app.UseEndpoints(endpoint =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"
     );
-    
+
     endpoint.MapRazorPages();
 });
 

@@ -17,8 +17,8 @@ body {
     background-attachment: fixed;
     background-image: url('./../img/bg_image.jpg');
     background-size: cover;
-    min-height: 100vh;
 
+    min-height: 100vh;
     position: relative;
 }
 
