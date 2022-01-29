@@ -3,6 +3,7 @@ using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.Interfaces;
 using SuggestionsApp.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,11 @@ services.AddDefaultIdentity<ApplicationUser>(options => {
     options.User.RequireUniqueEmail = true;
 
 }).AddEntityFrameworkStores<ApplicationContext>();
+
+services.ConfigureApplicationCookie(config =>
+{
+    config.Cookie.Name = "Identity.Cookie";
+});
 
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
 services.AddRazorPages();
