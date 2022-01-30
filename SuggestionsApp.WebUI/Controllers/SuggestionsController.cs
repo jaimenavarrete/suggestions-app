@@ -101,6 +101,15 @@ namespace SuggestionsApp.WebUI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DeleteSuggestion([FromForm] int id)
+        {
+            var result = await _suggestionsService.DeleteSuggestion(id);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         #region HelperMethods
 
         private async Task<List<CategoryViewModel>> GetCategoriesViewModel()

@@ -46,9 +46,17 @@ namespace SuggestionsApp.Services
             return suggestion;
         }
 
-        public Task<bool> DeleteSuggestion(int id)
+        public async Task<bool> DeleteSuggestion(int id)
         {
-            throw new NotImplementedException();
+            var suggestion = await GetSuggestionById(id);
+
+            if(suggestion != null)
+            {
+                _context.Suggestions.Remove(suggestion);
+                await _context.SaveChangesAsync();
+            }
+
+            return true;
         }        
     }
 }

@@ -41,6 +41,7 @@ services.AddDefaultIdentity<ApplicationUser>(options => {
 services.ConfigureApplicationCookie(config =>
 {
     config.Cookie.Name = "Identity.Cookie";
+    config.LoginPath = "/Account/Login";
 });
 
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
