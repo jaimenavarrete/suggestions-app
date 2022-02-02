@@ -28,12 +28,12 @@ namespace SuggestionsApp.Services
             return state;
         }
 
-        public Task<State> InsertState(State state)
+        public Task<bool> InsertState(State state)
         {
             throw new NotImplementedException();
         }
 
-        public Task<State> UpdateState(State state)
+        public Task<bool> UpdateState(State state)
         {
             throw new NotImplementedException();
         }

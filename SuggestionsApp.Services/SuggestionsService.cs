@@ -30,20 +30,20 @@ namespace SuggestionsApp.Services
             return suggestion;
         }
 
-        public async Task<Suggestion> InsertSuggestion(Suggestion suggestion)
+        public async Task<bool> InsertSuggestion(Suggestion suggestion)
         {
             _context.Add(suggestion);
-            await _context.SaveChangesAsync();
+            var affectedRows = await _context.SaveChangesAsync();
 
-            return suggestion;
+            return affectedRows > 0;
         }
 
-        public async Task<Suggestion> UpdateSuggestion(Suggestion suggestion)
+        public async Task<bool> UpdateSuggestion(Suggestion suggestion)
         {
             _context.Update(suggestion);
-            await _context.SaveChangesAsync();
+            var affectedRows = await _context.SaveChangesAsync();
 
-            return suggestion;
+            return affectedRows > 0;
         }
 
         public async Task<bool> DeleteSuggestion(int id)
@@ -53,10 +53,12 @@ namespace SuggestionsApp.Services
             if(suggestion != null)
             {
                 _context.Suggestions.Remove(suggestion);
-                await _context.SaveChangesAsync();
+                var affectedRows = await _context.SaveChangesAsync();
+
+                return affectedRows > 0;
             }
 
-            return true;
+            return false;
         }        
     }
 }

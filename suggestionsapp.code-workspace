@@ -1,0 +1,17 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/.vs": true,
+            "**/.vscode": true,
+            "**/*.user": true,
+            "**/bin": true,
+            "**/obj": true,
+            "**/serviceDependencies.*": true
+        }
+    }
+}

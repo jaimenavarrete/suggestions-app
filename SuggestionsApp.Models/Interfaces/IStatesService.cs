@@ -11,8 +11,8 @@ namespace SuggestionsApp.Models.Interfaces
     {
         Task<IEnumerable<State>> GetStates();
         Task<State> GetStateById(int id);
-        Task<State> InsertState(State state);
-        Task<State> UpdateState(State state);
+        Task<bool> InsertState(State state);
+        Task<bool> UpdateState(State state);
         Task<bool> DeleteState(int id);
     }
 }

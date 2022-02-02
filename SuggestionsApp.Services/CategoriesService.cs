@@ -28,12 +28,12 @@ namespace SuggestionsApp.Services
             return category;
         }
 
-        public Task<Category> InsertCategory(Category suggestion)
+        public Task<bool> InsertCategory(Category suggestion)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Category> UpdateCategory(Category suggestion)
+        public Task<bool> UpdateCategory(Category suggestion)
         {
             throw new NotImplementedException();
         }

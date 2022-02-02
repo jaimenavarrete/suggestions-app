@@ -9,6 +9,7 @@ using SuggestionsApp.Models.ViewModels;
 
 namespace SuggestionsApp.WebUI.Controllers
 {
+    [Authorize]
     public class SuggestionsController : Controller
     {
         private readonly ISuggestionsService _suggestionsService;
@@ -29,13 +30,13 @@ namespace SuggestionsApp.WebUI.Controllers
             _userManager = userManager;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> CreateSuggestion()
         {
@@ -47,7 +48,6 @@ namespace SuggestionsApp.WebUI.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateSuggestion(SuggestionFormViewModel viewModel)
         {
@@ -57,12 +57,11 @@ namespace SuggestionsApp.WebUI.Controllers
             suggestion.Date = DateTime.UtcNow;
             suggestion.UserId = _userManager.GetUserId(User);
 
-            var result = await _suggestionsService.InsertSuggestion(suggestion);
+            var succeeded = await _suggestionsService.InsertSuggestion(suggestion);
 
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> EditSuggestion(int id)
         {
@@ -83,7 +82,6 @@ namespace SuggestionsApp.WebUI.Controllers
             return View("CreateSuggestion", viewModel);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> EditSuggestion(SuggestionFormViewModel viewModel)
         {
@@ -96,16 +94,15 @@ namespace SuggestionsApp.WebUI.Controllers
             suggestion.CategoryId = viewModel.CategoryId;
             suggestion.Description = viewModel.Description;
 
-            var result = await _suggestionsService.UpdateSuggestion(suggestion);
+            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
 
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteSuggestion([FromForm] int id)
         {
-            var result = await _suggestionsService.DeleteSuggestion(id);
+            var succeeded = await _suggestionsService.DeleteSuggestion(id);
 
             return RedirectToAction("Index", "Home");
         }
