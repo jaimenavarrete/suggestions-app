@@ -39,7 +39,10 @@
             {
                 <div class="alert alert-dismissible alert-success">
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    <p class="mb-0"><strong>Bien hecho!</strong> @TempData["success"]</p>
+                    <p class="mb-0">
+                        <i class="las la-check fs-4"></i>
+                        <strong>Bien hecho!</strong> @TempData["success"]
+                    </p>
                 </div>
             }
 
@@ -53,10 +56,13 @@
                             <p class="fw-bold text-uppercase mb-0">Votar</p>
                         </aside>
 
-                        <section class="col-10 d-flex flex-column justify-content-between">
-                            <header class="border-bottom border-2 border-primary mb-2 pb-2">
-                                <h5 class="card-title mb-2">@suggestion.Title</h5>
-                                <h6 class="card-subtitle text-muted">@suggestion.UserName</h6>
+                        <section class="col-10 d-flex flex-column justify-content-between p-0">
+                            <header class="border-bottom border-2 border-primary d-flex justify-content-between align-items-start mb-3 pb-3">
+                                <div>
+                                    <h5 class="card-title mb-2">@suggestion.Title</h5>
+                                    <h6 class="card-subtitle text-muted">@suggestion.UserName</h6>
+                                </div>
+                                <span class="badge rounded-pill py-2 px-4 fs-6" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
                             </header>
 
                             <footer class="d-flex justify-content-between align-items-center">
@@ -66,9 +72,8 @@
                                     <a href="/Suggestions/EditSuggestion/@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
                                     <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
                                         <input type="hidden" value="@suggestion.Id" name="id" />
-                                        <button class="bg-white border-0 p-0"><i class="las la-trash text-muted fs-3 px-1"></i></button>
+                                        <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
                                     </form>
-                                    <span class="badge rounded-pill py-2 px-4 fs-6" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
                                 </div>
                             </footer>
                         </section>
@@ -88,7 +93,7 @@
         </article>
 
         <article class="card shadow mb-3 p-1">
-            <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary">Estados</div>
+            <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary"><i class="las la-flag fs-4"></i> Estados</div>
 
             <ul class="card-body list-unstyled mb-0">
                 <li class="fw-bold"><a href="#" class="d-block text-decoration-none text-black py-2">Todos</a></li>
@@ -101,7 +106,7 @@
         </article>
 
         <article class="card shadow mb-3 p-1">
-            <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary">Categorías</div>
+            <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary"><i class="las la-tags fs-4"></i> Categorías</div>
 
             <ul class="card-body list-unstyled mb-0">
                 <li class="fw-bold"><a href="#" class="d-block text-decoration-none text-black py-2">Todos</a></li>

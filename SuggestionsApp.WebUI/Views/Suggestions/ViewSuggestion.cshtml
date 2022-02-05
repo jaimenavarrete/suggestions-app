@@ -9,7 +9,20 @@
 {
     <div class="alert alert-dismissible alert-success">
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        <p class="mb-0"><strong>Bien hecho!</strong> @TempData["success"]</p>
+        <p class="mb-0">
+            <i class="las la-check fs-4"></i>
+            <strong>Bien hecho!</strong> @TempData["success"]
+        </p>
+    </div>
+}
+
+@if(!Model.Approved)
+{
+    <div class="alert alert-warning">
+        <p class="mb-0">
+            <i class="las la-exclamation-triangle fs-4"></i>
+            <strong>Aprobación en proceso!</strong> Actualmente esta sugerencia no se podrá visualizar por los usuarios.
+        </p>
     </div>
 }
 
@@ -42,10 +55,11 @@
             <footer class="d-flex justify-content-between align-items-center">
                 <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @Model.CategoryName</p>
                 <div class="d-flex align-items-center">
+                    <a asp-controller="Home" asp-action="Index"><i class="las la-arrow-left text-primary fs-3 px-1"></i></a>
                     <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
                     <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
                         <input type="hidden" value="@Model.Id" name="id" />
-                        <button class="bg-white border-0 p-0"><i class="las la-trash text-muted fs-3 px-1"></i></button>
+                        <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
                     </form>
                 </div>
             </footer>
@@ -53,18 +67,21 @@
     </div>
 </section>
 
-<section class="card shadow overflow-hidden mb-4">
-    <div class="card-body row p-0">
-        <div class="col-1 d-flex justify-content-center align-items-center" style="background-color:@Model.StateColorHexCode">
-            <i class="las la-flag fs-1 text-white m-0"></i>
-        </div>
+@if(Model.StateId != null)
+{
+    <section class="card shadow overflow-hidden mb-4">
+        <div class="card-body row p-0">
+            <div class="col-1 d-flex justify-content-center align-items-center" style="background-color:@Model.StateColorHexCode">
+                <i class="las la-flag fs-1 text-white m-0"></i>
+            </div>
 
-        <div class="col-11 p-4">
-            <h3 class="h4 fw-bold border-bottom-1 border-danger" style="color:@Model.StateColorHexCode;">@Model.StateName</h3>
-            <p class="mb-0">@Model.StateDescription</p>
+            <div class="col-11 p-4">
+                <h3 class="h4 fw-bold border-bottom-1 border-danger" style="color:@Model.StateColorHexCode;">@Model.StateName</h3>
+                <p class="mb-0">@Model.StateDescription</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+}
 
 <section class="card shadow border-0 overflow-hidden p-4">
     <h3 class="card-title h4 text-primary fw-bold mb-4">Definir estado de la sugerencia</h3>

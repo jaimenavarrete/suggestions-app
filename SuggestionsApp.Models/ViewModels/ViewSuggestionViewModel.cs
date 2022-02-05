@@ -12,17 +12,19 @@
 
         public string CategoryName { get; set; } = null!;
 
-        public int StateId { get; set; }
+        public int? StateId { get; set; }
 
-        public string StateName { get; set; } = null!;
+        public string? StateName { get; set; }
 
-        public string StateDescription { get; set; } = null!;
+        public string? StateDescription { get; set; }
 
-        public string StateColorHexCode { get; set; } = null!;
+        public string? StateColorHexCode { get; set; }
 
         public string UserName { get; set; } = null!;
 
         public DateTime Date { get; set; }
+
+        public bool Approved { get; set; }
 
         public List<StateViewModel> States { get; set; } = null!;
     }

@@ -66,7 +66,7 @@ namespace SuggestionsApp.WebUI.Controllers
             var suggestion = _mapper.Map<Suggestion>(viewModel);
             suggestion.UpvotesAmount = 0;
             suggestion.Approved = false;
-            suggestion.Date = DateTime.UtcNow;
+            suggestion.Date = DateTime.Now;
             suggestion.UserId = _userManager.GetUserId(User);
 
             var succeeded = await _suggestionsService.InsertSuggestion(suggestion);
@@ -114,7 +114,7 @@ namespace SuggestionsApp.WebUI.Controllers
             if (succeeded)
                 TempData["success"] = "La sugerencia se ha editado correctamente.";
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("ViewSuggestion", new { id = viewModel.Id});
         }
 
         [HttpPost]

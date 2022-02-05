@@ -7,7 +7,7 @@ deleteSuggestionForms.forEach(form => {
 
         Swal.fire({
             title: '¿Está seguro?',
-            text: "Si borra la sugerencia, no podrá recuperarla",
+            text: "Si borra el elemento, no podrá recuperarlo",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
