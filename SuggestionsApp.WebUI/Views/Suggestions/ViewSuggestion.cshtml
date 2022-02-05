@@ -1,9 +1,17 @@
-﻿@model SuggestionViewModel
+﻿@model ViewSuggestionViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1 class="display-2 text-center text-white fw-bold my-5">Detalles de la sugerencia</h1>
+
+@if(TempData["success"] != null)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <p class="mb-0"><strong>Bien hecho!</strong> @TempData["success"]</p>
+    </div>
+}
 
 <section class="card shadow overflow-hidden mb-4 p-3">
     <div class="card-body row p-3">
@@ -19,7 +27,7 @@
         <section class="col-10 d-flex flex-column justify-content-between">
             <header class="border-bottom border-2 border-primary mb-4 pb-1">
                 <h2 class="card-title text-primary fs-3 fw-bold mb-2">@Model.Title</h2>
-                <h3 class="card-subtitle text-muted">@Model.UserName</h3>
+                <h3 class="card-subtitle fs-6 text-muted">@Model.UserName</h3>
             </header>
 
             @if(!String.IsNullOrEmpty(Model.Description))
@@ -34,10 +42,10 @@
             <footer class="d-flex justify-content-between align-items-center">
                 <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @Model.CategoryName</p>
                 <div class="d-flex align-items-center">
-                    <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-dark text-opacity-75 fs-3 px-1"></i></a>
+                    <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
                     <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
                         <input type="hidden" value="@Model.Id" name="id" />
-                        <button class="bg-white border-0 p-0"><i class="las la-trash text-dark text-opacity-75 fs-3 px-1"></i></button>
+                        <button class="bg-white border-0 p-0"><i class="las la-trash text-muted fs-3 px-1"></i></button>
                     </form>
                 </div>
             </footer>
@@ -60,15 +68,17 @@
 
 <section class="card shadow border-0 overflow-hidden p-4">
     <h3 class="card-title h4 text-primary fw-bold mb-4">Definir estado de la sugerencia</h3>
+    <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post">
+        <input type="hidden" name="suggestionId" value="@Model.Id" />
+        <div class="btn-group w-100 mb-4" role="group" aria-label="Basic radio toggle button group">
+            
+            @foreach(var state in Model.States)
+            {
+                <input type="radio" class="btn-check" name="stateId" value="@state.Id" id="input-state-@state.Id" autocomplete="off" @(state.Id == Model.StateId ? "checked" : "") data-com.bitwarden.browser.user-edited="yes">
+                <label class="btn btn-outline-primary" for="input-state-@state.Id">@state.Name</label>
+            }
 
-    <form asp-controller="Status" asp-action="SetSuggestionStatus" class="btn-group" role="group" aria-label="Basic radio toggle button group">
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked data-com.bitwarden.browser.user-edited="yes">
-        <label class="btn btn-outline-primary" for="btnradio1">Radio 1</label>
-
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked data-com.bitwarden.browser.user-edited="yes">
-        <label class="btn btn-outline-primary" for="btnradio2">Radio 2</label>
-        
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked data-com.bitwarden.browser.user-edited="yes">
-        <label class="btn btn-outline-primary" for="btnradio3">Radio 3</label>
+        </div>
+        <button class="btn btn-primary"><i class='las la-pen'></i> Editar estado </button>
     </form>
 </section>

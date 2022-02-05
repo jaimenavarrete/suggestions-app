@@ -14,17 +14,20 @@ namespace SuggestionsApp.WebUI.Controllers
     {
         private readonly ISuggestionsService _suggestionsService;
         private readonly ICategoriesService _categoriesService;
+        private readonly IStatesService _statesService;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public SuggestionsController(
             ISuggestionsService suggestionsService,
-            ICategoriesService categoriesService, 
+            ICategoriesService categoriesService,
+            IStatesService statesService,
             IMapper mapper,
             UserManager<ApplicationUser> userManager)
         {
             _suggestionsService = suggestionsService;
             _categoriesService = categoriesService;
+            _statesService = statesService;
 
             _mapper = mapper;
             _userManager = userManager;
@@ -39,7 +42,9 @@ namespace SuggestionsApp.WebUI.Controllers
             if (suggestion == null)
                 return NotFound();
 
-            var viewModel = _mapper.Map<SuggestionViewModel>(suggestion);
+            var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
+            viewModel.UserName = await GetUserName(suggestion.UserId);
+            viewModel.States = await GetStatesViewModel();
 
             return View(viewModel);
         }
@@ -113,6 +118,20 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> SetSuggestionStatus([FromForm] int suggestionId, [FromForm] int stateId)
+        {
+            var suggestion = await _suggestionsService.GetSuggestionById(suggestionId);
+            suggestion.StateId = stateId;
+
+            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+
+            if (succeeded)
+                TempData["success"] = "El estado de la sugerencia se ha cambiado correctamente.";
+
+            return RedirectToAction("ViewSuggestion", new { id = suggestionId });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> DeleteSuggestion([FromForm] int id)
         {
             var succeeded = await _suggestionsService.DeleteSuggestion(id);
@@ -131,6 +150,24 @@ namespace SuggestionsApp.WebUI.Controllers
             var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
 
             return categoriesViewModel;
+        }
+
+        private async Task<List<StateViewModel>> GetStatesViewModel()
+        {
+            var states = await _statesService.GetStates();
+            var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
+
+            return statesViewModel;
+        }
+
+        private async Task<string> GetUserName(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                throw new Exception("El usuario no existe");
+
+            return user.UserName;
         }
 
         #endregion

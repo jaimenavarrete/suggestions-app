@@ -6,10 +6,10 @@
 
         public string Title { get; set; } = null!;
 
-        public List<CategoryViewModel> Categories { get; set; } = null!;
-
         public int CategoryId { get; set; }
 
         public string? Description { get; set; }
+
+        public List<CategoryViewModel> Categories { get; set; } = null!;
     }
 }

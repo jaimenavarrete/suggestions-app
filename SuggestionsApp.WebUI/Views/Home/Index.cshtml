@@ -62,13 +62,13 @@
                             <footer class="d-flex justify-content-between align-items-center">
                                 <p class="text-muted text-uppercase fw-bold mb-0">@suggestion.CategoryName</p>
                                 <div class="d-flex align-items-center">
-                                    <a href="/Suggestions/ViewSuggestion/@suggestion.Id"><i class="las la-eye text-dark text-opacity-75 fs-3 px-1"></i></a>
-                                    <a href="/Suggestions/EditSuggestion/@suggestion.Id"><i class="las la-pen text-dark text-opacity-75 fs-3 px-1"></i></a>
+                                    <a href="/Suggestions/ViewSuggestion/@suggestion.Id"><i class="las la-eye text-muted fs-3 px-1"></i></a>
+                                    <a href="/Suggestions/EditSuggestion/@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
                                     <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
                                         <input type="hidden" value="@suggestion.Id" name="id" />
-                                        <button class="bg-white border-0 p-0"><i class="las la-trash text-dark text-opacity-75 fs-3 px-1"></i></button>
+                                        <button class="bg-white border-0 p-0"><i class="las la-trash text-muted fs-3 px-1"></i></button>
                                     </form>
-                                    <span class="badge rounded-pill py-2 px-4 fs-6" style="background:@suggestion.StateColorHexCode"><i class="las la-flag fs-5"></i> @suggestion.StateName</span>
+                                    <span class="badge rounded-pill py-2 px-4 fs-6" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
                                 </div>
                             </footer>
                         </section>
@@ -95,7 +95,7 @@
                 
                 @foreach(var state in Model.StatesList)
                 {
-                    <li><a href="#" class="d-block text-decoration-none text-black py-1">@state.Name</a></li>
+                    <li class="mb-2"><a href="#" class="d-block text-decoration-none text-black py-1">@state.Name</a></li>
                 }
             </ul>
         </article>
@@ -108,7 +108,7 @@
                 
                 @foreach(var category in Model.CategoriesList)
                 {
-                    <li><a href="#" class="d-block text-decoration-none text-black py-1">@category.Name</a></li>
+                    <li class="mb-2"><a href="#" class="d-block text-decoration-none text-black py-1">@category.Name</a></li>
                 }
             </ul>
         </article>
