@@ -18,14 +18,20 @@ namespace SuggestionsApp.Services
 
         public async Task<IEnumerable<Suggestion>> GetSuggestions()
         {
-            var suggestions = await _context.Suggestions.ToListAsync();
+            var suggestions = await _context.Suggestions
+                                        .Include(p => p.Category)
+                                        .Include(p => p.State)
+                                        .ToListAsync();
 
             return suggestions;
         }
 
         public async Task<Suggestion> GetSuggestionById(int id)
         {
-            var suggestion = await _context.Suggestions.FindAsync(id);
+            var suggestion = await _context.Suggestions
+                                        .Include(p => p.Category)
+                                        .Include(p => p.State)
+                                        .FirstOrDefaultAsync(p => p.Id == id);
 
             return suggestion;
         }

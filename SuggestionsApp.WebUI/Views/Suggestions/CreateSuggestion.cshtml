@@ -3,7 +3,7 @@
     ViewData["Title"] = "CreateSuggestion";
 }
 
-<h1 class="display-1 text-center text-white fw-bold my-5">@(Model.Id == null ? "Crear" : "Editar") sugerencia</h1>
+<h1 class="display-2 text-center text-white fw-bold my-5">@(Model.Id == null ? "Crear" : "Editar") sugerencia</h1>
 
 <section class="col-lg-9 card shadow py-3 mx-auto mb-2">
     <form asp-controller="Suggestions" asp-action="@(Model.Id == null ? "CreateSuggestion" : "EditSuggestion")" method="post" class="col-11 card-body mx-auto">

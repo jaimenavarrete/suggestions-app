@@ -1,4 +1,22 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿// Delete button confirm dialog
+const deleteSuggestionForms = document.querySelectorAll(".delete-suggestion-form");
 
-// Write your JavaScript code.
+deleteSuggestionForms.forEach(form => {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: "Si borra la sugerencia, no podrá recuperarla",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, borrar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});

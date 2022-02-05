@@ -1,0 +1,74 @@
+﻿@model SuggestionViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="display-2 text-center text-white fw-bold my-5">Detalles de la sugerencia</h1>
+
+<section class="card shadow overflow-hidden mb-4 p-3">
+    <div class="card-body row p-3">
+        <aside class="col-2 text-center">
+            <div class="text-primary border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1 mx-auto mb-2" role="button" style="max-width: 100px; max-height: 100px">
+                <p class="h5 fw-bold mb-0">@Model.UpvotesAmount</p>
+                <i class="las la-chevron-up fs-3"></i>
+                <p class="fw-bold text-uppercase mb-0">Votar</p>
+            </div>
+            <time class="text-black-50">@Model.Date</time>
+        </aside>
+
+        <section class="col-10 d-flex flex-column justify-content-between">
+            <header class="border-bottom border-2 border-primary mb-4 pb-1">
+                <h2 class="card-title text-primary fs-3 fw-bold mb-2">@Model.Title</h2>
+                <h3 class="card-subtitle text-muted">@Model.UserName</h3>
+            </header>
+
+            @if(!String.IsNullOrEmpty(Model.Description))
+            {
+                <p class="lh-lg">@Model.Description</p>
+            }
+            else
+            {
+                <p>[Sin descripcion]</p>
+            }
+
+            <footer class="d-flex justify-content-between align-items-center">
+                <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @Model.CategoryName</p>
+                <div class="d-flex align-items-center">
+                    <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-dark text-opacity-75 fs-3 px-1"></i></a>
+                    <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
+                        <input type="hidden" value="@Model.Id" name="id" />
+                        <button class="bg-white border-0 p-0"><i class="las la-trash text-dark text-opacity-75 fs-3 px-1"></i></button>
+                    </form>
+                </div>
+            </footer>
+        </section>
+    </div>
+</section>
+
+<section class="card shadow overflow-hidden mb-4">
+    <div class="card-body row p-0">
+        <div class="col-1 d-flex justify-content-center align-items-center" style="background-color:@Model.StateColorHexCode">
+            <i class="las la-flag fs-1 text-white m-0"></i>
+        </div>
+
+        <div class="col-11 p-4">
+            <h3 class="h4 fw-bold border-bottom-1 border-danger" style="color:@Model.StateColorHexCode;">@Model.StateName</h3>
+            <p class="mb-0">@Model.StateDescription</p>
+        </div>
+    </div>
+</section>
+
+<section class="card shadow border-0 overflow-hidden p-4">
+    <h3 class="card-title h4 text-primary fw-bold mb-4">Definir estado de la sugerencia</h3>
+
+    <form asp-controller="Status" asp-action="SetSuggestionStatus" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked data-com.bitwarden.browser.user-edited="yes">
+        <label class="btn btn-outline-primary" for="btnradio1">Radio 1</label>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked data-com.bitwarden.browser.user-edited="yes">
+        <label class="btn btn-outline-primary" for="btnradio2">Radio 2</label>
+        
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked data-com.bitwarden.browser.user-edited="yes">
+        <label class="btn btn-outline-primary" for="btnradio3">Radio 3</label>
+    </form>
+</section>

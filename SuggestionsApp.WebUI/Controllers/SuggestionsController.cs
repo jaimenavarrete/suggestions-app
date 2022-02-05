@@ -32,9 +32,16 @@ namespace SuggestionsApp.WebUI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> ViewSuggestion(int id)
         {
-            return View();
+            var suggestion = await _suggestionsService.GetSuggestionById(id);
+
+            if (suggestion == null)
+                return NotFound();
+
+            var viewModel = _mapper.Map<SuggestionViewModel>(suggestion);
+
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -58,6 +65,9 @@ namespace SuggestionsApp.WebUI.Controllers
             suggestion.UserId = _userManager.GetUserId(User);
 
             var succeeded = await _suggestionsService.InsertSuggestion(suggestion);
+
+            if(succeeded)
+                TempData["success"] = "La sugerencia se ha creado correctamente.";
 
             return RedirectToAction("Index", "Home");
         }
@@ -96,6 +106,9 @@ namespace SuggestionsApp.WebUI.Controllers
 
             var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
 
+            if (succeeded)
+                TempData["success"] = "La sugerencia se ha editado correctamente.";
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -103,6 +116,9 @@ namespace SuggestionsApp.WebUI.Controllers
         public async Task<IActionResult> DeleteSuggestion([FromForm] int id)
         {
             var succeeded = await _suggestionsService.DeleteSuggestion(id);
+
+            if (succeeded)
+                TempData["success"] = "La sugerencia se ha borrado correctamente.";
 
             return RedirectToAction("Index", "Home");
         }
