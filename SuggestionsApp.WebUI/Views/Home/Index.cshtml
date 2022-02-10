@@ -68,8 +68,8 @@
                             <footer class="d-flex justify-content-between align-items-center">
                                 <p class="text-muted text-uppercase fw-bold mb-0">@suggestion.CategoryName</p>
                                 <div class="d-flex align-items-center">
-                                    <a href="/Suggestions/ViewSuggestion/@suggestion.Id"><i class="las la-eye text-muted fs-3 px-1"></i></a>
-                                    <a href="/Suggestions/EditSuggestion/@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
+                                    <a asp-controller="Suggestions" asp-action="ViewSuggestion" asp-route-id="@suggestion.Id"><i class="las la-eye text-muted fs-3 px-1"></i></a>
+                                    <a asp-controller="Suggestions" asp-action="EditSuggestion" asp-route-id="@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
                                     <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
                                         <input type="hidden" value="@suggestion.Id" name="id" />
                                         <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
@@ -86,9 +86,9 @@
     </section>
     <section class="col-md-3">
         <article class="mb-5">
-             <form class="input-group">
-                <input type="text" class="form-control" placeholder="Buscar" aria-label="Barra de busqueda" aria-describedby="button-addon2">
-                <button class="btn btn-primary" type="button" id="button-addon2"><i class="las la-search"></i></button>
+             <form class="input-group" asp-controller="Home" asp-action="Index" method="get">
+                <input type="text" name="search" class="form-control" placeholder="Buscar" aria-label="Barra de busqueda">
+                <button class="btn btn-primary"><i class="las la-search"></i></button>
             </form>
         </article>
 
@@ -96,11 +96,11 @@
             <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary"><i class="las la-flag fs-4"></i> Estados</div>
 
             <ul class="card-body list-unstyled mb-0">
-                <li class="fw-bold"><a href="#" class="d-block text-decoration-none text-black py-2">Todos</a></li>
+                <li class="fw-bold"><a asp-controller="Home" asp-action="Index" class="d-block text-decoration-none text-black py-2">Todos</a></li>
                 
                 @foreach(var state in Model.StatesList)
                 {
-                    <li class="mb-2"><a href="#" class="d-block text-decoration-none text-black py-1">@state.Name</a></li>
+                    <li class="mb-2"><a asp-controller="Home" asp-action="Index" asp-route-stateId="@state.Id" class="d-block text-decoration-none text-black py-1">@state.Name</a></li>
                 }
             </ul>
         </article>
@@ -109,11 +109,11 @@
             <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary"><i class="las la-tags fs-4"></i> Categorías</div>
 
             <ul class="card-body list-unstyled mb-0">
-                <li class="fw-bold"><a href="#" class="d-block text-decoration-none text-black py-2">Todos</a></li>
+                <li class="fw-bold"><a asp-controller="Home" asp-action="Index" class="d-block text-decoration-none text-black py-2">Todos</a></li>
                 
                 @foreach(var category in Model.CategoriesList)
                 {
-                    <li class="mb-2"><a href="#" class="d-block text-decoration-none text-black py-1">@category.Name</a></li>
+                    <li class="mb-2"><a asp-controller="Home" asp-action="Index" asp-route-categoryId="@category.Id" class="d-block text-decoration-none text-black py-1">@category.Name</a></li>
                 }
             </ul>
         </article>

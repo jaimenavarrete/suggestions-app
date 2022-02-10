@@ -4,7 +4,7 @@ namespace SuggestionsApp.Models.Interfaces
 {
     public interface ISuggestionsService
     {
-        Task<IEnumerable<Suggestion>> GetSuggestions();
+        Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search);
         Task<Suggestion> GetSuggestionById(int id);
         Task<bool> InsertSuggestion(Suggestion suggestion);
         Task<bool> UpdateSuggestion(Suggestion suggestion);

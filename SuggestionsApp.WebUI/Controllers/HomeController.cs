@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SuggestionsApp.Models.Data.Identity;
+using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Interfaces;
 using SuggestionsApp.Models.ViewModels;
 using System.Diagnostics;
@@ -33,9 +34,9 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId, int? stateId, string? search)
         {
-            var suggestions = await _suggestionsService.GetSuggestions();
+            var suggestions = await _suggestionsService.GetSuggestions(isApproved: true, categoryId, stateId, search);
             var categories = await _categoriesService.GetCategories();
             var states = await _statesService.GetStates();
 
@@ -75,7 +76,7 @@ namespace SuggestionsApp.WebUI.Controllers
 
         #region HelperMethods
 
-        private async Task<string> GetUserName(string userId)
+            private async Task<string> GetUserName(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
 

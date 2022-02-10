@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
@@ -16,21 +15,30 @@ namespace SuggestionsApp.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Suggestion>> GetSuggestions()
+        public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search)
         {
-            var suggestions = await _context.Suggestions
-                                        .Include(p => p.Category)
-                                        .Include(p => p.State)
-                                        .ToListAsync();
+            var suggestionsQuery = GetAllSuggestionsQuery();
+
+            if (isApproved != null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.Approved == isApproved);
+
+            if (categoryId != null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == categoryId);
+
+            if (stateId != null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.StateId == stateId);
+
+            if (search != null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.Title.Contains(search));
+
+            var suggestions = await suggestionsQuery.ToListAsync();
 
             return suggestions;
         }
 
         public async Task<Suggestion> GetSuggestionById(int id)
         {
-            var suggestion = await _context.Suggestions
-                                        .Include(p => p.Category)
-                                        .Include(p => p.State)
+            var suggestion = await GetAllSuggestionsQuery()
                                         .FirstOrDefaultAsync(p => p.Id == id);
 
             return suggestion;
@@ -65,6 +73,19 @@ namespace SuggestionsApp.Services
             }
 
             return false;
-        }        
+        }
+
+        #region HelperMethods
+
+            private IQueryable<Suggestion> GetAllSuggestionsQuery()
+            {
+                var suggestionsQuery = _context.Suggestions
+                                            .Include(p => p.Category)
+                                            .Include(p => p.State);
+
+                return suggestionsQuery;
+            }
+
+        #endregion
     }
 }

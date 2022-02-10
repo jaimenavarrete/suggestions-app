@@ -144,31 +144,31 @@ namespace SuggestionsApp.WebUI.Controllers
 
         #region HelperMethods
 
-        private async Task<List<CategoryViewModel>> GetCategoriesViewModel()
-        {
-            var categories = await _categoriesService.GetCategories();
-            var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
+            private async Task<List<CategoryViewModel>> GetCategoriesViewModel()
+            {
+                var categories = await _categoriesService.GetCategories();
+                var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
 
-            return categoriesViewModel;
-        }
+                return categoriesViewModel;
+            }
 
-        private async Task<List<StateViewModel>> GetStatesViewModel()
-        {
-            var states = await _statesService.GetStates();
-            var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
+            private async Task<List<StateViewModel>> GetStatesViewModel()
+            {
+                var states = await _statesService.GetStates();
+                var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
 
-            return statesViewModel;
-        }
+                return statesViewModel;
+            }
 
-        private async Task<string> GetUserName(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
+            private async Task<string> GetUserName(string userId)
+            {
+                var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null)
-                throw new Exception("El usuario no existe");
+                if (user == null)
+                    throw new Exception("El usuario no existe");
 
-            return user.UserName;
-        }
+                return user.UserName;
+            }
 
         #endregion
     }
