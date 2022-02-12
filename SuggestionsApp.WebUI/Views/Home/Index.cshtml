@@ -45,6 +45,16 @@
                     </p>
                 </div>
             }
+            
+            @if (Model.SuggestionsAmount == 0)
+            {
+                <div class="alert alert-light">
+                    <p class="mb-0 text-primary fw-bold">
+                        <i class="las la-info-circle fs-4"></i>
+                        Actualmente no existen sugerencias.
+                    </p>
+                </div>
+            }
 
             @foreach(var suggestion in Model.SuggestionsList)
             {
