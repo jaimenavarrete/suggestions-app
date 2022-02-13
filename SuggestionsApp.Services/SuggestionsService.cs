@@ -14,21 +14,33 @@ namespace SuggestionsApp.Services
         {
             _context = context;
         }
-
-        public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search)
+        
+        public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved)
         {
             var suggestionsQuery = GetAllSuggestionsQuery();
 
-            if (isApproved != null)
+            if (isApproved is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.Approved == isApproved);
 
-            if (categoryId != null)
+            var suggestions = await suggestionsQuery.ToListAsync();
+
+            return suggestions;
+        }
+
+        public async Task<IEnumerable<Suggestion>> GetSearchedSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search)
+        {
+            var suggestionsQuery = GetAllSuggestionsQuery();
+
+            if (isApproved is not null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.Approved == isApproved);
+
+            if (categoryId is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == categoryId);
 
-            if (stateId != null)
+            if (stateId is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.StateId == stateId);
 
-            if (search != null)
+            if (search is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.Title.Contains(search));
 
             var suggestions = await suggestionsQuery.ToListAsync();
@@ -36,7 +48,7 @@ namespace SuggestionsApp.Services
             return suggestions;
         }
 
-        public async Task<Suggestion> GetSuggestionById(int id)
+        public async Task<Suggestion?> GetSuggestionById(int id)
         {
             var suggestion = await GetAllSuggestionsQuery()
                                         .FirstOrDefaultAsync(p => p.Id == id);
@@ -64,7 +76,7 @@ namespace SuggestionsApp.Services
         {
             var suggestion = await GetSuggestionById(id);
 
-            if(suggestion != null)
+            if(suggestion is not null)
             {
                 _context.Suggestions.Remove(suggestion);
                 var affectedRows = await _context.SaveChangesAsync();

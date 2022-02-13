@@ -21,7 +21,7 @@ namespace SuggestionsApp.Services
             return categories;
         }
 
-        public async Task<Category> GetCategoryById(int id)
+        public async Task<Category?> GetCategoryById(int id)
         {
             var category = await _context.Categories.FindAsync(id);
 

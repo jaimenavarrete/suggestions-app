@@ -36,7 +36,7 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int? categoryId, int? stateId, string? search)
         {
-            var suggestions = await _suggestionsService.GetSuggestions(isApproved: true, categoryId, stateId, search);
+            var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, categoryId, stateId, search);
             var categories = await _categoriesService.GetCategories();
             var states = await _statesService.GetStates();
 
@@ -80,7 +80,7 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null)
+            if (user is null)
                 throw new Exception("El usuario no existe");
 
             return user.UserName;

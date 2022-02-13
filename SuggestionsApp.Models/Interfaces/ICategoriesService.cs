@@ -10,7 +10,7 @@ namespace SuggestionsApp.Models.Interfaces
     public interface ICategoriesService
     {
         Task<IEnumerable<Category>> GetCategories();
-        Task<Category> GetCategoryById(int id);
+        Task<Category?> GetCategoryById(int id);
         Task<bool> InsertCategory(Category suggestion);
         Task<bool> UpdateCategory(Category suggestion);
         Task<bool> DeleteCategory(int id);

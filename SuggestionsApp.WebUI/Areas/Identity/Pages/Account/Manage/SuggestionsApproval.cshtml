@@ -1,0 +1,23 @@
+@page
+@model SuggestionsApprovalModel
+@{
+    ViewData["Title"] = "Aprobar sugerencias";
+    ViewData["SubTitle"] = "Estas sugerencias no son visibles actualmente para los usuarios. Una vez apruebe una sugerencia, los usuarios podrán comenzar a votar por ella.";
+    ViewData["ActivePage"] = ManageNavPages.SuggestionsApproval;
+}
+
+<h3>@ViewData["Title"]</h3>
+<p>@ViewData["SubTitle"]</p>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        @foreach (var suggestion in Model.PendingSuggestionsList)
+        {
+            <p>@suggestion.Title</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

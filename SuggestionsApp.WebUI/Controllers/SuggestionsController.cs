@@ -39,7 +39,7 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var suggestion = await _suggestionsService.GetSuggestionById(id);
 
-            if (suggestion == null)
+            if (suggestion is null)
                 return NotFound();
 
             var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
@@ -82,7 +82,7 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var suggestion = await _suggestionsService.GetSuggestionById(id);
 
-            if (suggestion == null)
+            if (suggestion is null)
                 return NotFound();
 
             SuggestionFormViewModel viewModel = new()
@@ -102,7 +102,7 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var suggestion = await _suggestionsService.GetSuggestionById(viewModel.Id ?? 0);
 
-            if (suggestion == null)
+            if (suggestion is null)
                 return NotFound();
 
             suggestion.Title = viewModel.Title;
@@ -121,6 +121,10 @@ namespace SuggestionsApp.WebUI.Controllers
         public async Task<IActionResult> SetSuggestionStatus([FromForm] int suggestionId, [FromForm] int stateId)
         {
             var suggestion = await _suggestionsService.GetSuggestionById(suggestionId);
+
+            if (suggestion is null)
+                return NotFound();
+            
             suggestion.StateId = stateId;
 
             var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);

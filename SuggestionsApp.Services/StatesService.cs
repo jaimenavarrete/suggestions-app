@@ -21,7 +21,7 @@ namespace SuggestionsApp.Services
             return states;
         }
 
-        public async Task<State> GetStateById(int id)
+        public async Task<State?> GetStateById(int id)
         {
             var state = await _context.States.FindAsync(id);
             
