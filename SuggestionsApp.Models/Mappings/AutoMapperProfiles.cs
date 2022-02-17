@@ -30,6 +30,15 @@ namespace SuggestionsApp.Models.Mappings
             CreateMap<ViewSuggestionViewModel, Suggestion>();
         }
     }
+    
+    public class PendingSuggestionMapping : Profile
+    {
+        public PendingSuggestionMapping()
+        {
+            CreateMap<Suggestion, PendingSuggestionViewModel>();
+            CreateMap<PendingSuggestionViewModel, Suggestion>();
+        }
+    }
 
     public class CategoryMapping : Profile
     {

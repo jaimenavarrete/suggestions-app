@@ -24,7 +24,7 @@
 
         public DateTime Date { get; set; }
 
-        public bool Approved { get; set; }
+        public bool? Approved { get; set; }
 
         public List<StateViewModel> States { get; set; } = null!;
     }

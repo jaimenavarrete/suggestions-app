@@ -13,9 +13,9 @@
         public int UpvotesAmount { get; set; }
         public int CategoryId { get; set; }
         public int? StateId { get; set; }
-        public string UserId { get; set; }
+        public string UserId { get; set; } = null!;
         public DateTime Date { get; set; }
-        public bool Approved { get; set; }
+        public bool? Approved { get; set; }
 
         public virtual Category Category { get; set; } = null!;
         public virtual State? State { get; set; }

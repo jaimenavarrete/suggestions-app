@@ -65,7 +65,6 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var suggestion = _mapper.Map<Suggestion>(viewModel);
             suggestion.UpvotesAmount = 0;
-            suggestion.Approved = false;
             suggestion.Date = DateTime.Now;
             suggestion.UserId = _userManager.GetUserId(User);
 

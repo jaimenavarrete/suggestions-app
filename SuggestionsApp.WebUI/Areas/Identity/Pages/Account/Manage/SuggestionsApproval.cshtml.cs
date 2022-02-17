@@ -31,25 +31,67 @@ namespace SuggestionsApp.WebUI.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
-        public IEnumerable<SuggestionViewModel> PendingSuggestionsList { get; set; }
+        public IEnumerable<PendingSuggestionViewModel> PendingSuggestionsList { get; set; }
+
+        public int PendingSuggestionsCount { get; set; }
 
         [BindProperty]
-        public ApproveSuggestion Input { get; set; }
+        public ApproveSuggestionForm Input { get; set; }
 
-        public class ApproveSuggestion
+        public class ApproveSuggestionForm
         {
-            public int Id { get; set; }
+            public int SuggestionId { get; set; }
             
             public bool Approved { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var suggestions = await _suggestionsService.GetSuggestions(isApproved: false);
+            var suggestions = await _suggestionsService.GetSuggestions(isApproved: null);
             
-            PendingSuggestionsList = _mapper.Map<IEnumerable<SuggestionViewModel>>(suggestions);
+            PendingSuggestionsList = _mapper.Map<IEnumerable<PendingSuggestionViewModel>>(suggestions);
+            PendingSuggestionsCount = PendingSuggestionsList.Count();
+
+            foreach (var suggestion in PendingSuggestionsList)
+            {
+                var user = suggestions.First(s => s.Id == suggestion.Id);
+                suggestion.UserName = await GetUserName(user.UserId);
+            }
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var suggestion = await _suggestionsService.GetSuggestionById(Input.SuggestionId);
+
+            if (suggestion is null)
+                RedirectToPage();
+            
+            suggestion.Approved = Input.Approved;
+
+            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+            
+            if(succeeded && Input.Approved)
+                StatusMessage = "La sugerencia se ha aprobado correctamente.";
+            else if(succeeded && !Input.Approved)
+                StatusMessage = "La sugerencia se ha rechazado correctamente.";
+
+            return RedirectToPage();
+        }
+        
+        #region HelperMethods
+
+        private async Task<string> GetUserName(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                throw new Exception("El usuario no existe");
+
+            return user.UserName;
+        }
+
+        #endregion
     }
 }

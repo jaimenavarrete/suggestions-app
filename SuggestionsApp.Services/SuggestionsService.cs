@@ -17,22 +17,16 @@ namespace SuggestionsApp.Services
         
         public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved)
         {
-            var suggestionsQuery = GetAllSuggestionsQuery();
-
-            if (isApproved is not null)
-                suggestionsQuery = suggestionsQuery.Where(p => p.Approved == isApproved);
-
-            var suggestions = await suggestionsQuery.ToListAsync();
-
+            var suggestions = await GetAllSuggestionsQuery()
+                                                        .Where(p => p.Approved == isApproved)
+                                                        .ToListAsync();
             return suggestions;
         }
 
         public async Task<IEnumerable<Suggestion>> GetSearchedSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search)
         {
-            var suggestionsQuery = GetAllSuggestionsQuery();
-
-            if (isApproved is not null)
-                suggestionsQuery = suggestionsQuery.Where(p => p.Approved == isApproved);
+            var suggestionsQuery = GetAllSuggestionsQuery()
+                                                            .Where(p => p.Approved == isApproved);
 
             if (categoryId is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == categoryId);

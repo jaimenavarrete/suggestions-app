@@ -16,12 +16,21 @@
     </div>
 }
 
-@if(!Model.Approved)
+@if(Model.Approved is null)
 {
     <div class="alert alert-warning">
         <p class="mb-0">
             <i class="las la-exclamation-triangle fs-4"></i>
             <strong>Aprobación en proceso!</strong> Actualmente esta sugerencia no se podrá visualizar por los usuarios.
+        </p>
+    </div>
+}
+else if (Model.Approved == false)
+{
+    <div class="alert alert-danger">
+        <p class="mb-0">
+            <i class="las la-times fs-4"></i>
+            <strong>Rechazada!</strong> La sugerencia ha sido rechazada por el administrador o por un moderador.
         </p>
     </div>
 }

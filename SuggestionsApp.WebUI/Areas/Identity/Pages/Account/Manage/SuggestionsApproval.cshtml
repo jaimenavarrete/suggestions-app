@@ -7,15 +7,49 @@
 }
 
 <h3>@ViewData["Title"]</h3>
-<p>@ViewData["SubTitle"]</p>
+<p class="mb-4">@ViewData["SubTitle"]</p>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
-    <div class="col-md-6">
+    <section class="col">
+        @if (Model.PendingSuggestionsCount == 0)
+        {
+            <div class="alert alert-light">
+                <p class="mb-0 text-primary fw-bold">
+                    <i class="las la-info-circle fs-4"></i>
+                    Actualmente no existen sugerencias pendientes de aprobación.
+                </p>
+            </div>
+        }
+        
         @foreach (var suggestion in Model.PendingSuggestionsList)
         {
-            <p>@suggestion.Title</p>
+            <article class="border border-2 border-primary rounded p-3 mb-3">
+                <header class="border-bottom border-2 border-primary mb-3 pb-2">
+                    <h5 class="card-title mb-2 text-primary">@suggestion.Title</h5>
+                    <p class="card-subtitle text-muted small">@suggestion.UserName - @suggestion.Date</p>
+                </header>
+
+                <p class="my-3">@suggestion.Description</p>
+
+                <footer class="d-flex justify-content-between align-items-center">
+                    <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @suggestion.CategoryName</p>
+                    <div class="d-flex">
+                        <form method="post">
+                            <input type="hidden" asp-for="Input.SuggestionId" value="@suggestion.Id"/>
+                            <input type="hidden" asp-for="Input.Approved" value="true"/>
+                            <button type="submit" class="btn btn-sm btn-success mx-1"><i class="las la-check fs-4"></i> Aprobar</button>
+                        </form>
+
+                        <form method="post">
+                            <input type="hidden" asp-for="Input.SuggestionId" value="@suggestion.Id"/>
+                            <input type="hidden" asp-for="Input.Approved" value="false"/>
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="las la-times fs-4"></i> Rechazar</button>
+                        </form>
+                    </div>
+                </footer>
+            </article>
         }
-    </div>
+    </section>
 </div>
 
 @section Scripts {
