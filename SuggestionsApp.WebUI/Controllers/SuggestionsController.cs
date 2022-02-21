@@ -16,21 +16,21 @@ namespace SuggestionsApp.WebUI.Controllers
         private readonly ICategoriesService _categoriesService;
         private readonly IStatesService _statesService;
         private readonly IMapper _mapper;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
 
         public SuggestionsController(
             ISuggestionsService suggestionsService,
             ICategoriesService categoriesService,
             IStatesService statesService,
             IMapper mapper,
-            UserManager<ApplicationUser> userManager)
+            IUserService userService)
         {
             _suggestionsService = suggestionsService;
             _categoriesService = categoriesService;
             _statesService = statesService;
 
             _mapper = mapper;
-            _userManager = userManager;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -43,7 +43,7 @@ namespace SuggestionsApp.WebUI.Controllers
                 return NotFound();
 
             var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
-            viewModel.UserName = await GetUserName(suggestion.UserId);
+            viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
             viewModel.States = await GetStatesViewModel();
 
             return View(viewModel);
@@ -64,9 +64,9 @@ namespace SuggestionsApp.WebUI.Controllers
         public async Task<IActionResult> CreateSuggestion(SuggestionFormViewModel viewModel)
         {
             var suggestion = _mapper.Map<Suggestion>(viewModel);
+            suggestion.UserId = await _userService.GetUserIdLoggedIn();
             suggestion.UpvotesAmount = 0;
             suggestion.Date = DateTime.Now;
-            suggestion.UserId = _userManager.GetUserId(User);
 
             var succeeded = await _suggestionsService.InsertSuggestion(suggestion);
 
@@ -99,7 +99,8 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> EditSuggestion(SuggestionFormViewModel viewModel)
         {
-            var suggestion = await _suggestionsService.GetSuggestionById(viewModel.Id ?? 0);
+            var suggestionId = viewModel.Id ?? 0;
+            var suggestion = await _suggestionsService.GetSuggestionById(suggestionId);
 
             if (suggestion is null)
                 return NotFound();
@@ -117,7 +118,7 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetSuggestionStatus([FromForm] int suggestionId, [FromForm] int stateId)
+        public async Task<IActionResult> SetSuggestionStatus([FromForm] int suggestionId, int stateId)
         {
             var suggestion = await _suggestionsService.GetSuggestionById(suggestionId);
 
@@ -161,16 +162,6 @@ namespace SuggestionsApp.WebUI.Controllers
                 var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
 
                 return statesViewModel;
-            }
-
-            private async Task<string> GetUserName(string userId)
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-
-                if (user == null)
-                    throw new Exception("El usuario no existe");
-
-                return user.UserName;
             }
 
         #endregion

@@ -44,6 +44,7 @@ services.ConfigureApplicationCookie(config =>
     config.LoginPath = "/Account/Login";
 });
 
+services.AddHttpContextAccessor();
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
 services.AddRazorPages();
 
@@ -51,6 +52,7 @@ services.AddRazorPages();
 services.AddTransient<ISuggestionsService, SuggestionsService>();
 services.AddTransient<ICategoriesService, CategoriesService>();
 services.AddTransient<IStatesService, StatesService>();
+services.AddTransient<IUserService, UserService>();
 
 // Depencency Injection - AutoMapper
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

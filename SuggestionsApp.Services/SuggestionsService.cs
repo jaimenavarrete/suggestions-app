@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
-using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Interfaces;
+using SuggestionsApp.Services.Responses;
 
 namespace SuggestionsApp.Services
 {
@@ -18,15 +18,15 @@ namespace SuggestionsApp.Services
         public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved)
         {
             var suggestions = await GetAllSuggestionsQuery()
-                                                        .Where(p => p.Approved == isApproved)
-                                                        .ToListAsync();
+                                        .Where(p => p.Approved == isApproved)
+                                        .ToListAsync();
             return suggestions;
         }
 
         public async Task<IEnumerable<Suggestion>> GetSearchedSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search)
         {
             var suggestionsQuery = GetAllSuggestionsQuery()
-                                                            .Where(p => p.Approved == isApproved);
+                                        .Where(p => p.Approved == isApproved);
 
             if (categoryId is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == categoryId);
