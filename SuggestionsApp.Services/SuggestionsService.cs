@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
+using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
-using SuggestionsApp.Services.Responses;
 
 namespace SuggestionsApp.Services
 {
@@ -42,10 +42,15 @@ namespace SuggestionsApp.Services
             return suggestions;
         }
 
-        public async Task<Suggestion?> GetSuggestionById(int id)
+        public async Task<Suggestion> GetSuggestionById(int id)
         {
             var suggestion = await GetAllSuggestionsQuery()
                                         .FirstOrDefaultAsync(p => p.Id == id);
+
+            if(suggestion is null)
+            {
+                throw new BusinessException("La sugerencia que seleccionó no existe o ha sido borrada hace poco.");
+            }
 
             return suggestion;
         }

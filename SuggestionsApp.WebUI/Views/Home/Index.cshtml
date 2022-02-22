@@ -45,6 +45,17 @@
                     </p>
                 </div>
             }
+
+            @if(TempData["error"] != null)
+            {
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <p class="mb-0">
+                        <i class="las la-times fs-4"></i>
+                        <strong>Error!</strong> @TempData["error"]
+                    </p>
+                </div>
+            }
             
             @if (Model.SuggestionsAmount == 0)
             {

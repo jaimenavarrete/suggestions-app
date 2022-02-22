@@ -14,23 +14,21 @@ namespace SuggestionsApp.WebUI.Controllers
         private readonly ISuggestionsService _suggestionsService;
         private readonly ICategoriesService _categoriesService;
         private readonly IStatesService _statesService;
-
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly UserManager<ApplicationUser> _userManager;
 
         public HomeController(
             ISuggestionsService suggestionsService, 
             ICategoriesService categoriesService,
             IStatesService statesService,
             IMapper mapper,
-            UserManager<ApplicationUser> userManager)
+            IUserService userService)
         {
             _suggestionsService = suggestionsService;
             _categoriesService = categoriesService;
             _statesService = statesService;
-
+            _userService = userService;
             _mapper = mapper;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -47,7 +45,7 @@ namespace SuggestionsApp.WebUI.Controllers
             foreach(var suggestion in suggestionsViewModel)
             {
                 var user = suggestions.First(s => s.Id == suggestion.Id);
-                suggestion.UserName = await GetUserName(user.UserId);
+                suggestion.UserName = await _userService.GetUserNameById(user.UserId);
             }
 
             IndexViewModel viewModel = new()
@@ -72,20 +70,5 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
-        #region HelperMethods
-
-            private async Task<string> GetUserName(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user is null)
-                throw new Exception("El usuario no existe");
-
-            return user.UserName;
-        }
-
-        #endregion
     }
 }

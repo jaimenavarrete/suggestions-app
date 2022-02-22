@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
+using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
 using SuggestionsApp.Models.ViewModels;
 
@@ -37,16 +36,22 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewSuggestion(int id)
         {
-            var suggestion = await _suggestionsService.GetSuggestionById(id);
+            try
+            {
+                var suggestion = await _suggestionsService.GetSuggestionById(id);
 
-            if (suggestion is null)
-                return NotFound();
+                var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
+                viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
+                viewModel.States = await GetStatesViewModel();
 
-            var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
-            viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-            viewModel.States = await GetStatesViewModel();
+                return View(viewModel);
+            }
+            catch (BusinessException ex)
+            {
+                TempData["error"] = ex.Message;
 
-            return View(viewModel);
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpGet]

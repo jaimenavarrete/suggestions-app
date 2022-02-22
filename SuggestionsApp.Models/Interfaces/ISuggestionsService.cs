@@ -6,7 +6,7 @@ namespace SuggestionsApp.Models.Interfaces
     {
         Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved);
         Task<IEnumerable<Suggestion>> GetSearchedSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search);
-        Task<Suggestion?> GetSuggestionById(int id);
+        Task<Suggestion> GetSuggestionById(int id);
         Task<bool> InsertSuggestion(Suggestion suggestion);
         Task<bool> UpdateSuggestion(Suggestion suggestion);
         Task<bool> DeleteSuggestion(int id);
