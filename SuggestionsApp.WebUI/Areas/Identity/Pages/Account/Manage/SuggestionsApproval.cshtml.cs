@@ -2,7 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SuggestionsApp.Models.Interfaces;
-using SuggestionsApp.Models.ViewModels;
+using SuggestionsApp.WebUI.ViewModels;
 
 namespace SuggestionsApp.WebUI.Areas.Identity.Pages.Account.Manage
 {

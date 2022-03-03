@@ -3,6 +3,7 @@ using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
+using System.Text;
 
 namespace SuggestionsApp.Services
 {
@@ -49,7 +50,7 @@ namespace SuggestionsApp.Services
 
             if(suggestion is null)
             {
-                throw new BusinessException("La sugerencia que seleccionó no existe o ha sido borrada hace poco.");
+                throw new LogicException("La sugerencia que seleccionó no existe o ha sido borrada hace poco.");
             }
 
             return suggestion;
@@ -57,6 +58,11 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> InsertSuggestion(Suggestion suggestion)
         {
+            if(suggestion is null)
+            {
+                throw new LogicException("No existe una sugerencia para agregar.");
+            }
+
             _context.Add(suggestion);
             var affectedRows = await _context.SaveChangesAsync();
 
@@ -65,6 +71,11 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> UpdateSuggestion(Suggestion suggestion)
         {
+            if (suggestion is null)
+            {
+                throw new LogicException("No existe una sugerencia para editar.");
+            }
+
             _context.Update(suggestion);
             var affectedRows = await _context.SaveChangesAsync();
 
@@ -83,19 +94,19 @@ namespace SuggestionsApp.Services
                 return affectedRows > 0;
             }
 
-            return false;
+            throw new LogicException("No existe una sugerencia para borrar.");
         }
 
         #region HelperMethods
 
-            private IQueryable<Suggestion> GetAllSuggestionsQuery()
-            {
-                var suggestionsQuery = _context.Suggestions
-                                            .Include(p => p.Category)
-                                            .Include(p => p.State);
+        private IQueryable<Suggestion> GetAllSuggestionsQuery()
+        {
+            var suggestionsQuery = _context.Suggestions
+                                        .Include(p => p.Category)
+                                        .Include(p => p.State);
 
-                return suggestionsQuery;
-            }
+            return suggestionsQuery;
+        }
 
         #endregion
     }

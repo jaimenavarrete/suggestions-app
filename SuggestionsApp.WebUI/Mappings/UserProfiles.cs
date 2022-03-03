@@ -2,7 +2,7 @@
 using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
 
-namespace SuggestionsApp.Models.Mappings
+namespace SuggestionsApp.WebUI.Mappings
 {
     public class UserMapping : Profile
     {

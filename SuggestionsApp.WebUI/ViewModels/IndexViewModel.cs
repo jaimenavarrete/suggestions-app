@@ -1,4 +1,4 @@
-﻿namespace SuggestionsApp.Models.ViewModels
+﻿namespace SuggestionsApp.WebUI.ViewModels
 {
     public class IndexViewModel
     {

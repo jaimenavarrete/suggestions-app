@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SuggestionsApp.Models.Data.Identity;
-using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Interfaces;
-using SuggestionsApp.Models.ViewModels;
+using SuggestionsApp.WebUI.ViewModels;
 using System.Diagnostics;
 
 namespace SuggestionsApp.WebUI.Controllers
@@ -34,26 +31,15 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int? categoryId, int? stateId, string? search)
         {
-            var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, categoryId, stateId, search);
-            var categories = await _categoriesService.GetCategories();
-            var states = await _statesService.GetStates();
-
-            var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
-            var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
-            var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
-
-            foreach(var suggestion in suggestionsViewModel)
-            {
-                var user = suggestions.First(s => s.Id == suggestion.Id);
-                suggestion.UserName = await _userService.GetUserNameById(user.UserId);
-            }
+            // The categoryId, stateId and search parameters are to filter suggestions and they are optional
+            var suggestionsViewModel = await GetApprovedSuggestionsViewModel(categoryId, stateId, search);
 
             IndexViewModel viewModel = new()
             {
                 SuggestionsAmount = suggestionsViewModel.Count(),
                 SuggestionsList = suggestionsViewModel,
-                CategoriesList = categoriesViewModel,
-                StatesList = statesViewModel
+                CategoriesList = await GetCategoriesViewModel(),
+                StatesList = await GetStatesViewModel()
             };
 
             return View(viewModel);
@@ -70,5 +56,39 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        #region HelperMethods
+
+            private async Task<List<SuggestionViewModel>> GetApprovedSuggestionsViewModel(int? categoryId, int? stateId, string? search)
+            {
+                var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, categoryId, stateId, search);
+                var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
+
+                foreach (var suggestion in suggestionsViewModel)
+                {
+                    var user = suggestions.First(s => s.Id == suggestion.Id);
+                    suggestion.UserName = await _userService.GetUserNameById(user.UserId);
+                }
+
+                return suggestionsViewModel;
+            }
+
+            private async Task<List<CategoryViewModel>> GetCategoriesViewModel()
+            {
+                var categories = await _categoriesService.GetCategories();
+                var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
+
+                return categoriesViewModel;
+            }
+
+            private async Task<List<StateViewModel>> GetStatesViewModel()
+            {
+                var states = await _statesService.GetStates();
+                var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
+
+                return statesViewModel;
+            }
+
+        #endregion
     }
 }

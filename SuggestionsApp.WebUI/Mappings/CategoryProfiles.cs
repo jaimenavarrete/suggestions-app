@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using SuggestionsApp.Models.DataModels;
-using SuggestionsApp.Models.ViewModels;
+using SuggestionsApp.WebUI.ViewModels;
 
-namespace SuggestionsApp.Models.Mappings
+namespace SuggestionsApp.WebUI.Mappings
 {
     public class CategoryMapping : Profile
     {
