@@ -25,7 +25,6 @@ namespace  SuggestionsApp.WebUI.Areas.Identity.Pages.Account.Manage
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
-        public static string SuggestionsApproval => "SuggestionsApproval";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
         
@@ -43,8 +42,7 @@ namespace  SuggestionsApp.WebUI.Areas.Identity.Pages.Account.Manage
 
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
 
-        public static string SuggestionsApprovalNavClass(ViewContext viewContext) => PageNavClass(viewContext, SuggestionsApproval);
-        
+
         private static string PageNavClass(ViewContext viewContext, string page)
         {
             var activePage = viewContext.ViewData["ActivePage"] as string

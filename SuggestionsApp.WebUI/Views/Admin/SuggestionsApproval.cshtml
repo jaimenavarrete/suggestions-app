@@ -1,14 +1,37 @@
-@page
-@model SuggestionsApprovalModel
+﻿@model SuggestionsApprovalViewModel
 @{
+    Layout = "_AdminLayout";
+
     ViewData["Title"] = "Aprobar sugerencias";
     ViewData["SubTitle"] = "Estas sugerencias no son visibles actualmente para los usuarios. Una vez apruebe una sugerencia, los usuarios podrán comenzar a votar por ella.";
-    ViewData["ActivePage"] = ManageNavPages.SuggestionsApproval;
+    ViewData["ActivePage"] = ManageAdminNavPages.SuggestionsApproval;
 }
 
 <h3>@ViewData["Title"]</h3>
 <p class="mb-4">@ViewData["SubTitle"]</p>
-<partial name="_StatusMessage" for="StatusMessage" />
+
+@if(TempData["success"] != null)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <p class="mb-0">
+            <i class="las la-check fs-4"></i>
+            <strong>Bien hecho!</strong> @TempData["success"]
+        </p>
+    </div>
+}
+
+@if(TempData["error"] != null)
+{
+    <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <p class="mb-0">
+            <i class="las la-times fs-4"></i>
+            <strong>Error!</strong> @TempData["error"]
+        </p>
+    </div>
+}
+
 <div class="row">
     <section class="col">
         @if (Model.PendingSuggestionsCount == 0)
@@ -35,14 +58,14 @@
                     <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @suggestion.CategoryName</p>
                     <div class="d-flex">
                         <form method="post">
-                            <input type="hidden" asp-for="Input.SuggestionId" value="@suggestion.Id"/>
-                            <input type="hidden" asp-for="Input.Approved" value="true"/>
+                            <input type="hidden" asp-for="SuggestionId" value="@suggestion.Id"/>
+                            <input type="hidden" asp-for="Approved" value="true"/>
                             <button type="submit" class="btn btn-sm btn-success mx-1"><i class="las la-check fs-4"></i> Aprobar</button>
                         </form>
 
                         <form method="post">
-                            <input type="hidden" asp-for="Input.SuggestionId" value="@suggestion.Id"/>
-                            <input type="hidden" asp-for="Input.Approved" value="false"/>
+                            <input type="hidden" asp-for="SuggestionId" value="@suggestion.Id"/>
+                            <input type="hidden" asp-for="Approved" value="false"/>
                             <button type="submit" class="btn btn-sm btn-danger"><i class="las la-times fs-4"></i> Rechazar</button>
                         </form>
                     </div>

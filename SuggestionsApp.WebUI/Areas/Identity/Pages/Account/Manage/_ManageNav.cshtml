@@ -3,7 +3,6 @@
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <ul class="nav nav-pills flex-column">
-    <li class="nav-item mb-5"><a class="nav-link @ManageNavPages.SuggestionsApprovalNavClass(ViewContext)" id="suggestionsApproval" asp-page="./SuggestionsApproval"><i class="las la-check fs-4"></i> Aprobar sugerencias</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><i class="las la-user fs-4"></i> Perfil</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email"><i class="las la-envelope fs-4"></i> Email</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword"><i class="las la-lock fs-4"></i> Contraseña</a></li>
