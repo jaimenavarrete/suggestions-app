@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<h1 class="display-2 text-center text-white fw-bold my-5">Administración del sistema</h1>
+
+<section class="card shadow border-0 overflow-hidden p-4 mb-4">
+    <h2 class="card-title h4 text-primary fw-bold border-bottom border-2 border-primary mb-2">Administra los elementos del sitio</h2>
+    
+    <div class="row py-5">
+        <div class="col-md-3 mb-4 mb-md-0">
+            <partial name="_ManageAdminNavMenu" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
