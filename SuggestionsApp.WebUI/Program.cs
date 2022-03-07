@@ -3,7 +3,6 @@ using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.Interfaces;
 using SuggestionsApp.Services;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

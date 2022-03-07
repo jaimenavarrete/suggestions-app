@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
+using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
 
 namespace SuggestionsApp.Services
@@ -28,19 +29,45 @@ namespace SuggestionsApp.Services
             return category;
         }
 
-        public Task<bool> InsertCategory(Category suggestion)
+        public async Task<bool> InsertCategory(Category category)
         {
-            throw new NotImplementedException();
+            if(category is null)
+            {
+                throw new LogicException("No existe una categoria para crear.");
+            }
+
+            _context.Add(category);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
 
-        public Task<bool> UpdateCategory(Category suggestion)
+        public async Task<bool> UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
+            if (category is null)
+            {
+                throw new LogicException("No existe una categoria para editar.");
+            }
+
+            _context.Update(category);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
 
-        public Task<bool> DeleteCategory(int id)
+        public async Task<bool> DeleteCategory(int id)
         {
-            throw new NotImplementedException();
+            var category = await GetCategoryById(id);
+
+            if (category is null)
+            {
+                throw new LogicException("No existe una categoría para borrar.");
+            }
+
+            _context.Categories.Remove(category);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
     }
 }

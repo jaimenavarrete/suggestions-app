@@ -10,27 +10,7 @@
 <h3>@ViewData["Title"]</h3>
 <p class="mb-4">@ViewData["SubTitle"]</p>
 
-@if(TempData["success"] != null)
-{
-    <div class="alert alert-dismissible alert-success">
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        <p class="mb-0">
-            <i class="las la-check fs-4"></i>
-            <strong>Bien hecho!</strong> @TempData["success"]
-        </p>
-    </div>
-}
-
-@if(TempData["error"] != null)
-{
-    <div class="alert alert-dismissible alert-danger">
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        <p class="mb-0">
-            <i class="las la-times fs-4"></i>
-            <strong>Error!</strong> @TempData["error"]
-        </p>
-    </div>
-}
+<partial name="_StatusMessage" />
 
 <div class="row">
     <section class="col">

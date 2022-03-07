@@ -1,7 +1,7 @@
 ﻿// Delete button confirm dialog
-const deleteSuggestionForms = document.querySelectorAll(".delete-suggestion-form");
+const deleteElementButton = document.querySelectorAll(".delete-element-form");
 
-deleteSuggestionForms.forEach(form => {
+deleteElementButton.forEach(form => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 

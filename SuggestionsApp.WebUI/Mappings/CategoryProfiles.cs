@@ -12,4 +12,13 @@ namespace SuggestionsApp.WebUI.Mappings
             CreateMap<CategoryViewModel, Category>();
         }
     }
+
+    public class CategoriesListMapping : Profile
+    {
+        public CategoriesListMapping()
+        {
+            CreateMap<Category, CategoriesListViewModel>();
+            CreateMap<CategoriesListViewModel, Category>();
+        }
+    }
 }

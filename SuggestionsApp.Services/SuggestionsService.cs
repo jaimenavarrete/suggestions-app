@@ -86,15 +86,15 @@ namespace SuggestionsApp.Services
         {
             var suggestion = await GetSuggestionById(id);
 
-            if(suggestion is not null)
+            if(suggestion is null)
             {
-                _context.Suggestions.Remove(suggestion);
-                var affectedRows = await _context.SaveChangesAsync();
-
-                return affectedRows > 0;
+                throw new LogicException("No existe una sugerencia para borrar.");
             }
 
-            throw new LogicException("No existe una sugerencia para borrar.");
+            _context.Suggestions.Remove(suggestion);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
 
         #region HelperMethods

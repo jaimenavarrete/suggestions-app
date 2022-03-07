@@ -35,27 +35,7 @@
 
         <section class="row p-2 pt-0">
             
-            @if(TempData["success"] != null)
-            {
-                <div class="alert alert-dismissible alert-success">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    <p class="mb-0">
-                        <i class="las la-check fs-4"></i>
-                        <strong>Bien hecho!</strong> @TempData["success"]
-                    </p>
-                </div>
-            }
-
-            @if(TempData["error"] != null)
-            {
-                <div class="alert alert-dismissible alert-danger">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    <p class="mb-0">
-                        <i class="las la-times fs-4"></i>
-                        <strong>Error!</strong> @TempData["error"]
-                    </p>
-                </div>
-            }
+            <partial name="_StatusMessage" />
             
             @if (Model.SuggestionsAmount == 0)
             {
@@ -91,7 +71,7 @@
                                 <div class="d-flex align-items-center">
                                     <a asp-controller="Suggestions" asp-action="ViewSuggestion" asp-route-id="@suggestion.Id"><i class="las la-eye text-muted fs-3 px-1"></i></a>
                                     <a asp-controller="Suggestions" asp-action="EditSuggestion" asp-route-id="@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
-                                    <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
+                                    <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-element-form">
                                         <input type="hidden" value="@suggestion.Id" name="id" />
                                         <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
                                     </form>

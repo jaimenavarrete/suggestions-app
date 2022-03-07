@@ -7,16 +7,7 @@
 
 <section class="col-lg-9 card shadow py-3 mx-auto mb-2">
     <form asp-controller="Suggestions" asp-action="@(Model.Id == null ? "CreateSuggestion" : "EditSuggestion")" method="post" class="col-11 card-body mx-auto">
-        @if(TempData["error"] != null)
-        {
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                <p class="mb-0">
-                    <i class="las la-times fs-4"></i>
-                    <strong>Error!</strong> @TempData["error"]
-                </p>
-            </div>
-        }
+        <partial name="_StatusMessage" />
 
         <input type="hidden" asp-for="Id" />
 

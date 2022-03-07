@@ -5,16 +5,7 @@
 
 <h1 class="display-2 text-center text-white fw-bold my-5">Detalles de la sugerencia</h1>
 
-@if(TempData["success"] != null)
-{
-    <div class="alert alert-dismissible alert-success">
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        <p class="mb-0">
-            <i class="las la-check fs-4"></i>
-            <strong>Bien hecho!</strong> @TempData["success"]
-        </p>
-    </div>
-}
+<partial name="_StatusMessage" />
 
 @if(Model.Approved is null)
 {

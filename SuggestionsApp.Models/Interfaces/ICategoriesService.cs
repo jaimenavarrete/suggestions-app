@@ -11,8 +11,8 @@ namespace SuggestionsApp.Models.Interfaces
     {
         Task<IEnumerable<Category>> GetCategories();
         Task<Category?> GetCategoryById(int id);
-        Task<bool> InsertCategory(Category suggestion);
-        Task<bool> UpdateCategory(Category suggestion);
+        Task<bool> InsertCategory(Category category);
+        Task<bool> UpdateCategory(Category category);
         Task<bool> DeleteCategory(int id);
     }
 }
