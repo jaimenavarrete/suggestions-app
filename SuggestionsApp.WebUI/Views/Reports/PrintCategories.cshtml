@@ -1,0 +1,23 @@
+﻿@model List<CategoryViewModel>
+@{
+    Layout = "_ReportsLayout";
+    ViewData["Title"] = "Reporte de categorias";
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var category in Model)
+        {
+            <tr>
+                <th scope="row">@category.Id</th>
+                <td>@category.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

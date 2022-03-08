@@ -11,11 +11,17 @@
 
 <h3 class="fw-bold display-6 mb-4">Lista de estados</h3>
 
+<!-- Status message alert -->
 <partial name="_StatusMessage" />
 
-<button type="button" id="button-create-state" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-state-modal">
-    <i class="las la-plus fs-4"></i> Agregar estado
-</button>
+<section class="d-flex justify-content-between">
+    <button type="button" id="button-create-state" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-state-modal">
+        <i class="las la-plus fs-4"></i> Agregar estado
+    </button>
+    <a asp-controller="Reports" asp-action="PrintStates" class="btn btn-outline-dark mb-4" target="_blank">
+        <i class="las la-print fs-4"></i> Imprimir estados
+    </a>
+</section>
 
 <div class="table-responsive">
     <table class="table table-hover table-striped">
@@ -37,7 +43,7 @@
                     <td>@state.Description</td>
                     <td class="text-white fw-bold"><span class="badge rounded-pill py-2 px-4 fs-6" style="background-color:@state.ColorHexCode">@state.ColorHexCode</span></td>
                     <td>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex">
                             <button class="button-edit-state bg-transparent border-0 p-0" data-category-id="@state.Id" data-bs-toggle="modal" data-bs-target="#form-state-modal">
                             <i class="las la-pen text-primary fs-3 px-1"></i>
                             </button>
@@ -61,7 +67,7 @@
         const modalStateLabel = document.getElementById('form-state-modal-label');
 
         const getStateInfo = (e) => {
-            const stateInfo = e.currentTarget.parentElement.parentElement.children;
+            const stateInfo = e.currentTarget.closest('tr').children;
 
             form.elements['Id'].value = stateInfo[0].outerText;
             form.elements['Name'].value = stateInfo[1].outerText;

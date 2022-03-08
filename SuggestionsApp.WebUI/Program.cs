@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var services = builder.Services;
 var configutation = builder.Configuration;
+var env = builder.Environment;
 
 var connectionString = configutation.GetConnectionString("SuggestionsApp");
 
@@ -83,5 +84,8 @@ app.UseEndpoints(endpoint =>
 
     endpoint.MapRazorPages();
 });
+
+// Rotativa configuration
+Rotativa.AspNetCore.RotativaConfiguration.Setup(env.WebRootPath,"../Rotativa");
 
 app.Run();

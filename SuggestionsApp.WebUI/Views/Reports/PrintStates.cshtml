@@ -1,0 +1,27 @@
+﻿@model List<StateViewModel>
+@{
+    Layout = "_ReportsLayout";
+    ViewData["Title"] = "Reporte de estados";
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Código de color</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var state in Model)
+            {
+                <tr>
+                    <th scope="row">@state.Id</th>
+                    <td>@state.Name</td>
+                    <td>@state.Description</td>
+                    <td class="text-white fw-bold"><span class="badge rounded-pill py-2 px-4 fs-6" style="background-color:@state.ColorHexCode">@state.ColorHexCode</span></td>
+                </tr>
+            }
+    </tbody>
+</table>

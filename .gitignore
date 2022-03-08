@@ -269,3 +269,7 @@ __pycache__/
 
 # Javascript shortcut file
 archivo_javascript.js
+
+# Rotativa required files
+wkhtmltoimage.exe
+wkhtmltopdf.exe

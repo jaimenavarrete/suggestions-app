@@ -11,14 +11,20 @@
 
 <h3 class="fw-bold display-6 mb-4">Lista de categorías</h3>
 
+<!-- Status message alert -->
 <partial name="_StatusMessage" />
 
-<button type="button" id="button-create-category" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-category-modal">
+<section class="d-flex justify-content-between">
+    <button type="button" id="button-create-category" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-category-modal">
         <i class="las la-plus fs-4"></i> Agregar categoría
     </button>
+    <a asp-controller="Reports" asp-action="PrintCategories" class="btn btn-outline-dark mb-4" target="_blank">
+        <i class="las la-print fs-4"></i> Imprimir categorías
+    </a>
+</section>
 
 <div class="table-responsive">
-    <table class="table table-hover table-striped text-center">
+    <table class="table table-hover table-striped">
         <thead>
             <tr class="table-primary">
                 <th scope="col">Id</th>
@@ -33,9 +39,9 @@
                     <th scope="row">@category.Id</th>
                     <td>@category.Name</td>
                     <td>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex">
                             <button class="button-edit-category bg-transparent border-0 p-0" data-category-id="@category.Id" data-bs-toggle="modal" data-bs-target="#form-category-modal">
-                            <i class="las la-pen text-primary fs-3 px-1"></i>
+                                <i class="las la-pen text-primary fs-3 px-1"></i>
                             </button>
                             <form asp-controller="Admin" asp-action="DeleteCategory" method="post" class="delete-element-form">
                                 <input type="hidden" value="@category.Id" name="id" />
@@ -57,7 +63,7 @@
         const modalCategoryLabel = document.getElementById('form-category-modal-label');
 
         const getCategoryInfo = (e) => {
-            const categoryInfo = e.currentTarget.parentElement.parentElement.children;
+            const categoryInfo = e.currentTarget.closest('tr').children;
 
             form.elements['Id'].value = categoryInfo[0].outerText;
             form.elements['Name'].value = categoryInfo[1].outerText;

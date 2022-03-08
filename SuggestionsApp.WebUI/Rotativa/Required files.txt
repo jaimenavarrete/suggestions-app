@@ -1,0 +1,7 @@
+The required files to use Rotativa are:
+
+* Windows *
+wkhtmltoimage.exe
+wkhtmltopdf.exe
+
+Download installer here: https://wkhtmltopdf.org/downloads.html
