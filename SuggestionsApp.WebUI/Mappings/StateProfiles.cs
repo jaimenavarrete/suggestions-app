@@ -12,4 +12,13 @@ namespace SuggestionsApp.WebUI.Mappings
             CreateMap<StateViewModel, State>();
         }
     }
+
+    public class StatesListMapping : Profile
+    {
+        public StatesListMapping()
+        {
+            CreateMap<State, StatesListViewModel>();
+            CreateMap<StatesListViewModel, State>();
+        }
+    }
 }

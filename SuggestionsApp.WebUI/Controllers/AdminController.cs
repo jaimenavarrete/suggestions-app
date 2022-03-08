@@ -11,18 +11,21 @@ namespace SuggestionsApp.WebUI.Controllers
     {
         private readonly ISuggestionsService _suggestionsService;
         private readonly ICategoriesService _categoriesService;
+        private readonly IStatesService _statesService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public AdminController(
             ISuggestionsService suggestionsService,
             ICategoriesService categoriesService,
+            IStatesService statesService,
             IMapper mapper,
             IUserService userService
             )
         {
             _suggestionsService = suggestionsService;
             _categoriesService = categoriesService;
+            _statesService = statesService;
             _userService = userService;
             _mapper = mapper;
         }
@@ -112,9 +115,81 @@ namespace SuggestionsApp.WebUI.Controllers
 
         // States section
 
-        public IActionResult StatesList()
+        public async Task<IActionResult> StatesList()
         {
-            return View();
+            var states = await _statesService.GetStates();
+            var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
+
+            StatesListViewModel viewModel = new()
+            {
+                StatesList = statesViewModel
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateState(StatesListViewModel viewModel)
+        {
+            try
+            {
+                var state = _mapper.Map<State>(viewModel);
+                var succeeded = await _statesService.InsertState(state);
+
+                if (succeeded)
+                    TempData["success"] = "El estado se ha creado correctamente.";
+
+                return RedirectToAction("StatesList");
+            }
+            catch (LogicException ex)
+            {
+                TempData["error"] = ex.Message;
+
+                return RedirectToAction("StatesList");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditState(StatesListViewModel viewModel)
+        {
+            try
+            {
+                var state = _mapper.Map<State>(viewModel);
+                var succeeded = await _statesService.UpdateState(state);
+
+                if (succeeded)
+                    TempData["success"] = "El estado se ha editado correctamente.";
+
+                return RedirectToAction("StatesList");
+            }
+            catch (LogicException ex)
+            {
+                TempData["error"] = ex.Message;
+
+                return RedirectToAction("StatesList");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteState([FromForm] int id)
+        {
+            try
+            {
+                var succeeded = await _statesService.DeleteState(id);
+
+                if (succeeded)
+                    TempData["success"] = "El estado se ha borrado correctamente.";
+                else
+                    TempData["error"] = "Ocurrió un error al borrar el estado.";
+
+                return RedirectToAction("StatesList");
+            }
+            catch (LogicException ex)
+            {
+                TempData["error"] = ex.Message;
+
+                return RedirectToAction("StatesList");
+            }
         }
 
         // Users section

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
+using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
 
 namespace SuggestionsApp.Services
@@ -28,19 +29,45 @@ namespace SuggestionsApp.Services
             return state;
         }
 
-        public Task<bool> InsertState(State state)
+        public async Task<bool> InsertState(State state)
         {
-            throw new NotImplementedException();
+            if (state is null)
+            {
+                throw new LogicException("No existe un estado para crear.");
+            }
+
+            _context.Add(state);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
 
-        public Task<bool> UpdateState(State state)
+        public async Task<bool> UpdateState(State state)
         {
-            throw new NotImplementedException();
+            if (state is null)
+            {
+                throw new LogicException("No existe un estado para editar.");
+            }
+
+            _context.Update(state);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
 
-        public Task<bool> DeleteState(int id)
+        public async Task<bool> DeleteState(int id)
         {
-            throw new NotImplementedException();
+            var state = await GetStateById(id);
+
+            if (state is null)
+            {
+                throw new LogicException("No existe un estado para borrar.");
+            }
+
+            _context.States.Remove(state);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
     }
 }

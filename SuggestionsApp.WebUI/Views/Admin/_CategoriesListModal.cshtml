@@ -1,0 +1,26 @@
+﻿@model CategoriesListViewModel
+
+<div class="modal fade" id="form-category-modal" tabindex="-1" aria-labelledby="form-category-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="form-category" class="modal-content">
+            <div class="modal-header">
+                <h5 id="form-category-modal-label" class="modal-title text-primary fw-bold"><i class="las la-plus-circle fs-4"></i> Crear categoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" asp-for="Id" id="input-category-id" class="input-category" />
+
+                <div class="form-group">
+                    <label class="col-form-label" for="input-name">Nombre de la categoría:</label>
+                    <input type="text" asp-for="Name" id="input-category-name" class="form-control input-category">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary text-dark" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary"><i class="las la-save fs-4"></i> Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

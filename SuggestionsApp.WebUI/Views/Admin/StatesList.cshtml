@@ -1,47 +1,99 @@
-﻿@{
+﻿@model StatesListViewModel
+@{
     Layout = "_AdminLayout";
 
     ViewData["Title"] = "Lista de estados";
     ViewData["ActivePage"] = ManageAdminNavPages.StatesList;
 }
 
-<h1 class="mb-4">Lista de estados</h1>
+<!-- Modal -->
+<partial name="_StatesListModal" model="Model" />
+
+<h3 class="fw-bold display-6 mb-4">Lista de estados</h3>
+
+<partial name="_StatusMessage" />
+
+<button type="button" id="button-create-state" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-state-modal">
+    <i class="las la-plus fs-4"></i> Agregar estado
+</button>
 
 <div class="table-responsive">
-    <table class="table table-hover table-bordered table-striped">
+    <table class="table table-hover table-striped">
         <thead>
-            <tr class="table-info">
-                <th scope="col">Type</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
+            <tr class="table-primary">
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Código de color</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">Default</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-            </tr>
-            <tr>
-                <th scope="row">Default</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-            </tr>
-            <tr>
-                <th scope="row">Default</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-            </tr>
-            <tr>
-                <th scope="row">Default</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-            </tr>
+            @foreach(var state in Model.StatesList)
+            {
+                <tr>
+                    <th scope="row">@state.Id</th>
+                    <td>@state.Name</td>
+                    <td>@state.Description</td>
+                    <td class="text-white fw-bold"><span class="badge rounded-pill py-2 px-4 fs-6" style="background-color:@state.ColorHexCode">@state.ColorHexCode</span></td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <button class="button-edit-state bg-transparent border-0 p-0" data-category-id="@state.Id" data-bs-toggle="modal" data-bs-target="#form-state-modal">
+                            <i class="las la-pen text-primary fs-3 px-1"></i>
+                            </button>
+                            <form asp-controller="Admin" asp-action="DeleteState" method="post" class="delete-element-form">
+                                <input type="hidden" value="@state.Id" name="id" />
+                                <button class="bg-transparent border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script>
+        const btnCreateState = document.getElementById('button-create-state');
+        const btnEditState = document.querySelectorAll('.button-edit-state');
+        const form = document.getElementById('form-state');
+        const modalStateLabel = document.getElementById('form-state-modal-label');
+
+        const getStateInfo = (e) => {
+            const stateInfo = e.currentTarget.parentElement.parentElement.children;
+
+            form.elements['Id'].value = stateInfo[0].outerText;
+            form.elements['Name'].value = stateInfo[1].outerText;
+            form.elements['Description'].value = stateInfo[2].outerText;
+            form.elements['ColorHexCode'].value = stateInfo[3].outerText;
+            modalStateLabel.innerHTML = `<i class="las la-pen fs-4"></i> Editar estado`;
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const baseUrl = window.location.origin;
+
+            if (form.elements['Id'].value === '') {
+                form.action = `${baseUrl}/Admin/CreateState`;
+            } else {
+                form.action = `${baseUrl}/Admin/EditState`;
+            }
+
+            form.submit();
+        });
+
+        btnCreateState.addEventListener('click', () => {
+            form.elements['Id'].value = '';
+            form.elements['Name'].value = '';
+            form.elements['Description'].value = '';
+            form.elements['ColorHexCode'].value = '';
+            modalStateLabel.innerHTML = `<i class="las la-plus-circle fs-4"></i> Crear estado`;
+        });
+
+        btnEditState.forEach((btn) => {
+            btn.addEventListener('click', (e) => getStateInfo(e));
+        });
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@model StatesListViewModel
+
+<div class="modal fade" id="form-state-modal" tabindex="-1" aria-labelledby="form-state-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="form-state" class="modal-content">
+            <div class="modal-header">
+                <h5 id="form-state-modal-label" class="modal-title text-primary fw-bold"><i class="las la-plus-circle fs-4"></i> Crear estado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" asp-for="Id" id="input-state-id" class="input-state" />
+
+                <div class="form-group mb-3">
+                    <label class="col-form-label" for="input-state-name">Nombre del estado:</label>
+                    <input type="text" asp-for="Name" id="input-state-name" class="form-control input-state">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="col-form-label" for="input-state-description">Descripción del estado:</label>
+                    <textarea asp-for="Description" id="input-state-description" class="form-control input-state" rows="5"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label" for="input-state-color">Color de fondo del estado:</label>
+                    <input type="color" asp-for="ColorHexCode" id="input-state-color" class="d-block w-100 border-0 rounded input-state" role="button">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary text-dark" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary"><i class="las la-save fs-4"></i> Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
