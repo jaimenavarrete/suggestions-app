@@ -87,8 +87,10 @@
     </section>
     <section class="col-md-3">
         <article class="mb-5">
-             <form class="input-group" asp-controller="Home" asp-action="Index" method="get">
-                <input type="text" name="search" class="form-control" placeholder="Buscar" aria-label="Barra de busqueda">
+            <form class="input-group" asp-controller="Home" asp-action="Index" method="get" id="form-search-text">
+                <input type="hidden" name="categoryId" value="@Model.CategorySearchId" @(Model.CategorySearchId == null ? "disabled" : "") />
+                <input type="hidden" name="stateId" value="@Model.StateSearchId" @(Model.StateSearchId == null ? "disabled" : "") />
+                <input type="text" name="search" class="form-control" placeholder="Buscar" aria-label="Barra de busqueda" value="@Model.SearchText">
                 <button class="btn btn-primary"><i class="las la-search"></i></button>
             </form>
         </article>
@@ -97,11 +99,19 @@
             <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary"><i class="las la-flag fs-4"></i> Estados</div>
 
             <ul class="card-body list-unstyled mb-0">
-                <li class="fw-bold"><a asp-controller="Home" asp-action="Index" class="d-block text-decoration-none text-primary py-2">Todos</a></li>
+                <li>
+                    <a class="state-search d-block text-decoration-none py-2 @(Model.StateSearchId == null ? "active-link" : "text-black")" data-stateid="">
+                        Todos
+                    </a>
+                </li>
                 
                 @foreach(var state in Model.StatesList)
                 {
-                    <li class="mb-2"><a asp-controller="Home" asp-action="Index" asp-route-stateId="@state.Id" class="d-block text-decoration-none text-black py-1">@state.Name</a></li>
+                    <li class="mb-2">
+                        <a class="state-search d-block text-decoration-none py-1 @(Model.StateSearchId == state.Id ? "active-link" : "text-black")" data-stateid="@state.Id">
+                            <i class="las la-square-full fs-4" style="color: @state.ColorHexCode"></i> @state.Name
+                        </a>
+                    </li>
                 }
             </ul>
         </article>
@@ -110,13 +120,68 @@
             <div class="card-header text-primary text-uppercase fw-bold bg-white border-bottom border-2 border-primary"><i class="las la-tags fs-4"></i> Categorías</div>
 
             <ul class="card-body list-unstyled mb-0">
-                <li class="fw-bold"><a asp-controller="Home" asp-action="Index" class="d-block text-decoration-none text-primary py-2">Todos</a></li>
+                <li>
+                    <a class="category-search d-block text-decoration-none py-2 @(Model.CategorySearchId == null ? "active-link" : "text-black")" data-categoryid="">
+                        Todos
+                    </a>
+                </li>
                 
                 @foreach(var category in Model.CategoriesList)
                 {
-                    <li class="mb-2"><a asp-controller="Home" asp-action="Index" asp-route-categoryId="@category.Id" class="d-block text-decoration-none text-black py-1">@category.Name</a></li>
+                    <li class="mb-2">
+                        <a class="category-search d-block text-decoration-none py-1 @(Model.CategorySearchId == category.Id ? "active-link" : "text-black")" data-categoryid="@category.Id">
+                            @category.Name
+                        </a>
+                    </li>
                 }
             </ul>
         </article>
     </section>
 </div>
+
+@section Scripts {
+    <script>
+        const baseUrl = window.location.origin;
+        const buttonsStateSearch = document.querySelectorAll(".state-search");
+        const buttonsCategorySearch = document.querySelectorAll(".category-search");
+        const formSearchText = document.getElementById("form-search-text");
+
+        let queryParams = new URLSearchParams(window.location.search);
+
+        // Buttons to search by state
+        buttonsStateSearch.forEach(btn => {
+            if(btn.dataset.stateid)
+                queryParams.set("stateId",btn.dataset.stateid);
+            else
+                queryParams.delete("stateId");
+
+            btn.href = `${baseUrl}/?${queryParams}`;
+        });
+
+        queryParams = new URLSearchParams(window.location.search);
+
+        // Buttons to search by category
+        buttonsCategorySearch.forEach(btn => {
+            if(btn.dataset.categoryid)
+                queryParams.set("categoryId",btn.dataset.categoryid);
+            else
+                queryParams.delete("categoryId");
+
+            btn.href = `${baseUrl}/?${queryParams}`;
+        });
+
+        // Submit search text form if the value is empty
+        const submitEmptySearchText = () => {
+            const inputSearchText = formSearchText.elements["search"];
+
+            if(inputSearchText.value == "") {
+                inputSearchText.setAttribute("disabled", "");
+                formSearchText.submit();
+            }
+        }
+
+        formSearchText.addEventListener('keyup', () => submitEmptySearchText());
+        formSearchText.addEventListener('focusout', () => submitEmptySearchText());
+
+    </script>
+}

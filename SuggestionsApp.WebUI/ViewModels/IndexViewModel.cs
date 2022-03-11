@@ -2,6 +2,12 @@
 {
     public class IndexViewModel
     {
+        public string? SearchText { get; set; }
+
+        public int? CategorySearchId { get; set; }
+
+        public int? StateSearchId { get; set; }
+
         public int SuggestionsAmount { get; set; }
 
         public List<SuggestionViewModel> SuggestionsList { get; set; } = null!;

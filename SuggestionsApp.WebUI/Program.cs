@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.Data.Identity;
@@ -29,7 +30,7 @@ services.AddDefaultIdentity<ApplicationUser>(options => {
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
 
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 

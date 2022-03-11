@@ -36,6 +36,9 @@ namespace SuggestionsApp.WebUI.Controllers
 
             IndexViewModel viewModel = new()
             {
+                SearchText = search,
+                CategorySearchId = categoryId,
+                StateSearchId = stateId,
                 SuggestionsAmount = suggestionsViewModel.Count(),
                 SuggestionsList = suggestionsViewModel,
                 CategoriesList = await GetCategoriesViewModel(),

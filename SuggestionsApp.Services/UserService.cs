@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Interfaces;
@@ -23,52 +24,61 @@ namespace SuggestionsApp.Services
             _mapper = mapper;
         }
 
-        public async Task<PersonalUser> GetUserLoggedIn()
+        public async Task<User> GetUserLoggedIn()
         {
-            ApplicationUser currentUser = await GetCurrentUser();
+            var currentAppUser = await GetCurrentUser();
 
-            var personalUser = _mapper.Map<PersonalUser>(currentUser);
+            var user = _mapper.Map<User>(currentAppUser);
 
-            return personalUser;
+            return user;
         }
 
         public async Task<string> GetUserIdLoggedIn()
         {
-            ApplicationUser currentUser = await GetCurrentUser();
+            var currentAppUser = await GetCurrentUser();
 
-            return currentUser.Id;
+            return currentAppUser.Id;
         }
 
         public async Task<string> GetUserNameLoggedIn()
         {
-            ApplicationUser currentUser = await GetCurrentUser();
+            var currentAppUser = await GetCurrentUser();
 
-            return currentUser.UserName;
+            return currentAppUser.UserName;
         }
 
-        public async Task<PersonalUser> GetUserById(string userId)
+        public async Task<User> GetUserById(string userId)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            var appUser = await _userManager.FindByIdAsync(userId);
 
-            var personalUser = _mapper.Map<PersonalUser>(user);
+            var user = _mapper.Map<User>(appUser);
 
-            return personalUser;
+            return user;
         }
 
         public async Task<string> GetUserNameById(string userId)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            var appUser = await _userManager.FindByIdAsync(userId);
 
-            return user.UserName;
+            return appUser.UserName;
+        }
+
+        public async Task<IEnumerable<User>> GetAllUsers()
+        {
+            var appUsers = await _userManager.Users.ToListAsync();
+
+            var users = _mapper.Map<IEnumerable<User>>(appUsers);
+
+            return users;
         }
 
         #region HelperMethods
 
             private async Task<ApplicationUser> GetCurrentUser()
             {
-                var currentUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+                var currentAppUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
 
-                return currentUser;
+                return currentAppUser;
             }
 
         #endregion

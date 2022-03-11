@@ -4,13 +4,13 @@ namespace SuggestionsApp.Models.Interfaces
 {
     public interface IUserService
     {
-        Task<PersonalUser> GetUserLoggedIn();
+        Task<User> GetUserLoggedIn();
 
         Task<string> GetUserNameLoggedIn();
 
         Task<string> GetUserIdLoggedIn();
 
-        Task<PersonalUser> GetUserById(string userId);
+        Task<User> GetUserById(string userId);
 
         Task<string> GetUserNameById(string userId);
     }

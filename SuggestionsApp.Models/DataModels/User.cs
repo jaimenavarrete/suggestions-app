@@ -1,6 +1,6 @@
 ﻿namespace SuggestionsApp.Models.DataModels
 {
-    public class PersonalUser
+    public class User
     {
         public int Id { get; set; }
 

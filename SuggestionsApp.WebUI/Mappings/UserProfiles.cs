@@ -8,8 +8,8 @@ namespace SuggestionsApp.WebUI.Mappings
     {
         public UserMapping()
         {
-            CreateMap<ApplicationUser, PersonalUser>();
-            CreateMap<PersonalUser, ApplicationUser>();
+            CreateMap<ApplicationUser, User>();
+            CreateMap<User, ApplicationUser>();
         }
     }
 }
