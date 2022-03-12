@@ -14,21 +14,24 @@ namespace SuggestionsApp.WebUI.Controllers
         private readonly ISuggestionsService _suggestionsService;
         private readonly ICategoriesService _categoriesService;
         private readonly IStatesService _statesService;
-        private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly IUpvotesService _upvotesService;
+        private readonly IMapper _mapper;
 
         public SuggestionsController(
             ISuggestionsService suggestionsService,
             ICategoriesService categoriesService,
             IStatesService statesService,
-            IMapper mapper,
-            IUserService userService)
+            IUserService userService,
+            IUpvotesService upvotesService,
+            IMapper mapper)
         {
             _suggestionsService = suggestionsService;
             _categoriesService = categoriesService;
             _statesService = statesService;
-            _mapper = mapper;
             _userService = userService;
+            _upvotesService = upvotesService;
+            _mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -41,6 +44,7 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
                 viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
+                viewModel.IsUserUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(suggestion.Id, suggestion.UserId);
                 viewModel.States = await GetStatesViewModel();
 
                 return View(viewModel);
@@ -180,6 +184,39 @@ namespace SuggestionsApp.WebUI.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangeSuggestionUpvote([FromForm] int id, bool isFromViewSuggestion)
+        {
+            try
+            {
+                string userId = await _userService.GetUserIdLoggedIn();
+                bool isSuggestionUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(id, userId);
+
+                if(isSuggestionUpvoteActive)
+                {
+                    var succeeded = await _upvotesService.DeleteUpvote(id, userId);
+                }
+                else
+                {
+                    var upvote = new Upvote
+                    {
+                        SuggestionId = id,
+                        UserId = userId
+                    };
+
+                    var succeeded = await _upvotesService.InsertUpvote(upvote);
+                }
+
+                return GetUpvoteRedirect(id, isFromViewSuggestion);
+            }
+            catch (LogicException ex)
+            {
+                TempData["error"] = ex.Message;
+
+                return GetUpvoteRedirect(id, isFromViewSuggestion);
+            }
+        }
+
         #region HelperMethods
 
             private async Task<List<CategoryViewModel>> GetCategoriesViewModel()
@@ -196,6 +233,16 @@ namespace SuggestionsApp.WebUI.Controllers
                 var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
 
                 return statesViewModel;
+            }
+
+            private RedirectToActionResult GetUpvoteRedirect(int id, bool isFromViewSuggestion)
+            {
+                if (isFromViewSuggestion)
+                {
+                    return RedirectToAction("ViewSuggestion", "Suggestions", new { id = id });
+                }
+
+                return RedirectToAction("Index", "Home");
             }
 
         #endregion

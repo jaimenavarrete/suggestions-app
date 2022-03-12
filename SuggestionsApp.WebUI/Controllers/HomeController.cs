@@ -12,19 +12,22 @@ namespace SuggestionsApp.WebUI.Controllers
         private readonly ICategoriesService _categoriesService;
         private readonly IStatesService _statesService;
         private readonly IUserService _userService;
+        private readonly IUpvotesService _upvotesService;
         private readonly IMapper _mapper;
 
         public HomeController(
             ISuggestionsService suggestionsService, 
             ICategoriesService categoriesService,
             IStatesService statesService,
-            IMapper mapper,
-            IUserService userService)
+            IUserService userService,
+            IUpvotesService upvotesService,
+            IMapper mapper)
         {
             _suggestionsService = suggestionsService;
             _categoriesService = categoriesService;
             _statesService = statesService;
             _userService = userService;
+            _upvotesService = upvotesService;
             _mapper = mapper;
         }
 
@@ -66,11 +69,13 @@ namespace SuggestionsApp.WebUI.Controllers
             {
                 var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, categoryId, stateId, search);
                 var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
+                var currentUserId = await _userService.GetUserIdLoggedIn();
 
                 foreach (var suggestion in suggestionsViewModel)
                 {
                     var user = suggestions.First(s => s.Id == suggestion.Id);
                     suggestion.UserName = await _userService.GetUserNameById(user.UserId);
+                    suggestion.IsUserUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(suggestion.Id ?? 0, currentUserId);
                 }
 
                 return suggestionsViewModel;

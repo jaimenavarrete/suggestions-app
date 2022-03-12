@@ -29,11 +29,13 @@ else if (Model.Approved == false)
 <section class="card shadow overflow-hidden mb-4 p-3">
     <div class="card-body row p-3">
         <aside class="col-2 text-center">
-            <div class="text-primary border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1 mx-auto mb-2" role="button" style="max-width: 100px; max-height: 100px">
-                <p class="h5 fw-bold mb-0">@Model.UpvotesAmount</p>
+            <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" id="upvote-button" class="upvote-button text-center border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1 mx-auto mb-2 @(Model.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
+                <input type="hidden" name="id" id="suggestionId" value="@Model.Id" />
+                <input type="hidden" name="isFromViewSuggestion" id="isFromViewSuggestion" value="true" />
                 <i class="las la-chevron-up fs-3"></i>
-                <p class="fw-bold text-uppercase mb-0">Votar</p>
-            </div>
+                <p class="h5 fw-bold mb-0">@Model.UpvotesAmount</p>
+                <p class="fw-bold text-uppercase mb-0">@(Model.IsUserUpvoteActive ? "Votada" : "Votar")</p>
+            </form>
             <time class="text-black-50">@Model.Date</time>
         </aside>
 
@@ -99,3 +101,11 @@ else if (Model.Approved == false)
         <button class="btn btn-primary"><i class='las la-pen'></i> Editar estado </button>
     </form>
 </section>
+
+@section Scripts {
+    <script>
+        // Button to upvote suggestion
+        const buttonUpvote = document.getElementById('upvote-button');
+        buttonUpvote.addEventListener('click', () => buttonUpvote.submit());
+    </script>
+}

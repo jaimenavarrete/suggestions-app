@@ -10,6 +10,8 @@
 
         public int UpvotesAmount { get; set; }
 
+        public bool IsUserUpvoteActive { get; set; }
+
         public string CategoryName { get; set; } = null!;
 
         public int? StateId { get; set; }

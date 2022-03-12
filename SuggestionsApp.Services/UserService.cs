@@ -37,6 +37,11 @@ namespace SuggestionsApp.Services
         {
             var currentAppUser = await GetCurrentUser();
 
+            if(currentAppUser == null)
+            {
+                return null;
+            }
+
             return currentAppUser.Id;
         }
 

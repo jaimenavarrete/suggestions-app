@@ -51,11 +51,12 @@
             {
                 <article class="card shadow border-primary overflow-hidden mb-3">
                     <div class="card-body row p-3 d-flex justify-content-between">
-                        <aside class="col-2 text-center text-primary border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1" role="button" style="max-width: 100px; max-height: 100px">
-                            <p class="h5 fw-bold mb-0">@suggestion.UpvotesAmount</p>
+                        <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" class="upvote-button col-2 text-center border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1 @(suggestion.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
+                            <input type="hidden" name="id" id="suggestionId" value="@suggestion.Id" />
                             <i class="las la-chevron-up fs-3"></i>
-                            <p class="fw-bold text-uppercase mb-0">Votar</p>
-                        </aside>
+                            <p class="h5 fw-bold mb-0">@suggestion.UpvotesAmount</p>
+                            <p class="fw-bold text-uppercase mb-0">@(suggestion.IsUserUpvoteActive ? "Votada" : "Votar")</p>
+                        </form>
 
                         <section class="col-10 d-flex flex-column justify-content-between p-0">
                             <header class="border-bottom border-2 border-primary d-flex justify-content-between align-items-start mb-3 pb-3">
@@ -144,8 +145,6 @@
         const baseUrl = window.location.origin;
         const buttonsStateSearch = document.querySelectorAll(".state-search");
         const buttonsCategorySearch = document.querySelectorAll(".category-search");
-        const formSearchText = document.getElementById("form-search-text");
-
         let queryParams = new URLSearchParams(window.location.search);
 
         // Buttons to search by state
@@ -171,6 +170,8 @@
         });
 
         // Submit search text form if the value is empty
+        const formSearchText = document.getElementById("form-search-text");
+
         const submitEmptySearchText = () => {
             const inputSearchText = formSearchText.elements["search"];
 
@@ -182,6 +183,13 @@
 
         formSearchText.addEventListener('keyup', () => submitEmptySearchText());
         formSearchText.addEventListener('focusout', () => submitEmptySearchText());
+
+        // Button to upvote suggestion
+        const buttonsUpvote = document.querySelectorAll('.upvote-button');
+
+        buttonsUpvote.forEach(btnForm => {
+            btnForm.addEventListener('click', () => btnForm.submit());
+        })
 
     </script>
 }
