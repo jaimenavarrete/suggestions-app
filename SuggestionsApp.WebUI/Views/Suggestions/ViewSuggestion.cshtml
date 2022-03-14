@@ -33,19 +33,19 @@ else if (Model.Approved == false)
         </a>
     </div>
 
-    <div class="card-body row p-3">
-        <aside class="col-2 text-center">
+    <div class="card-body row p-3 d-flex justify-content-between align-items-start">
+        <aside class="col-2 text-center p-0 px-md-3">
             <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" id="upvote-button" class="upvote-button text-center border border-2 border-primary rounded d-flex flex-column justify-content-around p-1 mx-auto mb-2 @(Model.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
                 <input type="hidden" name="id" id="suggestionId" value="@Model.Id" />
                 <input type="hidden" name="isFromViewSuggestion" id="isFromViewSuggestion" value="true" />
                 <i class="las la-chevron-up fs-3"></i>
                 <p class="h5 fw-bold mb-0">@Model.UpvotesAmount</p>
-                <p class="fw-bold text-uppercase mb-0">@(Model.IsUserUpvoteActive ? "Votada" : "Votar")</p>
+                <p class="fw-bold text-uppercase mb-0 d-none d-sm-block">@(Model.IsUserUpvoteActive ? "Votada" : "Votar")</p>
             </form>
-            <time class="text-black-50">@Model.Date</time>
+            <time class="text-black-50 small">@Model.Date</time>
         </aside>
 
-        <section class="col-10 d-flex flex-column justify-content-between">
+        <section class="col-9 col-md-10 d-flex flex-column justify-content-between">
             <header class="border-bottom border-2 border-primary mb-4 pb-1">
                 <h2 class="card-title text-primary fs-3 fw-bold mb-2">@Model.Title</h2>
                 <h3 class="card-subtitle fs-6 text-muted">@Model.UserName</h3>
@@ -76,13 +76,13 @@ else if (Model.Approved == false)
 
 @if(Model.StateId != null)
 {
-    <section class="card shadow overflow-hidden mb-4">
+    <section class="card shadow overflow-hidden mb-4" style="border: 4px solid @Model.StateColorHexCode">
         <div class="card-body row p-0">
-            <div class="col-1 d-flex justify-content-center align-items-center" style="background-color:@Model.StateColorHexCode">
+            <div class="col-4 col-md-2 d-flex justify-content-center align-items-center" style="background-color:@Model.StateColorHexCode">
                 <i class="las la-flag fs-1 text-white m-0"></i>
             </div>
 
-            <div class="col-11 p-4">
+            <div class="col-8 col-md-10 p-4">
                 <h3 class="h4 fw-bold border-bottom-1 border-danger" style="color:@Model.StateColorHexCode;">@Model.StateName</h3>
                 <p class="mb-0">@Model.StateDescription</p>
             </div>
@@ -90,18 +90,39 @@ else if (Model.Approved == false)
     </section>
 }
 
-<section class="card shadow border-0 overflow-hidden p-4">
+@*<section class="card shadow border-0 overflow-hidden p-4">
     <h3 class="card-title h4 text-primary fw-bold mb-4">Definir estado de la sugerencia</h3>
-    <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post">
+    <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post" id="change-state-button">
         <input type="hidden" name="suggestionId" value="@Model.Id" />
         <div class="btn-group w-100 mb-4" role="group" aria-label="Basic radio toggle button group">
             
             @foreach(var state in Model.States)
             {
-                <input type="radio" class="btn-check" name="stateId" value="@state.Id" id="input-state-@state.Id" autocomplete="off" @(state.Id == Model.StateId ? "checked" : "") data-com.bitwarden.browser.user-edited="yes">
+                <input type="radio" class="btn-check" name="stateId" id="input-state-@state.Id" value="@state.Id" autocomplete="off" @(state.Id == Model.StateId ? "checked" : "") data-com.bitwarden.browser.user-edited="yes">
                 <label class="btn btn-outline-primary" for="input-state-@state.Id">@state.Name</label>
             }
 
+        </div>
+    </form>
+</section>*@
+
+<section class="card shadow border-0 overflow-hidden p-4">
+    <h3 class="card-title h4 text-primary fw-bold border-bottom border-2 border-primary mb-2">Panel de administración</h3>
+    <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post">
+        <input type="hidden" name="suggestionId" value="@Model.Id" />
+        <div class="form-group mb-4">
+            <label for="exampleSelect1" class="form-label text-primary fw-bold mt-4">Modificar estado:</label>
+            <select class="form-select" name="stateId" id="exampleSelect1" required>
+                <option value="">Seleccionar nuevo estado:</option>
+
+                @foreach(var state in Model.States)
+                {
+                    <option value="@state.Id">
+                        <i class="las la-square-full fs-4" style="color: @state.ColorHexCode"></i>@state.Name
+                    </option>
+                }
+
+            </select>
         </div>
         <button class="btn btn-primary"><i class='las la-pen'></i> Editar estado </button>
     </form>
@@ -112,5 +133,25 @@ else if (Model.Approved == false)
         // Button to upvote suggestion
         const buttonUpvote = document.getElementById('upvote-button');
         buttonUpvote.addEventListener('click', () => buttonUpvote.submit());
+
+        // Buttons to change state
+        const buttonChangeState = document.getElementById('change-state-button');
+        buttonChangeState.addEventListener('change', () => {
+            Swal.fire({
+                title: '¿Está seguro?',
+                text: "Cambiará el estado de la sugerencia",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, cámbialo!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    buttonChangeState.submit()
+                }
+            })
+        });
+
     </script>
 }
