@@ -16,15 +16,15 @@
         <div class="row mb-5">
             @if(Model.SuggestionsAmount == 0)
             {
-                <p class="col-md-7 h3 text-md-left text-white fw-bold">Sin sugerencias</p>
+                <p class="col-md-7 h4 text-md-left text-white fw-bold">Sin sugerencias</p>
             }
             else if(Model.SuggestionsAmount == 1)
             {
-                <p class="col-md-7 h3 text-md-left text-white fw-bold">@Model.SuggestionsAmount sugerencia</p>
+                <p class="col-md-7 h4 text-md-left text-white fw-bold">@Model.SuggestionsAmount sugerencia</p>
             }
             else
             {
-                <p class="col-md-7 h3 text-md-left text-white fw-bold">@Model.SuggestionsAmount sugerencias</p>
+                <p class="col-md-7 h4 text-md-left text-white fw-bold">@Model.SuggestionsAmount sugerencias</p>
             }
             
             <section class="col-md-5 btn-group" role="group" aria-label="Botones">
@@ -33,7 +33,7 @@
             </section>
         </div>
 
-        <section class="row p-2 pt-0">
+        <section class="row p-2 mb-4">
             
             <partial name="_StatusMessage" />
             
@@ -50,21 +50,21 @@
             @foreach(var suggestion in Model.SuggestionsList)
             {
                 <article class="card shadow border-primary overflow-hidden mb-3">
-                    <div class="card-body row p-3 d-flex justify-content-between">
-                        <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" class="upvote-button col-2 text-center border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1 @(suggestion.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
+                    <div class="card-body row p-3 d-flex justify-content-between align-items-start">
+                        <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" class="upvote-button col-2 text-center border border-2 border-primary rounded d-flex flex-column p-1 @(suggestion.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
                             <input type="hidden" name="id" id="suggestionId" value="@suggestion.Id" />
                             <i class="las la-chevron-up fs-3"></i>
                             <p class="h5 fw-bold mb-0">@suggestion.UpvotesAmount</p>
-                            <p class="fw-bold text-uppercase mb-0">@(suggestion.IsUserUpvoteActive ? "Votada" : "Votar")</p>
+                            <p class="fw-bold text-uppercase mb-0 d-none d-sm-block">@(suggestion.IsUserUpvoteActive ? "Votada" : "Votar")</p>
                         </form>
 
-                        <section class="col-10 d-flex flex-column justify-content-between p-0">
-                            <header class="border-bottom border-2 border-primary d-flex justify-content-between align-items-start mb-3 pb-3">
-                                <div>
+                        <section class="col-9 col-lg-10 offset-1 offset-lg-0 d-flex flex-column justify-content-between px-lg-2">
+                            <header class="d-lg-flex justify-content-between align-items-start mb-3 pb-1">
+                                <span class="badge rounded-pill py-2 px-4 fs-6 mb-3 order-2" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
+                                <div class="order-1">
                                     <h5 class="card-title mb-2">@suggestion.Title</h5>
                                     <h6 class="card-subtitle text-muted">@suggestion.UserName</h6>
                                 </div>
-                                <span class="badge rounded-pill py-2 px-4 fs-6" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
                             </header>
 
                             <footer class="d-flex justify-content-between align-items-center">
@@ -87,7 +87,7 @@
 
     </section>
     <section class="col-md-3">
-        <article class="mb-5">
+        <article class="mb-4 mb-md-5">
             <form class="input-group" asp-controller="Home" asp-action="Index" method="get" id="form-search-text">
                 <input type="hidden" name="categoryId" value="@Model.CategorySearchId" @(Model.CategorySearchId == null ? "disabled" : "") />
                 <input type="hidden" name="stateId" value="@Model.StateSearchId" @(Model.StateSearchId == null ? "disabled" : "") />

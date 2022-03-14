@@ -5,7 +5,13 @@
 
 <h1 class="display-2 text-center text-white fw-bold my-5">@(Model.Id == null ? "Crear" : "Editar") sugerencia</h1>
 
-<section class="col-lg-9 card shadow py-3 mx-auto mb-2">
+<section class="col-lg-9 card shadow p-2 mx-auto mb-2">
+    <div class="card-header bg-white">
+        <a asp-controller="Home" asp-action="Index" class="btn text-secondary p-0">
+            <i class="las la-arrow-left fs-3 px-1"></i> Regresar
+        </a>
+    </div>
+
     <form asp-controller="Suggestions" asp-action="@(Model.Id == null ? "CreateSuggestion" : "EditSuggestion")" method="post" class="col-11 card-body mx-auto">
         <partial name="_StatusMessage" />
 
@@ -14,7 +20,7 @@
         <fieldset class="mb-5">
             <legend class="fs-5 fw-bold text-primary text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Título de la sugerencia</legend>
             <div class="form-group">
-                <label class="col-form-label" for="Title">Define el título de la forma más legible posible. (Max 100 caracteres):</label>
+                <label class="col-form-label" for="Title"><span class="text-secondary small">Define el título de la forma más legible posible. (Max 100 caracteres):</span></label>
                 <input type="text" asp-for="Title" class="form-control" placeholder="Título">
             </div>
         </fieldset>
@@ -37,28 +43,18 @@
         <fieldset class="mb-5">
             <legend class="fs-5 fw-bold text-primary text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Descripción de la sugerencia</legend>
             <div class="form-group">
-                <label for="Description" class="col-form-label">Una descripción puede ayudar a los demás usuarios a comprender de una mejor manera tu sugerencia.</label>
+                <label for="Description" class="col-form-label"><span class="text-secondary small">Una descripción puede ayudar a los demás usuarios a comprender de una mejor manera tu sugerencia.</span></label>
                 <textarea asp-for="Description" class="form-control" rows="5"></textarea>
             </div>
         </fieldset>
 
         <div class="d-flex justify-content-between">
-            @if(Model.Id == null)
-            {
-                <button class="btn btn-primary"><i class='las la-plus'></i> Crear sugerencia </button>
-            }
-            else {
-                <button class="btn btn-primary"><i class='las la-pen'></i> Editar sugerencia </button>
-            }
+            <button class="btn btn-primary"><i class='las la-plus'></i> @(Model.Id == null ? "Crear sugerencia" : "Editar sugerencia") </button>
 
-            <div>
-                <a asp-controller="Home" asp-action="Index"><i class="las la-arrow-left text-primary fs-3 px-1"></i></a>
-                
-                @if(Model.Id != null)
-                {
-                    <a href="/Suggestions/ViewSuggestion/@Model.Id"><i class="las la-eye text-primary fs-3 px-1"></i></a>
-                }
-            </div>
+            @if(Model.Id != null)
+            {
+                <a asp-controller="Suggestions" asp-action="ViewSuggestion" asp-route-id="@Model.Id"><i class="las la-eye text-muted fs-3 px-1"></i></a>
+            }
         </div>
     </form>
 </section>

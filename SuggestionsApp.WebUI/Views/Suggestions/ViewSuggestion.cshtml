@@ -26,10 +26,16 @@ else if (Model.Approved == false)
     </div>
 }
 
-<section class="card shadow overflow-hidden mb-4 p-3">
+<section class="card shadow overflow-hidden mb-4 p-2">
+    <div class="card-header bg-white p-0">
+        <a asp-controller="Home" asp-action="Index" class="btn text-secondary mb-0">
+            <i class="las la-arrow-left fs-3 px-1"></i> Regresar
+        </a>
+    </div>
+
     <div class="card-body row p-3">
         <aside class="col-2 text-center">
-            <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" id="upvote-button" class="upvote-button text-center border border-2 border-primary rounded-circle d-flex flex-column justify-content-around p-1 mx-auto mb-2 @(Model.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
+            <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" id="upvote-button" class="upvote-button text-center border border-2 border-primary rounded d-flex flex-column justify-content-around p-1 mx-auto mb-2 @(Model.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
                 <input type="hidden" name="id" id="suggestionId" value="@Model.Id" />
                 <input type="hidden" name="isFromViewSuggestion" id="isFromViewSuggestion" value="true" />
                 <i class="las la-chevron-up fs-3"></i>
@@ -57,7 +63,6 @@ else if (Model.Approved == false)
             <footer class="d-flex justify-content-between align-items-center">
                 <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @Model.CategoryName</p>
                 <div class="d-flex align-items-center">
-                    <a asp-controller="Home" asp-action="Index"><i class="las la-arrow-left text-primary fs-3 px-1"></i></a>
                     <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
                     <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
                         <input type="hidden" value="@Model.Id" name="id" />
