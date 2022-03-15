@@ -20,7 +20,8 @@ services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connec
 services.AddDbContext<SuggestionsAppContext>(options => options.UseSqlServer(connectionString));
 
 // Identity implementation and configuration
-services.AddDefaultIdentity<ApplicationUser>(options => {
+services.AddDefaultIdentity<ApplicationUser>(options =>
+{
     options.SignIn.RequireConfirmedAccount = true;
 
     options.Password.RequireDigit = true;
@@ -34,10 +35,12 @@ services.AddDefaultIdentity<ApplicationUser>(options => {
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
 
-}).AddEntityFrameworkStores<ApplicationContext>();
+})
+.AddRoles<ApplicationRole>()
+.AddEntityFrameworkStores<ApplicationContext>();
 
 services.ConfigureApplicationCookie(config =>
 {

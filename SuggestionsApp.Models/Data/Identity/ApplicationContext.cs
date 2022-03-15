@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SuggestionsApp.Models.Data.Identity;
 
-public class ApplicationContext : IdentityDbContext<ApplicationUser>
+public class ApplicationContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)

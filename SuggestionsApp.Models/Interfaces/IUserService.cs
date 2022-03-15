@@ -1,17 +1,20 @@
-﻿using SuggestionsApp.Models.DataModels;
+﻿using SuggestionsApp.Models.Data.Identity;
+using SuggestionsApp.Models.DataModels;
 
 namespace SuggestionsApp.Models.Interfaces
 {
     public interface IUserService
     {
-        Task<User> GetUserLoggedIn();
+        Task<ApplicationUser> GetUserLoggedIn();
 
         Task<string> GetUserNameLoggedIn();
 
         Task<string> GetUserIdLoggedIn();
 
-        Task<User> GetUserById(string userId);
+        Task<ApplicationUser> GetUserById(string userId);
 
         Task<string> GetUserNameById(string userId);
+
+        Task<IEnumerable<ApplicationUser>> GetAllUsers();
     }
 }
