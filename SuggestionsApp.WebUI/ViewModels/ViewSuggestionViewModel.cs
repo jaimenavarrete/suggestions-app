@@ -24,6 +24,10 @@
 
         public string UserName { get; set; } = null!;
 
+        public bool IsAdminOrModeratorUser { get; set; }
+
+        public bool IsUserSuggestion { get; set; }
+
         public DateTime Date { get; set; }
 
         public bool? Approved { get; set; }

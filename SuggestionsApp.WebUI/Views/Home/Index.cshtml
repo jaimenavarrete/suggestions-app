@@ -51,7 +51,7 @@
             {
                 <article class="card shadow border-primary overflow-hidden mb-3">
                     <div class="card-body row p-3 d-flex justify-content-between align-items-start">
-                        <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" class="upvote-button col-2 text-center border border-2 border-primary rounded d-flex flex-column p-1 @(suggestion.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
+                        <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" class="upvote-button col-2 btn text-center border border-2 border-primary rounded d-flex flex-column p-1 @(suggestion.IsUserSuggestion ? "disabled" : "") @(suggestion.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
                             <input type="hidden" name="id" id="suggestionId" value="@suggestion.Id" />
                             <i class="las la-chevron-up fs-3"></i>
                             <p class="h5 fw-bold mb-0">@suggestion.UpvotesAmount</p>
@@ -71,11 +71,15 @@
                                 <p class="text-muted text-uppercase fw-bold mb-0">@suggestion.CategoryName</p>
                                 <div class="d-flex align-items-center">
                                     <a asp-controller="Suggestions" asp-action="ViewSuggestion" asp-route-id="@suggestion.Id"><i class="las la-eye text-muted fs-3 px-1"></i></a>
-                                    <a asp-controller="Suggestions" asp-action="EditSuggestion" asp-route-id="@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
-                                    <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-element-form">
-                                        <input type="hidden" value="@suggestion.Id" name="id" />
-                                        <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
-                                    </form>
+
+                                    @if(suggestion.IsUserSuggestion)
+                                    {
+                                        <a asp-controller="Suggestions" asp-action="EditSuggestion" asp-route-id="@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
+                                        <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-element-form">
+                                            <input type="hidden" value="@suggestion.Id" name="id" />
+                                            <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
+                                        </form>
+                                    }
                                 </div>
                             </footer>
                         </section>

@@ -40,11 +40,14 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
+                var currentUserId = await _userService.GetUserIdLoggedIn();
                 var suggestion = await _suggestionsService.GetSuggestionById(id);
 
                 var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
                 viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                viewModel.IsUserUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(suggestion.Id, suggestion.UserId);
+                viewModel.IsAdminOrModeratorUser = await _userService.IsAdminOrModeratorUserLoggedIn();
+                viewModel.IsUserSuggestion = suggestion.UserId == currentUserId;
+                viewModel.IsUserUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(suggestion.Id, currentUserId);
                 viewModel.States = await GetStatesViewModel();
 
                 return View(viewModel);

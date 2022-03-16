@@ -39,6 +39,21 @@ namespace SuggestionsApp.Services
             return currentUser?.UserName;
         }
 
+        public async Task<IEnumerable<string>> GetUserRolesLoggedIn()
+        {
+            var roles = await GetCurrentUserRoles();
+            return roles;
+        }
+
+        public async Task<bool> IsAdminOrModeratorUserLoggedIn()
+        {
+            var roles = await GetCurrentUserRoles();
+
+            if (roles is null) return false;
+
+            return (roles.Contains("Admin") || roles.Contains("Moderator"));
+        }
+
         public async Task<ApplicationUser> GetUserById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -64,6 +79,17 @@ namespace SuggestionsApp.Services
                 var currentAppUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
 
                 return currentAppUser;
+            }
+
+            private async Task<IEnumerable<string>> GetCurrentUserRoles()
+            {
+                var currentUser = await GetCurrentUser();
+
+                if (currentUser is null) return null;
+
+                var roles = await _userManager.GetRolesAsync(currentUser);
+
+                return roles;
             }
 
         #endregion

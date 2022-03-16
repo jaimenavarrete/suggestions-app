@@ -11,6 +11,10 @@ namespace SuggestionsApp.Models.Interfaces
 
         Task<string> GetUserIdLoggedIn();
 
+        Task<IEnumerable<string>> GetUserRolesLoggedIn();
+
+        Task<bool> IsAdminOrModeratorUserLoggedIn();
+
         Task<ApplicationUser> GetUserById(string userId);
 
         Task<string> GetUserNameById(string userId);

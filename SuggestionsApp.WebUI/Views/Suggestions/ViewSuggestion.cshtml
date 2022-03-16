@@ -62,13 +62,18 @@ else if (Model.Approved == false)
 
             <footer class="d-flex justify-content-between align-items-center">
                 <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @Model.CategoryName</p>
-                <div class="d-flex align-items-center">
-                    <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
-                    <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
-                        <input type="hidden" value="@Model.Id" name="id" />
-                        <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
-                    </form>
-                </div>
+
+                @if(Model.IsUserSuggestion)
+                {
+                    <div class="d-flex align-items-center">
+                        <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
+                        <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
+                            <input type="hidden" value="@Model.Id" name="id" />
+                            <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
+                        </form>
+                    </div>
+                }
+                
             </footer>
         </section>
     </div>
@@ -90,43 +95,51 @@ else if (Model.Approved == false)
     </section>
 }
 
-@*<section class="card shadow border-0 overflow-hidden p-4">
-    <h3 class="card-title h4 text-primary fw-bold mb-4">Definir estado de la sugerencia</h3>
-    <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post" id="change-state-button">
-        <input type="hidden" name="suggestionId" value="@Model.Id" />
-        <div class="btn-group w-100 mb-4" role="group" aria-label="Basic radio toggle button group">
-            
-            @foreach(var state in Model.States)
-            {
-                <input type="radio" class="btn-check" name="stateId" id="input-state-@state.Id" value="@state.Id" autocomplete="off" @(state.Id == Model.StateId ? "checked" : "") data-com.bitwarden.browser.user-edited="yes">
-                <label class="btn btn-outline-primary" for="input-state-@state.Id">@state.Name</label>
-            }
-
-        </div>
-    </form>
-</section>*@
-
-<section class="card shadow border-0 overflow-hidden p-4">
+@*<section class="card shadow border-0 p-4">
     <h3 class="card-title h4 text-primary fw-bold border-bottom border-2 border-primary mb-2">Panel de administración</h3>
-    <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post">
-        <input type="hidden" name="suggestionId" value="@Model.Id" />
-        <div class="form-group mb-4">
-            <label for="exampleSelect1" class="form-label text-primary fw-bold mt-4">Modificar estado:</label>
-            <select class="form-select" name="stateId" id="exampleSelect1" required>
-                <option value="">Seleccionar nuevo estado:</option>
 
+    <p class="form-label text-primary fw-bold mt-4">Modificar estado:</p>
+    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post" class="btn-group col col-md-6" role="group">
+            <input type="hidden" name="suggestionId" value="@Model.Id" />
+
+            <button id="btnGroupDrop" type="button" class="btn text-white dropdown-toggle d-block w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: @Model.StateColorHexCode">@Model.StateName</button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop" style="">
+                
                 @foreach(var state in Model.States)
                 {
-                    <option value="@state.Id">
-                        <i class="las la-square-full fs-4" style="color: @state.ColorHexCode"></i>@state.Name
-                    </option>
+                    <button class="dropdown-item text-secondary" href="#" name="stateId" value="@state.Id"><i class="las la-square-full" style="color: @state.ColorHexCode"></i> @state.Name</button>
                 }
 
-            </select>
-        </div>
-        <button class="btn btn-primary"><i class='las la-pen'></i> Editar estado </button>
-    </form>
-</section>
+            </div>
+        </form>
+    </div>
+</section>*@
+
+@if(Model.IsAdminOrModeratorUser)
+{
+    <section class="card shadow border-0 overflow-hidden p-4">
+        <h3 class="card-title h4 text-primary fw-bold border-bottom border-2 border-primary mb-2">Panel de administración</h3>
+        <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post">
+            <input type="hidden" name="suggestionId" value="@Model.Id" />
+            <div class="form-group mb-4">
+                <label for="exampleSelect1" class="form-label text-primary fw-bold mt-4">Modificar estado:</label>
+                <select class="form-select" name="stateId" id="exampleSelect1" required>
+                    <option value="">Seleccionar nuevo estado:</option>
+
+                    @foreach(var state in Model.States)
+                    {
+                        <option value="@state.Id">
+                            <i class="las la-square-full fs-4" style="color: @state.ColorHexCode"></i>@state.Name
+                        </option>
+                    }
+
+                </select>
+            </div>
+            <button class="btn btn-primary"><i class='las la-pen'></i> Editar estado </button>
+        </form>
+    </section>
+}
 
 @section Scripts {
     <script>
