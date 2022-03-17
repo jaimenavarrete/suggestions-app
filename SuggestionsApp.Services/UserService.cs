@@ -1,57 +1,47 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Identity;
-using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Interfaces;
+using System.Security.Claims;
 
 namespace SuggestionsApp.Services
 {
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(
-            UserManager<ApplicationUser> userManager,
-            IHttpContextAccessor httpContextAccessor)
+        public UserService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ApplicationUser> GetUserLoggedIn()
+        public async Task<ApplicationUser> GetUserLoggedIn(ClaimsPrincipal principal)
         {
-            var currentUser = await GetCurrentUser();
+            var currentUser = await GetCurrentUser(principal);
             return currentUser;
         }
 
-        public async Task<string> GetUserIdLoggedIn()
+        public async Task<string> GetUserIdLoggedIn(ClaimsPrincipal principal)
         {
-            var currentUser = await GetCurrentUser();
+            var currentUser = await GetCurrentUser(principal);
             return currentUser?.Id;
         }
 
-        public async Task<string> GetUserNameLoggedIn()
+        public async Task<string> GetUserNameLoggedIn(ClaimsPrincipal principal)
         {
-            var currentUser = await GetCurrentUser();
+            var currentUser = await GetCurrentUser(principal);
             return currentUser?.UserName;
         }
 
-        public async Task<IEnumerable<string>> GetUserRolesLoggedIn()
+        public async Task<string> GetUserRoleLoggedIn(ClaimsPrincipal principal)
         {
-            var roles = await GetCurrentUserRoles();
-            return roles;
-        }
+            var currentUser = await GetCurrentUser(principal);
 
-        public async Task<bool> IsAdminOrModeratorUserLoggedIn()
-        {
-            var roles = await GetCurrentUserRoles();
+            if (currentUser is null) return "";
 
-            if (roles is null) return false;
+            var roles = await _userManager.GetRolesAsync(currentUser);
 
-            return (roles.Contains("Admin") || roles.Contains("Moderator"));
+            return roles.First();
         }
 
         public async Task<ApplicationUser> GetUserById(string userId)
@@ -74,22 +64,10 @@ namespace SuggestionsApp.Services
 
         #region HelperMethods
 
-            private async Task<ApplicationUser> GetCurrentUser()
+            private async Task<ApplicationUser> GetCurrentUser(ClaimsPrincipal principal)
             {
-                var currentAppUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-
-                return currentAppUser;
-            }
-
-            private async Task<IEnumerable<string>> GetCurrentUserRoles()
-            {
-                var currentUser = await GetCurrentUser();
-
-                if (currentUser is null) return null;
-
-                var roles = await _userManager.GetRolesAsync(currentUser);
-
-                return roles;
+                var currentUser = await _userManager.GetUserAsync(principal);
+                return currentUser;
             }
 
         #endregion

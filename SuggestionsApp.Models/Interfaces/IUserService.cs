@@ -1,19 +1,17 @@
 ﻿using SuggestionsApp.Models.Data.Identity;
-using SuggestionsApp.Models.DataModels;
+using System.Security.Claims;
 
 namespace SuggestionsApp.Models.Interfaces
 {
     public interface IUserService
     {
-        Task<ApplicationUser> GetUserLoggedIn();
+        Task<ApplicationUser> GetUserLoggedIn(ClaimsPrincipal principal);
 
-        Task<string> GetUserNameLoggedIn();
+        Task<string> GetUserNameLoggedIn(ClaimsPrincipal principal);
 
-        Task<string> GetUserIdLoggedIn();
+        Task<string> GetUserIdLoggedIn(ClaimsPrincipal principal);
 
-        Task<IEnumerable<string>> GetUserRolesLoggedIn();
-
-        Task<bool> IsAdminOrModeratorUserLoggedIn();
+        Task<string> GetUserRoleLoggedIn(ClaimsPrincipal principal);
 
         Task<ApplicationUser> GetUserById(string userId);
 

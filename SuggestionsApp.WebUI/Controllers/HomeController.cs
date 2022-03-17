@@ -69,13 +69,15 @@ namespace SuggestionsApp.WebUI.Controllers
             {
                 var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, categoryId, stateId, search);
                 var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
-                var currentUserId = await _userService.GetUserIdLoggedIn();
+                var currentUserId = await _userService.GetUserIdLoggedIn(User);
 
                 foreach (var suggestionViewModel in suggestionsViewModel)
                 {
                     var suggestion = suggestions.First(s => s.Id == suggestionViewModel.Id);
+                    var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestion.Id, currentUserId);
+
                     suggestionViewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                    suggestionViewModel.IsUserUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(suggestion.Id, currentUserId);
+                    suggestionViewModel.IsUserUpvoteActive = currentUserUpvote != null;
                     suggestionViewModel.IsUserSuggestion = suggestion.UserId == currentUserId;
                 }
 

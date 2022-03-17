@@ -39,18 +39,6 @@ namespace SuggestionsApp.Services
             return upvote;
         }
 
-        public async Task<bool> IsSuggestionUserUpvoteActive(int suggesstionId, string userId)
-        {
-            var upvote = await GetSuggestionUserUpvote(suggesstionId, userId);
-
-            if(upvote == null)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         public async Task<bool> InsertUpvote(Upvote upvote)
         {
             if (upvote is null)

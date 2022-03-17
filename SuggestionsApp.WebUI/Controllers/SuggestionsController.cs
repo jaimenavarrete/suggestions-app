@@ -40,14 +40,16 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
-                var currentUserId = await _userService.GetUserIdLoggedIn();
                 var suggestion = await _suggestionsService.GetSuggestionById(id);
+                var currentUserId = await _userService.GetUserIdLoggedIn(User);
+                var currentUserRole = await _userService.GetUserRoleLoggedIn(User);
+                var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestion.Id, currentUserId);
 
                 var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
                 viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                viewModel.IsAdminOrModeratorUser = await _userService.IsAdminOrModeratorUserLoggedIn();
+                viewModel.IsAdminOrModeratorUser = currentUserRole == "Admin" || currentUserRole == "Moderator";
                 viewModel.IsUserSuggestion = suggestion.UserId == currentUserId;
-                viewModel.IsUserUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(suggestion.Id, currentUserId);
+                viewModel.IsUserUpvoteActive = currentUserUpvote != null;
                 viewModel.States = await GetStatesViewModel();
 
                 return View(viewModel);
@@ -77,20 +79,14 @@ namespace SuggestionsApp.WebUI.Controllers
             try
             {
                 var suggestion = _mapper.Map<Suggestion>(viewModel);
-                suggestion.UserId = await _userService.GetUserIdLoggedIn();
+                suggestion.UserId = await _userService.GetUserIdLoggedIn(User);
                 suggestion.UpvotesAmount = 0;
                 suggestion.Date = DateTime.Now;
 
                 var succeeded = await _suggestionsService.InsertSuggestion(suggestion);
 
                 if (succeeded)
-                {
                     TempData["success"] = "La sugerencia se ha creado correctamente.";
-                }
-                else
-                {
-                    TempData["error"] = "Ocurrió un error inesperado a la hora de crear la sugerencia. Inténtelo más tarde.";
-                }
 
                 return RedirectToAction("Index", "Home");
             }
@@ -192,10 +188,10 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
-                string userId = await _userService.GetUserIdLoggedIn();
-                bool isSuggestionUpvoteActive = await _upvotesService.IsSuggestionUserUpvoteActive(id, userId);
+                string userId = await _userService.GetUserIdLoggedIn(User);
+                var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(id, userId);
 
-                if(isSuggestionUpvoteActive)
+                if(currentUserUpvote is not null)
                 {
                     var succeeded = await _upvotesService.DeleteUpvote(id, userId);
                 }

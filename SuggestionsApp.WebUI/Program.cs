@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.Data.Identity;
@@ -48,7 +47,6 @@ services.ConfigureApplicationCookie(config =>
     config.LoginPath = "/Account/Login";
 });
 
-services.AddHttpContextAccessor();
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
 services.AddRazorPages();
 
@@ -60,8 +58,8 @@ services.AddTransient<IUserService, UserService>();
 services.AddTransient<IUpvotesService, UpvotesService>();
 
 // Depencency Injection - AutoMapper
-services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+//services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+services.AddAutoMapper(typeof(Program));
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
