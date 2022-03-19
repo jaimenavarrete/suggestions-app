@@ -125,7 +125,7 @@ namespace SuggestionsApp.WebUI.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     // Add to user role
-                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, "Usuario");
 
                     _logger.LogInformation("User created a new account with password.");
 

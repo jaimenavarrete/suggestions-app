@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
@@ -35,7 +36,9 @@ namespace SuggestionsApp.WebUI.Controllers
             return View();
         }
 
+
         // Categories section
+
 
         [HttpGet]
         public async Task<IActionResult> CategoriesList()
@@ -113,7 +116,9 @@ namespace SuggestionsApp.WebUI.Controllers
             }
         }
 
+
         // States section
+
 
         public async Task<IActionResult> StatesList()
         {
@@ -192,14 +197,60 @@ namespace SuggestionsApp.WebUI.Controllers
             }
         }
 
+
         // Users section
 
-        public IActionResult UsersList()
+
+        [HttpGet]
+        public async Task<IActionResult> UsersList()
         {
-            return View();
+            var users = await _userService.GetUsers();
+            var roles = await _userService.GetRoles();
+         
+            var usersViewModel = _mapper.Map<List<UserViewModel>>(users);
+            var rolesViewModel = _mapper.Map<List<RoleViewModel>>(roles);
+
+            foreach(var user in usersViewModel)
+            {
+                user.LockedOut = user.LockoutEnd > DateTime.UtcNow;
+                user.Role = await _userService.GetUserRoleById(user.Id);
+            }
+
+            UsersListViewModel viewModel = new()
+            {
+                UsersList = usersViewModel,
+                Roles = rolesViewModel
+            };
+
+            return View(viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(UsersListViewModel viewModel)
+        {
+            try
+            {
+                var user = _mapper.Map<ApplicationUser>(viewModel);
+                user.EmailConfirmed = true;
+
+                var succeeded = await _userService.InsertUser(user, viewModel.Password, viewModel.Role);
+
+                if (succeeded)
+                    TempData["success"] = "El usuario se ha creado correctamente.";
+
+                return RedirectToAction("UsersList");
+            }
+            catch (LogicException ex)
+            {
+                TempData["error"] = ex.Message;
+
+                return RedirectToAction("UsersList");
+            }
+        }
+
+
         // Suggestions section
+
 
         [HttpGet]
         public async Task<IActionResult> SuggestionsApproval()

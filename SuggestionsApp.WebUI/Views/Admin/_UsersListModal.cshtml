@@ -1,0 +1,54 @@
+﻿@model UsersListViewModel
+
+<div class="modal fade" id="form-user-modal" tabindex="-1" aria-labelledby="form-user-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-controller="Admin" asp-action="CreateUser" method="post" id="form-user" class="modal-content">
+            <div class="modal-header">
+                <h5 id="form-user-modal-label" class="modal-title text-primary fw-bold"><i class="las la-plus-circle fs-4"></i> Crear usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label class="col-form-label" for="input-user-name">Nombre de usuario:</label>
+                    <input type="text" asp-for="UserName" id="input-user-name" class="form-control input-user">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="col-form-label" for="input-user-email">Email del usuario:</label>
+                    <input type="email" asp-for="Email" id="input-user-email" class="form-control input-user">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="col-form-label" for="input-user-role">Rol del usuario:</label>
+                    <select asp-for="Role" class="form-select" role="button" required>
+                        <option value="">Seleccione un rol</option>
+                        
+                        @foreach(var role in Model.Roles)
+                        {
+                            <option value="@role.Name">@role.Name</option>
+                        }
+
+                    </select>
+                </div>
+
+                <div class="form-group has-danger mb-3">
+                    <label class="col-form-label" for="input-user-password">Contraseña del usuario:</label>
+                    <input type="password" asp-for="Password" id="input-user-password" class="form-control input-user">
+                    <div id="password-invalid-feedback" class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group has-danger mb-3">
+                    <label class="col-form-label" for="input-user-repeat-password">Repetir contraseña del usuario:</label>
+                    <input type="password" asp-for="RepeatPassword" id="input-user-repeat-password" class="form-control input-user">
+                    <div id="repeat-password-invalid-feedback" class="invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary text-dark" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary"><i class="las la-save fs-4"></i> Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

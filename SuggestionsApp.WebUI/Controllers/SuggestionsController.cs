@@ -47,7 +47,7 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
                 viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                viewModel.IsAdminOrModeratorUser = currentUserRole == "Admin" || currentUserRole == "Moderator";
+                viewModel.IsAdminOrModeratorUser = currentUserRole == "Admin" || currentUserRole == "Moderador";
                 viewModel.IsUserSuggestion = suggestion.UserId == currentUserId;
                 viewModel.IsUserUpvoteActive = currentUserUpvote != null;
                 viewModel.States = await GetStatesViewModel();

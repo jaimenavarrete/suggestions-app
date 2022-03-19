@@ -17,6 +17,12 @@ namespace SuggestionsApp.Models.Interfaces
 
         Task<string> GetUserNameById(string userId);
 
-        Task<IEnumerable<ApplicationUser>> GetAllUsers();
+        Task<string> GetUserRoleById(string userId);
+
+        Task<IEnumerable<ApplicationUser>> GetUsers();
+
+        Task<IEnumerable<ApplicationRole>> GetRoles();
+
+        Task<bool> InsertUser(ApplicationUser user, string password, string role);
     }
 }
