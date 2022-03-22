@@ -81,21 +81,22 @@
 
 @section Scripts {
     <script>
-        // Block user button confirm dialog
-        const btnBlockUser = document.querySelectorAll(".button-block-user");
 
-        btnBlockUser.forEach(form => {
+        // Block user button confirm dialog
+        const btnBlockUser = document.querySelectorAll('.button-block-user');
+
+        btnBlockUser.forEach((form) => {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
                 Swal.fire({
                     title: '¿Está seguro?',
-                    text: "Cambiará el estado de bloqueo del usuario.",
+                    text: 'Cambiará el estado de bloqueo del usuario.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, cambiar'
+                    confirmButtonText: 'Si, cambiar',
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
@@ -105,93 +106,185 @@
         });
 
         // Modal form validations
-        const btnCreateUser = document.getElementById("button-create-user");
-        const form = document.getElementById("form-user");
-        const passwordInput = form.elements['Password'];
-        const passwordInvalidLabel = document.getElementById('password-invalid-feedback');
-        const repeatPasswordInput = form.elements['RepeatPassword'];
-        const repeatPasswordInvalidLabel = document.getElementById('repeat-password-invalid-feedback');
+        const btnCreateUser = document.getElementById('button-create-user');
+        const form = document.getElementById('form-create');
+        const inputs = document.querySelectorAll('.input-create');
 
+        // Clear input value with button to create user
         btnCreateUser.addEventListener('click', () => {
-            form.elements['UserName'].value = '';
-            form.elements['Email'].value = '';
-            form.elements['Role'].value = '';
-            form.elements['Password'].value = '';
-            form.elements['RepeatPassword'].value = '';
+            inputs.forEach((input) => (input.value = ''));
+
+            // Hide invalid feedback
+            const activeFeedback = document.querySelectorAll('.is-invalid');
+            activeFeedback.forEach((label) => label.classList.remove('is-invalid'));
         });
 
-        const validPasswordInput = () => {
+        // Validate inputs
+        const validUserNameInput = () => {
+            const userNameInput = document.getElementById('input-username');
+            const userNameInvalidLabel = document.getElementById('feedback-username');
             let valid = true;
 
-            // Regex
-            let digitValidation = /\d/;
-            let lowerCaseValidation = /[a-z]/;
-            let upperCaseValidation = /[A-Z]/;
-            let alphaNumericValidation = /\W/;
+            // Clear elements
+            userNameInput.classList.remove('is-invalid');
+            userNameInvalidLabel.innerHTML = '';
+
+            if (!userNameInput.value) {
+                userNameInvalidLabel.innerHTML +=
+                    'Debe agregar un nombre de usuario.<br/>';
+                valid = false;
+            }
+
+            if (userNameInput.value.length < 5) {
+                userNameInvalidLabel.innerHTML += 'Requiere al menos 5 caracteres.';
+                valid = false;
+            }
+
+            if (!valid) userNameInput.classList.add('is-invalid');
+
+            return valid;
+        };
+
+        const validEmailInput = () => {
+            const emailInput = document.getElementById('input-email');
+            const emailInvalidLabel = document.getElementById('feedback-email');
+            let valid = true;
+            let emailRegex = /^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+
+            // Clear elements
+            emailInput.classList.remove('is-invalid');
+            emailInvalidLabel.innerHTML = '';
+
+            if (!emailInput.value) {
+                emailInvalidLabel.innerHTML += 'Debe agregar un email.<br/>';
+                valid = false;
+            }
+
+            if (!emailRegex.test(emailInput.value)) {
+                emailInvalidLabel.innerHTML += 'El email agregado es inválido.<br/>';
+                valid = false;
+            }
+
+            if (!valid) emailInput.classList.add('is-invalid');
+
+            return valid;
+        };
+
+        const validRoleInput = () => {
+            const roleInput = document.getElementById('input-role');
+            let valid = true;
+
+            // Clear elements
+            roleInput.classList.remove('is-invalid');
+
+            if (!roleInput.value) {
+                roleInput.classList.add('is-invalid');
+                valid = false;
+            }
+
+            return valid;
+        };
+
+        const validPasswordInput = () => {
+            const passwordInput = document.getElementById('input-password');
+            const passwordInvalidLabel = document.getElementById('feedback-password');
+            let valid = true;
 
             // Clear elements
             passwordInput.classList.remove('is-invalid');
-            passwordInvalidLabel.innerHTML = "";
+            passwordInvalidLabel.innerHTML = '';
 
-            if(passwordInput.value.search(digitValidation) === -1) {
-                passwordInput.classList.add('is-invalid');
-                passwordInvalidLabel.innerHTML += "Requiere al menos 1 dígito.<br>";
+            if (!passwordInput.value) {
+                passwordInvalidLabel.innerHTML += 'Debe agregar una contraseña.<br>';
                 valid = false;
             }
-            if(passwordInput.value.search(lowerCaseValidation) === -1) {
-                passwordInput.classList.add('is-invalid');
-                passwordInvalidLabel.innerHTML += "Requiere al menos 1 caracter en minúscula.<br>";
+
+            // Digit validation
+            if (passwordInput.value.search(/\d/) === -1) {
+                passwordInvalidLabel.innerHTML += 'Requiere al menos 1 dígito.<br>';
                 valid = false;
             }
-            if(passwordInput.value.search(upperCaseValidation) === -1) {
-                passwordInput.classList.add('is-invalid');
-                passwordInvalidLabel.innerHTML += "Requiere al menos 1 caracter en mayúscula.<br>";
+            // Lowercase validation
+            if (passwordInput.value.search(/[a-z]/) === -1) {
+                passwordInvalidLabel.innerHTML +=
+                    'Requiere al menos 1 caracter en minúscula.<br>';
                 valid = false;
             }
-            if(passwordInput.value.search(alphaNumericValidation) === -1) {
-                passwordInput.classList.add('is-invalid');
-                passwordInvalidLabel.innerHTML += "Requiere al menos 1 caracter alfanumérico.<br>";
+            // Uppercase validation
+            if (passwordInput.value.search(/[A-Z]/) === -1) {
+                passwordInvalidLabel.innerHTML +=
+                    'Requiere al menos 1 caracter en mayúscula.<br>';
                 valid = false;
             }
-            if(passwordInput.value.length < 6) {
-                passwordInput.classList.add('is-invalid');
-                passwordInvalidLabel.innerHTML += "Requiere al menos 6 caracteres.<br>";
+            // Alphanumeric validation
+            if (passwordInput.value.search(/\W/) === -1) {
+                passwordInvalidLabel.innerHTML +=
+                    'Requiere al menos 1 caracter alfanumérico.<br>';
                 valid = false;
             }
+            // Length validation
+            if (passwordInput.value.length < 6) {
+                passwordInvalidLabel.innerHTML += 'Requiere al menos 6 caracteres.<br>';
+                valid = false;
+            }
+
+            if (!valid) passwordInput.classList.add('is-invalid');
 
             return valid;
         };
 
         const validRepeatPasswordInput = () => {
+            const passwordInput = document.getElementById('input-password');
+            const repeatPasswordInput = document.getElementById(
+                'input-repeat-password'
+            );
             let valid = true;
 
             // Clear elements
             repeatPasswordInput.classList.remove('is-invalid');
-            repeatPasswordInvalidLabel.textContent = "";
 
-            if(passwordInput.value !== repeatPasswordInput.value) {
+            if (passwordInput.value !== repeatPasswordInput.value) {
                 repeatPasswordInput.classList.add('is-invalid');
-                repeatPasswordInvalidLabel.textContent = "Las contraseñas no coinciden.";
                 valid = false;
             }
 
             return valid;
         };
 
-        form.addEventListener('submit', e => {
-            e.preventDefault();
+        const validateInput = (input) => {
+            switch (input.id) {
+                case 'input-username':
+                    return validUserNameInput();
+                case 'input-email':
+                    return validEmailInput();
+                case 'input-role':
+                    return validRoleInput();
+                case 'input-password':
+                    return validPasswordInput();
+                case 'input-repeat-password':
+                    return validRepeatPasswordInput();
+            }
+        };
 
+        const validateForm = () => {
             let valid = true;
 
-            if(!validPasswordInput()) valid = false;
+            inputs.forEach((input) => {
+                if (!validateInput(input)) {
+                    valid = false;
+                }
+            });
 
-            if(!validRepeatPasswordInput()) valid = false;
+            return valid;
+        };
 
-            if(valid) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (validateForm()) {
                 form.submit();
             }
         });
 
-        
     </script>
 }
