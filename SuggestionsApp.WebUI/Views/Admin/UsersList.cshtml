@@ -130,8 +130,7 @@
             userNameInvalidLabel.innerHTML = '';
 
             if (!userNameInput.value) {
-                userNameInvalidLabel.innerHTML +=
-                    'Debe agregar un nombre de usuario.<br/>';
+                userNameInvalidLabel.innerHTML += 'Debe agregar un nombre de usuario.<br/>';
                 valid = false;
             }
 
@@ -161,7 +160,7 @@
             }
 
             if (!emailRegex.test(emailInput.value)) {
-                emailInvalidLabel.innerHTML += 'El email agregado es inválido.<br/>';
+                emailInvalidLabel.innerHTML += 'Debe agregar un email válido.<br/>';
                 valid = false;
             }
 
@@ -206,20 +205,17 @@
             }
             // Lowercase validation
             if (passwordInput.value.search(/[a-z]/) === -1) {
-                passwordInvalidLabel.innerHTML +=
-                    'Requiere al menos 1 caracter en minúscula.<br>';
+                passwordInvalidLabel.innerHTML += 'Requiere al menos 1 caracter en minúscula.<br>';
                 valid = false;
             }
             // Uppercase validation
             if (passwordInput.value.search(/[A-Z]/) === -1) {
-                passwordInvalidLabel.innerHTML +=
-                    'Requiere al menos 1 caracter en mayúscula.<br>';
+                passwordInvalidLabel.innerHTML += 'Requiere al menos 1 caracter en mayúscula.<br>';
                 valid = false;
             }
             // Alphanumeric validation
             if (passwordInput.value.search(/\W/) === -1) {
-                passwordInvalidLabel.innerHTML +=
-                    'Requiere al menos 1 caracter alfanumérico.<br>';
+                passwordInvalidLabel.innerHTML += 'Requiere al menos 1 caracter alfanumérico.<br>';
                 valid = false;
             }
             // Length validation
@@ -235,9 +231,7 @@
 
         const validRepeatPasswordInput = () => {
             const passwordInput = document.getElementById('input-password');
-            const repeatPasswordInput = document.getElementById(
-                'input-repeat-password'
-            );
+            const repeatPasswordInput = document.getElementById('input-repeat-password');
             let valid = true;
 
             // Clear elements
