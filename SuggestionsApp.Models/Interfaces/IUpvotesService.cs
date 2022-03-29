@@ -9,8 +9,6 @@ namespace SuggestionsApp.Models.Interfaces
 {
     public interface IUpvotesService
     {
-        Task<int> GetUpvotesAmountBySuggestionId(int id);
-
         Task<Upvote> GetSuggestionUserUpvote(int suggesstionId, string userId);
 
         Task<bool> InsertUpvote(Upvote upvote);

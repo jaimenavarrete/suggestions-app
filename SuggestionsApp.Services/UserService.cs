@@ -19,33 +19,10 @@ namespace SuggestionsApp.Services
             _roleManager = roleManager;
         }
 
-        public async Task<ApplicationUser> GetUserLoggedIn(ClaimsPrincipal principal)
-        {
-            var currentUser = await _userManager.GetUserAsync(principal);
-            return currentUser;
-        }
-
-        public async Task<string> GetUserIdLoggedIn(ClaimsPrincipal principal)
+        public async Task<string> GetLoggedUserId(ClaimsPrincipal principal)
         {
             var currentUser = await _userManager.GetUserAsync(principal);
             return currentUser?.Id;
-        }
-
-        public async Task<string> GetUserNameLoggedIn(ClaimsPrincipal principal)
-        {
-            var currentUser = await _userManager.GetUserAsync(principal);
-            return currentUser?.UserName;
-        }
-
-        public async Task<string> GetUserRoleLoggedIn(ClaimsPrincipal principal)
-        {
-            var currentUser = await _userManager.GetUserAsync(principal);
-
-            if (currentUser is null) return "";
-
-            var roles = await _userManager.GetRolesAsync(currentUser);
-
-            return roles.First();
         }
 
         public async Task<ApplicationUser> GetUserById(string userId)
@@ -91,6 +68,17 @@ namespace SuggestionsApp.Services
 
             // Add to role
             result = await _userManager.AddToRoleAsync(user, role);
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> ChangeUserLockState(string userId)
+        {
+            var user = await GetUserById(userId);
+            var isUserLocked = user.LockoutEnd > DateTime.UtcNow;
+            var lockDate = isUserLocked ? DateTime.UtcNow : DateTimeOffset.MaxValue;
+            
+            var result = await _userManager.SetLockoutEndDateAsync(user, lockDate);
 
             return result.Succeeded;
         }

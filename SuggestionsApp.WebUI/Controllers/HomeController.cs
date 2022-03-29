@@ -42,7 +42,7 @@ namespace SuggestionsApp.WebUI.Controllers
                 SearchText = search,
                 CategorySearchId = categoryId,
                 StateSearchId = stateId,
-                SuggestionsAmount = suggestionsViewModel.Count(),
+                SuggestionsAmount = suggestionsViewModel.Count,
                 SuggestionsList = suggestionsViewModel,
                 CategoriesList = await GetCategoriesViewModel(),
                 StatesList = await GetStatesViewModel()
@@ -69,7 +69,7 @@ namespace SuggestionsApp.WebUI.Controllers
             {
                 var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, categoryId, stateId, search);
                 var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
-                var currentUserId = await _userService.GetUserIdLoggedIn(User);
+                var currentUserId = await _userService.GetLoggedUserId(User);
 
                 foreach (var suggestionViewModel in suggestionsViewModel)
                 {

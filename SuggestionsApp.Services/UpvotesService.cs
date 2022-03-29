@@ -22,19 +22,10 @@ namespace SuggestionsApp.Services
             _suggestionsService = suggestionsService;
         }
 
-        public Task<int> GetUpvotesAmountBySuggestionId(int id)
-        {
-            var upvotesAmount = _context.Upvotes
-                                    .Where(p => p.SuggestionId == id)
-                                    .Count();
-
-            return Task.FromResult(upvotesAmount);
-        }
-
-        public async Task<Upvote> GetSuggestionUserUpvote(int suggesstionId, string userId)
+        public async Task<Upvote> GetSuggestionUserUpvote(int suggestionId, string userId)
         {
             var upvote = await _context.Upvotes
-                                    .FirstOrDefaultAsync(p => p.SuggestionId == suggesstionId && p.UserId == userId);
+                                    .FirstOrDefaultAsync(p => p.SuggestionId == suggestionId && p.UserId == userId);
 
             return upvote;
         }

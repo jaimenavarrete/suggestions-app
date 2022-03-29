@@ -52,7 +52,7 @@
                 <article class="card shadow border-primary overflow-hidden mb-3">
                     <div class="card-body row p-3 d-flex justify-content-between align-items-start">
                         <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" class="upvote-button col-2 btn text-center border border-2 border-primary rounded d-flex flex-column p-1 @(suggestion.IsUserSuggestion ? "disabled" : "") @(suggestion.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
-                            <input type="hidden" name="id" id="suggestionId" value="@suggestion.Id" />
+                            <input type="hidden" name="suggestionId" id="suggestionId" value="@suggestion.Id" />
                             <i class="las la-chevron-up fs-3"></i>
                             <p class="h5 fw-bold mb-0">@suggestion.UpvotesAmount</p>
                             <p class="fw-bold text-uppercase mb-0 d-none d-sm-block">@(suggestion.IsUserUpvoteActive ? "Votada" : "Votar")</p>

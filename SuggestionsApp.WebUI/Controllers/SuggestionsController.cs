@@ -41,15 +41,15 @@ namespace SuggestionsApp.WebUI.Controllers
             try
             {
                 var suggestion = await _suggestionsService.GetSuggestionById(id);
-                var currentUserId = await _userService.GetUserIdLoggedIn(User);
-                var currentUserRole = await _userService.GetUserRoleLoggedIn(User);
+                var currentUserId = await _userService.GetLoggedUserId(User);
+                var currentUserRole = await _userService.GetUserRoleById(currentUserId);
                 var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestion.Id, currentUserId);
 
                 var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
                 viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                viewModel.IsAdminOrModeratorUser = currentUserRole == "Admin" || currentUserRole == "Moderador";
+                viewModel.IsAdminOrModeratorUser = currentUserRole is "Admin" or "Moderador";
                 viewModel.IsUserSuggestion = suggestion.UserId == currentUserId;
-                viewModel.IsUserUpvoteActive = currentUserUpvote != null;
+                viewModel.IsUserUpvoteActive = currentUserUpvote is not null;
                 viewModel.States = await GetStatesViewModel();
 
                 return View(viewModel);
@@ -79,7 +79,7 @@ namespace SuggestionsApp.WebUI.Controllers
             try
             {
                 var suggestion = _mapper.Map<Suggestion>(viewModel);
-                suggestion.UserId = await _userService.GetUserIdLoggedIn(User);
+                suggestion.UserId = await _userService.GetLoggedUserId(User);
                 suggestion.UpvotesAmount = 0;
                 suggestion.Date = DateTime.Now;
 
@@ -120,11 +120,7 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
-                var suggestionId = viewModel.Id ?? 0;
-                var suggestion = await _suggestionsService.GetSuggestionById(suggestionId);
-
-                if (suggestion is null)
-                    return NotFound();
+                var suggestion = await _suggestionsService.GetSuggestionById(viewModel.Id ?? 0);
 
                 suggestion.Title = viewModel.Title;
                 suggestion.CategoryId = viewModel.CategoryId;
@@ -150,9 +146,6 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var suggestion = await _suggestionsService.GetSuggestionById(suggestionId);
 
-            if (suggestion is null)
-                return NotFound();
-            
             suggestion.StateId = stateId;
 
             var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
@@ -164,11 +157,11 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSuggestion([FromForm] int id)
+        public async Task<IActionResult> DeleteSuggestion([FromForm] int suggestionId)
         {
             try
             {
-                var succeeded = await _suggestionsService.DeleteSuggestion(id);
+                var succeeded = await _suggestionsService.DeleteSuggestion(suggestionId);
 
                 if (succeeded)
                     TempData["success"] = "La sugerencia se ha borrado correctamente.";
@@ -184,35 +177,30 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeSuggestionUpvote([FromForm] int id, bool isFromViewSuggestion)
+        public async Task<IActionResult> ChangeSuggestionUpvote([FromForm] int suggestionId, bool isFromViewSuggestion)
         {
             try
             {
-                string userId = await _userService.GetUserIdLoggedIn(User);
-                var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(id, userId);
+                var userId = await _userService.GetLoggedUserId(User);
+                var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestionId, userId);
 
                 if(currentUserUpvote is not null)
                 {
-                    var succeeded = await _upvotesService.DeleteUpvote(id, userId);
+                    var succeeded = await _upvotesService.DeleteUpvote(suggestionId, userId);
                 }
                 else
                 {
-                    var upvote = new Upvote
-                    {
-                        SuggestionId = id,
-                        UserId = userId
-                    };
-
-                    var succeeded = await _upvotesService.InsertUpvote(upvote);
+                    var upvote = new Upvote(suggestionId, userId);
+                    await _upvotesService.InsertUpvote(upvote);
                 }
 
-                return GetUpvoteRedirect(id, isFromViewSuggestion);
+                return GetUpvoteRedirect(suggestionId, isFromViewSuggestion);
             }
             catch (LogicException ex)
             {
                 TempData["error"] = ex.Message;
 
-                return GetUpvoteRedirect(id, isFromViewSuggestion);
+                return GetUpvoteRedirect(suggestionId, isFromViewSuggestion);
             }
         }
 

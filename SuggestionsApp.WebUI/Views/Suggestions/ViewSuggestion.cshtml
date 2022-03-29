@@ -36,7 +36,7 @@ else if (Model.Approved == false)
     <div class="card-body row p-3 d-flex justify-content-between align-items-start">
         <aside class="col-2 text-center p-0 px-md-3">
             <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" id="upvote-button" class="upvote-button btn text-center border border-2 border-primary rounded d-flex flex-column justify-content-around p-1 mx-auto mb-2 @(Model.IsUserSuggestion ? "disabled" : "") @(Model.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
-                <input type="hidden" name="id" id="suggestionId" value="@Model.Id" />
+                <input type="hidden" name="suggestionId" id="suggestionId" value="@Model.Id" />
                 <input type="hidden" name="isFromViewSuggestion" id="isFromViewSuggestion" value="true" />
                 <i class="las la-chevron-up fs-3"></i>
                 <p class="h5 fw-bold mb-0">@Model.UpvotesAmount</p>

@@ -5,13 +5,7 @@ namespace SuggestionsApp.Models.Interfaces
 {
     public interface IUserService
     {
-        Task<ApplicationUser> GetUserLoggedIn(ClaimsPrincipal principal);
-
-        Task<string> GetUserNameLoggedIn(ClaimsPrincipal principal);
-
-        Task<string> GetUserIdLoggedIn(ClaimsPrincipal principal);
-
-        Task<string> GetUserRoleLoggedIn(ClaimsPrincipal principal);
+        Task<string> GetLoggedUserId(ClaimsPrincipal principal);
 
         Task<ApplicationUser> GetUserById(string userId);
 
@@ -24,5 +18,7 @@ namespace SuggestionsApp.Models.Interfaces
         Task<IEnumerable<ApplicationRole>> GetRoles();
 
         Task<bool> InsertUser(ApplicationUser user, string password, string role);
+
+        Task<bool> ChangeUserLockState(string userId);
     }
 }

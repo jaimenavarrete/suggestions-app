@@ -248,6 +248,26 @@ namespace SuggestionsApp.WebUI.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserLockState([FromForm] string userId)
+        {
+            try
+            {
+                var succeeded = await _userService.ChangeUserLockState(userId);
+
+                if (succeeded)
+                    TempData["success"] = "El estado de bloqueo del usuario ha sido cambiado correctamente.";
+
+                return RedirectToAction("UsersList");
+            }
+            catch (LogicException ex)
+            {
+                TempData["error"] = ex.Message;
+
+                return RedirectToAction("UsersList");
+            }
+        }
+
 
         // Suggestions section
 
