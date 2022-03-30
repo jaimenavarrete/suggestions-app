@@ -67,8 +67,8 @@ else if (Model.Approved == false)
                 {
                     <div class="d-flex align-items-center">
                         <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
-                        <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-suggestion-form">
-                            <input type="hidden" value="@Model.Id" name="id" />
+                        <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-element-form">
+                            <input type="hidden" value="@Model.Id" name="suggestionId" />
                             <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
                         </form>
                     </div>

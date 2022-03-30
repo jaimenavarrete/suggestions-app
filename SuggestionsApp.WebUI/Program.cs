@@ -11,7 +11,7 @@ var services = builder.Services;
 var configutation = builder.Configuration;
 var env = builder.Environment;
 
-var connectionString = configutation.GetConnectionString("SuggestionsApp");
+var connectionString = configutation.GetConnectionString("SuggestionsAppLinux");
 
 // Identity DB Context
 services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
@@ -34,7 +34,7 @@ services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.AllowedForNewUsers = true;
 
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789-._@+";
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnï¿½opqrstuvwxyzABCDEFGHIJKLMNï¿½OPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
 
 })

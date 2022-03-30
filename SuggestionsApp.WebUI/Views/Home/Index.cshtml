@@ -76,7 +76,7 @@
                                     {
                                         <a asp-controller="Suggestions" asp-action="EditSuggestion" asp-route-id="@suggestion.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
                                         <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post" class="delete-element-form">
-                                            <input type="hidden" value="@suggestion.Id" name="id" />
+                                            <input type="hidden" value="@suggestion.Id" name="suggestionId" />
                                             <button class="bg-white border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
                                         </form>
                                     }
