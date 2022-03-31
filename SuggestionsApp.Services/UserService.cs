@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.Interfaces;
 using System.Security.Claims;
+using SuggestionsApp.Models.Exceptions;
 
 namespace SuggestionsApp.Services
 {
@@ -22,7 +23,10 @@ namespace SuggestionsApp.Services
         public async Task<string> GetLoggedUserId(ClaimsPrincipal principal)
         {
             var currentUser = await _userManager.GetUserAsync(principal);
-            return currentUser?.Id;
+
+            if (currentUser is null) return "";
+            
+            return currentUser.Id;
         }
 
         public async Task<ApplicationUser> GetUserById(string userId)
@@ -34,6 +38,9 @@ namespace SuggestionsApp.Services
         public async Task<string> GetUserNameById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null) return "Anonimo";
+            
             return user.UserName;
         }
 
@@ -77,8 +84,27 @@ namespace SuggestionsApp.Services
             var user = await GetUserById(userId);
             var isUserLocked = user.LockoutEnd > DateTime.UtcNow;
             var lockDate = isUserLocked ? DateTime.UtcNow : DateTimeOffset.MaxValue;
+
+            if (!user.LockoutEnabled)
+            {
+                throw new BusinessException("No se puede bloquear la cuenta de administrador principal");
+            }
             
             var result = await _userManager.SetLockoutEndDateAsync(user, lockDate);
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> DeleteUser(string userId)
+        {
+            var user = await GetUserById(userId);
+
+            if (!user.LockoutEnabled)
+            {
+                throw new BusinessException("No se puede borrar la cuenta de administrador principal");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
 
             return result.Succeeded;
         }

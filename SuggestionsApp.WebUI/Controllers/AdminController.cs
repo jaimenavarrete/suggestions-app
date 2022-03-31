@@ -266,6 +266,35 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 return RedirectToAction("UsersList");
             }
+            catch (BusinessException ex)
+            {
+                TempData["error"] = ex.Message;
+                return RedirectToAction("UsersList");
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser([FromForm] string userId)
+        {
+            try
+            {
+                var succeeded = await _userService.DeleteUser(userId);
+
+                if (succeeded)
+                    TempData["success"] = "El usuario ha sido borrado correctamente.";
+
+                return RedirectToAction("UsersList");
+            }
+            catch (LogicException ex)
+            {
+                TempData["error"] = ex.Message;
+                return RedirectToAction("UsersList");
+            }
+            catch (BusinessException ex)
+            {
+                TempData["error"] = ex.Message;
+                return RedirectToAction("UsersList");
+            }
         }
 
 

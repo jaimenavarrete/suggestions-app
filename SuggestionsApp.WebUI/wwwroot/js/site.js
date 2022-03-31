@@ -67,7 +67,7 @@ const validEmailInput = () => {
     const emailInput = document.getElementById('input-email');
     const emailInvalidLabel = document.getElementById('feedback-email');
     let valid = true;
-    let emailRegex = /^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+    let emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,4})+$/;
 
     // Clear elements
     emailInput.classList.remove('is-invalid');
@@ -196,7 +196,7 @@ if (formCreate) {
         e.preventDefault();
 
         if (validateForm()) {
-            form.submit();
+            formCreate.submit();
         }
     });
 }

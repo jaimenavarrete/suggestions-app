@@ -20,5 +20,7 @@ namespace SuggestionsApp.Models.Interfaces
         Task<bool> InsertUser(ApplicationUser user, string password, string role);
 
         Task<bool> ChangeUserLockState(string userId);
+
+        Task<bool> DeleteUser(string userId);
     }
 }
