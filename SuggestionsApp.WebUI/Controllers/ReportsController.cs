@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore;
 using SuggestionsApp.Models.Interfaces;
@@ -10,15 +11,18 @@ namespace SuggestionsApp.WebUI.Controllers
     {
         private readonly ICategoriesService _categoriesService;
         private readonly IStatesService _statesService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public ReportsController(
             ICategoriesService categoriesService,
             IStatesService statesService,
+            IUserService userService,
             IMapper mapper)
         {
             _categoriesService = categoriesService;
             _statesService = statesService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -27,11 +31,7 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var categories = await _categoriesService.GetCategories();
             var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
-
-            return new ViewAsPdf(categoriesViewModel)
-            {
-                CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 10"
-            };
+            return CreatePdf(categoriesViewModel);
         }
 
         [HttpGet]
@@ -39,11 +39,34 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             var states = await _statesService.GetStates();
             var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
+            return CreatePdf(statesViewModel);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> PrintUsers()
+        {
+            var users = await _userService.GetUsers();
+            var usersViewModel = _mapper.Map<List<UserViewModel>>(users);
 
-            return new ViewAsPdf(statesViewModel)
+            foreach (var user in usersViewModel)
+            {
+                user.LockedOut = user.LockoutEnd > DateTime.UtcNow;
+                user.Role = await _userService.GetUserRoleById(user.Id);
+            }
+            
+            return CreatePdf(usersViewModel);
+        }
+
+        #region HelperMethods
+
+        private ViewAsPdf CreatePdf(object list)
+        {
+            return new ViewAsPdf(list)
             {
                 CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 10"
             };
         }
+
+        #endregion
     }
 }

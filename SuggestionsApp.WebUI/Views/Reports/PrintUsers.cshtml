@@ -1,0 +1,29 @@
+@model List<UserViewModel>
+@{
+    Layout = "_ReportsLayout";
+    ViewData["Title"] = "Reporte de usuarios";
+}
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Nombre de usuario</th>
+        <th scope="col">Email</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Verificado</th>
+        <th scope="col">Estado</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach(var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>@(user.EmailConfirmed ? "Si" : "No")</td>
+                <td>@(user.LockedOut ? "Bloqueado" : "Desbloqueado")</td>
+            </tr>
+        }
+    </tbody>
+</table>

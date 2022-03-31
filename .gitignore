@@ -271,5 +271,5 @@ __pycache__/
 archivo_javascript.js
 
 # Rotativa required files
-wkhtmltoimage.exe
-wkhtmltopdf.exe
+wkhtmltoimage*
+wkhtmltopdf*
