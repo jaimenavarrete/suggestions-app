@@ -2,18 +2,19 @@
 
 <div class="modal fade" id="form-category-modal" tabindex="-1" aria-labelledby="form-category-modal" aria-hidden="true">
     <div class="modal-dialog">
-        <form method="post" id="form-category" class="modal-content">
+        <form method="post" id="form-create" class="modal-content" novalidate>
             <div class="modal-header">
-                <h5 id="form-category-modal-label" class="modal-title text-primary fw-bold"><i class="las la-plus-circle fs-4"></i> Crear categoría</h5>
+                <h5 id="form-modal-label" class="modal-title text-primary fw-bold"><i class="las la-plus-circle fs-4"></i> Crear categoría</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <input type="hidden" asp-for="Id" id="input-category-id" class="input-category" />
+                <input type="hidden" asp-for="Id" id="input-id" class="input-category" />
 
-                <div class="form-group mb-3">
+                <div class="form-group has-danger mb-3">
                     <label class="col-form-label" for="input-name">Nombre de la categoría:</label>
-                    <input type="text" asp-for="Name" id="input-category-name" class="form-control input-category">
+                    <input type="text" asp-for="Name" id="input-name" class="form-control input-create">
+                    <div id="feedback-name" class="invalid-feedback"></div>
                 </div>
             </div>
 

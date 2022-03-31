@@ -2,23 +2,25 @@
 
 <div class="modal fade" id="form-state-modal" tabindex="-1" aria-labelledby="form-state-modal" aria-hidden="true">
     <div class="modal-dialog">
-        <form method="post" id="form-state" class="modal-content">
+        <form method="post" id="form-create" class="modal-content" novalidate>
             <div class="modal-header">
-                <h5 id="form-state-modal-label" class="modal-title text-primary fw-bold"><i class="las la-plus-circle fs-4"></i> Crear estado</h5>
+                <h5 id="form-modal-label" class="modal-title text-primary fw-bold"><i class="las la-plus-circle fs-4"></i> Crear estado</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <input type="hidden" asp-for="Id" id="input-state-id" class="input-state" />
+                <input type="hidden" asp-for="Id" id="input-id" class="input-state" />
 
-                <div class="form-group mb-3">
-                    <label class="col-form-label" for="input-state-name">Nombre del estado:</label>
-                    <input type="text" asp-for="Name" id="input-state-name" class="form-control input-state">
+                <div class="form-group has-danger mb-3">
+                    <label class="col-form-label" for="input-name">Nombre del estado:</label>
+                    <input type="text" asp-for="Name" id="input-name" class="form-control input-create">
+                    <div id="feedback-name" class="invalid-feedback"></div>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label class="col-form-label" for="input-state-description">Descripción del estado:</label>
-                    <textarea asp-for="Description" id="input-state-description" class="form-control input-state" rows="5"></textarea>
+                <div class="form-group has-danger mb-3">
+                    <label class="col-form-label" for="input-description">Descripción del estado:</label>
+                    <textarea asp-for="Description" id="input-description" class="form-control input-create" rows="5"></textarea>
+                    <div id="feedback-description" class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group mb-3">

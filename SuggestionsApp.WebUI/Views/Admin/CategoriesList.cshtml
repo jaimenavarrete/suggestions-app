@@ -15,7 +15,7 @@
 <partial name="_StatusMessage" />
 
 <section class="d-flex justify-content-between">
-    <button type="button" id="button-create-category" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-category-modal">
+    <button type="button" id="button-create" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-category-modal">
         <i class="las la-plus fs-4"></i> Agregar categoría
     </button>
     <a asp-controller="Reports" asp-action="PrintCategories" class="btn btn-outline-dark mb-4" target="_blank">
@@ -33,18 +33,26 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var category in Model.CategoriesList)
+        
+            @if (Model.CategoriesList.Count == 0)
+            {
+                <tr>
+                    <td class="text-center" colspan="3">Actualmente no existen categorias creadas.</td>
+                </tr>
+            }
+        
+            @foreach (var category in Model.CategoriesList)
             {
                 <tr>
                     <th scope="row">@category.Id</th>
                     <td>@category.Name</td>
                     <td>
                         <div class="d-flex">
-                            <button class="button-edit-category bg-transparent border-0 p-0" data-category-id="@category.Id" data-bs-toggle="modal" data-bs-target="#form-category-modal">
+                            <button class="button-edit bg-transparent border-0 p-0" data-bs-toggle="modal" data-bs-target="#form-category-modal">
                                 <i class="las la-pen text-primary fs-3 px-1"></i>
                             </button>
                             <form asp-controller="Admin" asp-action="DeleteCategory" method="post" class="delete-element-form">
-                                <input type="hidden" value="@category.Id" name="id" />
+                                <input type="hidden" value="@category.Id" name="id"/>
                                 <button class="bg-transparent border-0 p-0"><i class="las la-trash text-danger fs-3 px-1"></i></button>
                             </form>
                         </div>
@@ -57,41 +65,42 @@
 
 @section Scripts {
     <script>
-        const btnCreateCategory = document.getElementById('button-create-category');
-        const btnEditCategory = document.querySelectorAll('.button-edit-category');
-        const form = document.getElementById('form-category');
-        const modalCategoryLabel = document.getElementById('form-category-modal-label');
+        const btnCreate = document.getElementById('button-create');
+        const btnEdit = document.querySelectorAll('.button-edit');
+        const formCreate = document.getElementById('form-create');
+        const modalLabel = document.getElementById('form-modal-label');
 
         const getCategoryInfo = (e) => {
             const categoryInfo = e.currentTarget.closest('tr').children;
 
-            form.elements['Id'].value = categoryInfo[0].outerText;
-            form.elements['Name'].value = categoryInfo[1].outerText;
-            modalCategoryLabel.innerHTML = `<i class="las la-pen fs-4"></i> Editar categoría`;
+            formCreate.elements['Id'].value = categoryInfo[0].outerText;
+            formCreate.elements['Name'].value = categoryInfo[1].outerText;
+            modalLabel.innerHTML = `<i class="las la-pen fs-4"></i> Editar categoría`;
         };
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const baseUrl = window.location.origin;
-
-            if (form.elements['Id'].value === '') {
-                form.action = `${baseUrl}/Admin/CreateCategory`;
-            } else {
-                form.action = `${baseUrl}/Admin/EditCategory`;
-            }
-
-            form.submit();
+        
+        btnCreate.addEventListener('click', () => {
+            clearInputs();
+            modalLabel.innerHTML = `<i class="las la-plus-circle fs-4"></i> Crear categoría`;
         });
 
-        btnCreateCategory.addEventListener('click', () => {
-            form.elements['Id'].value = '';
-            form.elements['Name'].value = '';
-            modalCategoryLabel.innerHTML = `<i class="las la-plus-circle fs-4"></i> Crear categoría`;
-        });
-
-        btnEditCategory.forEach((btn) => {
+        btnEdit.forEach((btn) => {
             btn.addEventListener('click', (e) => getCategoryInfo(e));
+        });
+        
+        formCreate.addEventListener('submit', (e) => {
+            e.preventDefault();
+    
+            if (validateForm()) {
+                const baseUrl = window.location.origin;
+                            
+                if (formCreate.elements['Id'].value === '') {
+                    formCreate.action = `${baseUrl}/Admin/CreateCategory`;
+                } else {
+                    formCreate.action = `${baseUrl}/Admin/EditCategory`;
+                }
+                            
+                formCreate.submit();
+            }
         });
     </script>
 }

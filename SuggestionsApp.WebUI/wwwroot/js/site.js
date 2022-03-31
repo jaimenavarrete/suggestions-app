@@ -23,22 +23,66 @@ deleteElementButton.forEach(form => {
 
 
 // Modal form validations
-const btnCreate = document.getElementById('button-create');
-const formCreate = document.getElementById('form-create');
 const inputsCreate = document.querySelectorAll('.input-create');
 
-// Clear input value with button to create user
-if (btnCreate) {
-    btnCreate.addEventListener('click', () => {
-        inputsCreate.forEach((input) => (input.value = ''));
+// Clear inputs value
+const clearInputs = () => {
+    inputsCreate.forEach((input) => (input.value = ''));
 
-        // Hide invalid feedback
-        const activeFeedback = document.querySelectorAll('.is-invalid');
-        activeFeedback.forEach((label) => label.classList.remove('is-invalid'));
-    });
+    // Hide invalid feedback
+    const activeFeedback = document.querySelectorAll('.is-invalid');
+    activeFeedback.forEach((label) => label.classList.remove('is-invalid'));
 }
 
 // Validate inputs
+const validNameInput = () => {
+    const nameInput = document.getElementById('input-name');
+    const nameInvalidLabel = document.getElementById('feedback-name');
+    let valid = true;
+
+    // Clear elements
+    nameInput.classList.remove('is-invalid');
+    nameInvalidLabel.innerHTML = '';
+
+    if (!nameInput.value) {
+        nameInvalidLabel.innerHTML += 'Debe agregar un nombre.<br/>';
+        valid = false;
+    }
+
+    if (nameInput.value.length > 50) {
+        nameInvalidLabel.innerHTML += `Debe tener menos de 50 caracteres (Actual: ${nameInput.value.length}).`;
+        valid = false;
+    }
+
+    if (!valid) nameInput.classList.add('is-invalid');
+
+    return valid;
+};
+
+const validDescriptionInput = () => {
+    const descriptionInput = document.getElementById('input-description');
+    const descriptionInvalidLabel = document.getElementById('feedback-description');
+    let valid = true;
+
+    // Clear elements
+    descriptionInput.classList.remove('is-invalid');
+    descriptionInvalidLabel.innerHTML = '';
+
+    if (!descriptionInput.value) {
+        descriptionInvalidLabel.innerHTML += 'Debe agregar una descripción.<br/>';
+        valid = false;
+    }
+
+    if (descriptionInput.value.length > 100) {
+        descriptionInvalidLabel.innerHTML += `Debe tener menos de 100 caracteres (Actual: ${descriptionInput.value.length}).`;
+        valid = false;
+    }
+
+    if (!valid) descriptionInput.classList.add('is-invalid');
+
+    return valid;
+};
+
 const validUserNameInput = () => {
     const userNameInput = document.getElementById('input-username');
     const userNameInvalidLabel = document.getElementById('feedback-username');
@@ -164,8 +208,13 @@ const validRepeatPasswordInput = () => {
     return valid;
 };
 
+
 const validateInput = (input) => {
     switch (input.id) {
+        case 'input-name':
+            return validNameInput();
+        case 'input-description':
+            return validDescriptionInput();
         case 'input-username':
             return validUserNameInput();
         case 'input-email':
@@ -190,13 +239,3 @@ const validateForm = () => {
 
     return valid;
 };
-
-if (formCreate) {
-    formCreate.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        if (validateForm()) {
-            formCreate.submit();
-        }
-    });
-}

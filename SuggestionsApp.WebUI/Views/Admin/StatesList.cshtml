@@ -15,7 +15,7 @@
 <partial name="_StatusMessage" />
 
 <section class="d-flex justify-content-between">
-    <button type="button" id="button-create-state" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-state-modal">
+    <button type="button" id="button-create" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#form-state-modal">
         <i class="las la-plus fs-4"></i> Agregar estado
     </button>
     <a asp-controller="Reports" asp-action="PrintStates" class="btn btn-outline-dark mb-4" target="_blank">
@@ -35,6 +35,14 @@
             </tr>
         </thead>
         <tbody>
+        
+            @if (Model.StatesList.Count == 0)
+            {
+                <tr>
+                    <td class="text-center" colspan="5">Actualmente no existen estados creados.</td>
+                </tr>
+            }
+        
             @foreach(var state in Model.StatesList)
             {
                 <tr>
@@ -44,7 +52,7 @@
                     <td class="text-white fw-bold"><span class="badge rounded-pill py-2 px-4 fs-6" style="background-color:@state.ColorHexCode">@state.ColorHexCode</span></td>
                     <td>
                         <div class="d-flex">
-                            <button class="button-edit-state bg-transparent border-0 p-0" data-category-id="@state.Id" data-bs-toggle="modal" data-bs-target="#form-state-modal">
+                            <button class="button-edit bg-transparent border-0 p-0" data-bs-toggle="modal" data-bs-target="#form-state-modal">
                             <i class="las la-pen text-primary fs-3 px-1"></i>
                             </button>
                             <form asp-controller="Admin" asp-action="DeleteState" method="post" class="delete-element-form">
@@ -61,45 +69,45 @@
 
 @section Scripts {
     <script>
-        const btnCreateState = document.getElementById('button-create-state');
-        const btnEditState = document.querySelectorAll('.button-edit-state');
-        const form = document.getElementById('form-state');
-        const modalStateLabel = document.getElementById('form-state-modal-label');
+        const btnCreate = document.getElementById('button-create');
+        const btnEdit = document.querySelectorAll('.button-edit');
+        const formCreate = document.getElementById('form-create');
+        const modalLabel = document.getElementById('form-modal-label');
 
         const getStateInfo = (e) => {
             const stateInfo = e.currentTarget.closest('tr').children;
 
-            form.elements['Id'].value = stateInfo[0].outerText;
-            form.elements['Name'].value = stateInfo[1].outerText;
-            form.elements['Description'].value = stateInfo[2].outerText;
-            form.elements['ColorHexCode'].value = stateInfo[3].outerText;
-            modalStateLabel.innerHTML = `<i class="las la-pen fs-4"></i> Editar estado`;
+            formCreate.elements['Id'].value = stateInfo[0].outerText;
+            formCreate.elements['Name'].value = stateInfo[1].outerText;
+            formCreate.elements['Description'].value = stateInfo[2].outerText;
+            formCreate.elements['ColorHexCode'].value = stateInfo[3].outerText;
+            modalLabel.innerHTML = `<i class="las la-pen fs-4"></i> Editar estado`;
         };
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const baseUrl = window.location.origin;
-
-            if (form.elements['Id'].value === '') {
-                form.action = `${baseUrl}/Admin/CreateState`;
-            } else {
-                form.action = `${baseUrl}/Admin/EditState`;
-            }
-
-            form.submit();
+        btnCreate.addEventListener('click', () => {
+            clearInputs();
+            modalLabel.innerHTML = `<i class="las la-plus-circle fs-4"></i> Crear estado`;
         });
 
-        btnCreateState.addEventListener('click', () => {
-            form.elements['Id'].value = '';
-            form.elements['Name'].value = '';
-            form.elements['Description'].value = '';
-            form.elements['ColorHexCode'].value = '';
-            modalStateLabel.innerHTML = `<i class="las la-plus-circle fs-4"></i> Crear estado`;
-        });
-
-        btnEditState.forEach((btn) => {
+        btnEdit.forEach((btn) => {
             btn.addEventListener('click', (e) => getStateInfo(e));
         });
+        
+        formCreate.addEventListener('submit', (e) => {
+            e.preventDefault();
+    
+            if (validateForm()) {
+                const baseUrl = window.location.origin;
+                            
+                if (formCreate.elements['Id'].value === '') {
+                    formCreate.action = `${baseUrl}/Admin/CreateState`;
+                } else {
+                    formCreate.action = `${baseUrl}/Admin/EditState`;
+                }
+                            
+                formCreate.submit();
+            }
+        });
+        
     </script>
 }

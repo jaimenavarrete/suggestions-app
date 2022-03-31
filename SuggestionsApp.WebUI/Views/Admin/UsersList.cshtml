@@ -82,7 +82,11 @@
 @section Scripts {
     <script>
         // Block user button confirm dialog
+        const btnCreate = document.getElementById('button-create');
+        const formCreate = document.getElementById('form-create');        
         const btnBlockUser = document.querySelectorAll('.button-block-user');
+        
+        btnCreate.addEventListener('click', () => clearInputs());
 
         btnBlockUser.forEach((form) => {
             form.addEventListener('submit', (e) => {
@@ -102,6 +106,14 @@
                     }
                 });
             });
+        });
+        
+        formCreate.addEventListener('submit', (e) => {
+            e.preventDefault();
+    
+            if (validateForm()) {
+                formCreate.submit();
+            }
         });
     </script>
 }
