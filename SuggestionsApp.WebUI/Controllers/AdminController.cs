@@ -184,8 +184,6 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 if (succeeded)
                     TempData["success"] = "El estado se ha borrado correctamente.";
-                else
-                    TempData["error"] = "Ocurrió un error al borrar el estado.";
 
                 return RedirectToAction("StatesList");
             }
@@ -231,7 +229,6 @@ namespace SuggestionsApp.WebUI.Controllers
             try
             {
                 var user = _mapper.Map<ApplicationUser>(viewModel);
-                user.EmailConfirmed = true;
 
                 var succeeded = await _userService.InsertUser(user, viewModel.Password, viewModel.Role);
 
@@ -263,7 +260,6 @@ namespace SuggestionsApp.WebUI.Controllers
             catch (LogicException ex)
             {
                 TempData["error"] = ex.Message;
-
                 return RedirectToAction("UsersList");
             }
             catch (BusinessException ex)
@@ -305,20 +301,17 @@ namespace SuggestionsApp.WebUI.Controllers
         public async Task<IActionResult> SuggestionsApproval()
         {
             var pendingSuggestions = await _suggestionsService.GetSuggestions(isApproved: null);
+            var pendingSuggestionsViewModel = _mapper.Map<List<PendingSuggestionViewModel>>(pendingSuggestions);
 
-            var pendingSuggestionsViewModelList = _mapper.Map<IEnumerable<PendingSuggestionViewModel>>(pendingSuggestions);
-            var pendingSuggestionsCount = pendingSuggestionsViewModelList.Count();
-
-            foreach (var suggestion in pendingSuggestionsViewModelList)
+            foreach (var suggestion in pendingSuggestionsViewModel)
             {
-                var user = pendingSuggestions.First(s => s.Id == suggestion.Id);
-                suggestion.UserName = await _userService.GetUserNameById(user.UserId);
+                suggestion.UserName = await _userService.GetUserNameById(suggestion.UserId);
             }
 
             SuggestionsApprovalViewModel viewModel = new()
             {
-                PendingSuggestionsList = pendingSuggestionsViewModelList,
-                PendingSuggestionsCount = pendingSuggestionsCount
+                PendingSuggestionsList = pendingSuggestionsViewModel,
+                PendingSuggestionsCount = pendingSuggestionsViewModel.Count
             };
 
             return View(viewModel);
@@ -327,18 +320,12 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> SuggestionsApproval(SuggestionsApprovalViewModel viewModel)
         {
-            var suggestion = await _suggestionsService.GetSuggestionById(viewModel.SuggestionId);
-
-            suggestion.Approved = viewModel.Approved;
-
-            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+            var succeeded = await _suggestionsService.ChangeSuggestionApprovalStatus(viewModel.SuggestionId, viewModel.Approved);
 
             if (succeeded && viewModel.Approved)
                 TempData["success"] = "La sugerencia se ha aprobado correctamente.";
             else if (succeeded && !viewModel.Approved)
                 TempData["success"] = "La sugerencia se ha rechazado correctamente.";
-            else
-                TempData["error"] = "Ocurrió un inconveniente al aprobar la sugerencia";
 
             return RedirectToAction();
         }

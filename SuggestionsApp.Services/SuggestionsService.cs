@@ -56,12 +56,16 @@ namespace SuggestionsApp.Services
             return suggestion;
         }
 
-        public async Task<bool> InsertSuggestion(Suggestion suggestion)
+        public async Task<bool> InsertSuggestion(Suggestion suggestion, string userId)
         {
             if(suggestion is null)
             {
                 throw new LogicException("No existe una sugerencia para agregar.");
             }
+            
+            suggestion.UserId = userId;
+            suggestion.UpvotesAmount = 0;
+            suggestion.Date = DateTime.Now;
 
             _context.Add(suggestion);
             var affectedRows = await _context.SaveChangesAsync();
@@ -76,7 +80,12 @@ namespace SuggestionsApp.Services
                 throw new LogicException("No existe una sugerencia para editar.");
             }
 
-            _context.Update(suggestion);
+            var oldSuggestion = await GetSuggestionById(suggestion.Id);
+            oldSuggestion.Title = suggestion.Title;
+            oldSuggestion.CategoryId = suggestion.CategoryId;
+            oldSuggestion.Description = suggestion.Description;
+
+            _context.Update(oldSuggestion);
             var affectedRows = await _context.SaveChangesAsync();
 
             return affectedRows > 0;
@@ -86,15 +95,30 @@ namespace SuggestionsApp.Services
         {
             var suggestion = await GetSuggestionById(id);
 
-            if(suggestion is null)
-            {
-                throw new LogicException("No existe una sugerencia para borrar.");
-            }
-
             _context.Suggestions.Remove(suggestion);
             var affectedRows = await _context.SaveChangesAsync();
 
             return affectedRows > 0;
+        }
+
+        public async Task<bool> ChangeSuggestionApprovalStatus(int id, bool approved)
+        {
+            var suggestion = await GetSuggestionById(id);
+            suggestion.Approved = approved;
+
+            var result = await UpdateSuggestion(suggestion);
+
+            return result;
+        }
+
+        public async Task<bool> SetSuggestionStatus(int id, int stateId)
+        {
+            var suggestion = await GetSuggestionById(id);
+            suggestion.StateId = stateId;
+
+            var result = await UpdateSuggestion(suggestion);
+
+            return result;
         }
 
         #region HelperMethods

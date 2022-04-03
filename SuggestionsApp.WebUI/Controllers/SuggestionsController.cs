@@ -87,12 +87,10 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
+                var currentUserId = await _userService.GetLoggedUserId(User);
                 var suggestion = _mapper.Map<Suggestion>(viewModel);
-                suggestion.UserId = await _userService.GetLoggedUserId(User);
-                suggestion.UpvotesAmount = 0;
-                suggestion.Date = DateTime.Now;
 
-                var succeeded = await _suggestionsService.InsertSuggestion(suggestion);
+                var succeeded = await _suggestionsService.InsertSuggestion(suggestion, currentUserId);
 
                 if (succeeded)
                     TempData["success"] = "La sugerencia se ha creado correctamente.";
@@ -129,11 +127,7 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
-                var suggestion = await _suggestionsService.GetSuggestionById(viewModel.Id ?? 0);
-
-                suggestion.Title = viewModel.Title;
-                suggestion.CategoryId = viewModel.CategoryId;
-                suggestion.Description = viewModel.Description;
+                var suggestion = _mapper.Map<Suggestion>(viewModel);
 
                 var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
 
@@ -153,11 +147,7 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> SetSuggestionStatus([FromForm] int suggestionId, int stateId)
         {
-            var suggestion = await _suggestionsService.GetSuggestionById(suggestionId);
-
-            suggestion.StateId = stateId;
-
-            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+            var succeeded = await _suggestionsService.SetSuggestionStatus(suggestionId, stateId);
 
             if (succeeded)
                 TempData["success"] = "El estado de la sugerencia se ha cambiado correctamente.";
@@ -195,12 +185,11 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 if(currentUserUpvote is not null)
                 {
-                    var succeeded = await _upvotesService.DeleteUpvote(suggestionId, userId);
+                    await _upvotesService.DeleteUpvote(suggestionId, userId);
                 }
                 else
                 {
-                    var upvote = new Upvote(suggestionId, userId);
-                    await _upvotesService.InsertUpvote(upvote);
+                    await _upvotesService.InsertUpvote(suggestionId, userId);
                 }
 
                 return GetUpvoteRedirect(suggestionId, isFromViewSuggestion);

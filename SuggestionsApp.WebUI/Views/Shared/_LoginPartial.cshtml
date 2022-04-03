@@ -16,7 +16,7 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    @if(roles.Contains("Admin") || roles.Contains("Moderator"))
+    @if(roles.Contains("Admin") || roles.Contains("Moderador"))
     {
         <li class="nav-item">
             <a id="admin" class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="SuggestionsApproval">Admin</a>

@@ -30,13 +30,15 @@ namespace SuggestionsApp.Services
             return upvote;
         }
 
-        public async Task<bool> InsertUpvote(Upvote upvote)
+        public async Task<bool> InsertUpvote(int suggestionId, string userId)
         {
-            if (upvote is null)
+            if (suggestionId == 0 || string.IsNullOrEmpty(userId))
             {
                 throw new LogicException("No existe un voto positivo para agregar.");
             }
-
+            
+            var upvote = new Upvote(suggestionId, userId);
+            
             _context.Add(upvote);
             var affectedRows = await _context.SaveChangesAsync();
 

@@ -11,7 +11,7 @@ namespace SuggestionsApp.Models.Interfaces
     {
         Task<Upvote> GetSuggestionUserUpvote(int suggesstionId, string userId);
 
-        Task<bool> InsertUpvote(Upvote upvote);
+        Task<bool> InsertUpvote(int suggesstionId, string userId);
 
         Task<bool> DeleteUpvote(int suggesstionId, string userId);
     }

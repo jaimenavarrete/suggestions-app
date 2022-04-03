@@ -23,10 +23,7 @@ namespace SuggestionsApp.Services
         public async Task<string> GetLoggedUserId(ClaimsPrincipal principal)
         {
             var currentUser = await _userManager.GetUserAsync(principal);
-
-            if (currentUser is null) return "";
-            
-            return currentUser.Id;
+            return currentUser is null ? "" : currentUser.Id;
         }
 
         public async Task<ApplicationUser> GetUserById(string userId)
@@ -38,10 +35,7 @@ namespace SuggestionsApp.Services
         public async Task<string> GetUserNameById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-
-            if (user is null) return "Anonimo";
-            
-            return user.UserName;
+            return user is null ? "Anonimo" : user.UserName;
         }
 
         public async Task<string> GetUserRoleById(string userId)
@@ -69,13 +63,15 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> InsertUser(ApplicationUser user, string password, string role)
         {
+            user.EmailConfirmed = true;
+            
             var result = await _userManager.CreateAsync(user, password);
-
+            
             if (!result.Succeeded) return false;
 
             // Add to role
             result = await _userManager.AddToRoleAsync(user, role);
-
+            
             return result.Succeeded;
         }
 
