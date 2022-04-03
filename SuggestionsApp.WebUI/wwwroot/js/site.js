@@ -34,18 +34,21 @@ const clearInputs = () => {
     activeFeedback.forEach((label) => label.classList.remove('is-invalid'));
 }
 
+const clearFeedback = (input, feedback) => {
+    input.classList.remove('is-invalid');
+    feedback.innerHTML = '';
+}
+
 // Validate inputs
 const validNameInput = () => {
     const nameInput = document.getElementById('input-name');
     const nameInvalidLabel = document.getElementById('feedback-name');
     let valid = true;
 
-    // Clear elements
-    nameInput.classList.remove('is-invalid');
-    nameInvalidLabel.innerHTML = '';
+    clearFeedback(nameInput, nameInvalidLabel);
 
     if (!nameInput.value) {
-        nameInvalidLabel.innerHTML += 'Debe agregar un nombre.<br/>';
+        nameInvalidLabel.innerHTML += `Debe agregar un nombre.<br/>`;
         valid = false;
     }
 
@@ -59,14 +62,34 @@ const validNameInput = () => {
     return valid;
 };
 
+const validTitleInput = () => {
+    const titleInput = document.getElementById('input-title');
+    const titleInvalidLabel = document.getElementById('feedback-title');
+    let valid = true;
+
+    clearFeedback(titleInput, titleInvalidLabel);
+
+    if (!titleInput.value) {
+        titleInvalidLabel.innerHTML += `Debe agregar un título a la sugerencia.<br/>`;
+        valid = false;
+    }
+
+    if (titleInput.value.length > 100) {
+        titleInvalidLabel.innerHTML += `Debe tener menos de 100 caracteres (Actual: ${titleInput.value.length}).`;
+        valid = false;
+    }
+
+    if (!valid) titleInput.classList.add('is-invalid');
+
+    return valid;
+};
+
 const validDescriptionInput = () => {
     const descriptionInput = document.getElementById('input-description');
     const descriptionInvalidLabel = document.getElementById('feedback-description');
     let valid = true;
 
-    // Clear elements
-    descriptionInput.classList.remove('is-invalid');
-    descriptionInvalidLabel.innerHTML = '';
+    clearFeedback(descriptionInput, descriptionInvalidLabel);
 
     if (!descriptionInput.value) {
         descriptionInvalidLabel.innerHTML += 'Debe agregar una descripción.<br/>';
@@ -83,14 +106,34 @@ const validDescriptionInput = () => {
     return valid;
 };
 
+const validSuggestionDescriptionInput = () => {
+    const descriptionInput = document.getElementById('input-suggestion-description');
+    const descriptionInvalidLabel = document.getElementById('feedback-suggestion-description');
+    let valid = true;
+
+    clearFeedback(descriptionInput, descriptionInvalidLabel);
+
+    if (!descriptionInput.value) {
+        descriptionInvalidLabel.innerHTML += 'Debe agregar una descripción a la sugerencia.<br/>';
+        valid = false;
+    }
+
+    if (descriptionInput.value.length > 1000) {
+        descriptionInvalidLabel.innerHTML += `Debe tener menos de 1000 caracteres (Actual: ${descriptionInput.value.length}).`;
+        valid = false;
+    }
+
+    if (!valid) descriptionInput.classList.add('is-invalid');
+
+    return valid;
+};
+
 const validUserNameInput = () => {
     const userNameInput = document.getElementById('input-username');
     const userNameInvalidLabel = document.getElementById('feedback-username');
     let valid = true;
 
-    // Clear elements
-    userNameInput.classList.remove('is-invalid');
-    userNameInvalidLabel.innerHTML = '';
+    clearFeedback(userNameInput, userNameInvalidLabel);
 
     if (!userNameInput.value) {
         userNameInvalidLabel.innerHTML += 'Debe agregar un nombre de usuario.<br/>';
@@ -113,9 +156,7 @@ const validEmailInput = () => {
     let valid = true;
     let emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,4})+$/;
 
-    // Clear elements
-    emailInput.classList.remove('is-invalid');
-    emailInvalidLabel.innerHTML = '';
+    clearFeedback(emailInput, emailInvalidLabel);
 
     if (!emailInput.value) {
         emailInvalidLabel.innerHTML += 'Debe agregar un email.<br/>';
@@ -152,9 +193,7 @@ const validPasswordInput = () => {
     const passwordInvalidLabel = document.getElementById('feedback-password');
     let valid = true;
 
-    // Clear elements
-    passwordInput.classList.remove('is-invalid');
-    passwordInvalidLabel.innerHTML = '';
+    clearFeedback(passwordInput, passwordInvalidLabel);
 
     if (!passwordInput.value) {
         passwordInvalidLabel.innerHTML += 'Debe agregar una contraseña.<br>';
@@ -213,8 +252,12 @@ const validateInput = (input) => {
     switch (input.id) {
         case 'input-name':
             return validNameInput();
+        case 'input-title':
+            return validTitleInput();
         case 'input-description':
             return validDescriptionInput();
+        case 'input-suggestion-description':
+            return validSuggestionDescriptionInput();
         case 'input-username':
             return validUserNameInput();
         case 'input-email':

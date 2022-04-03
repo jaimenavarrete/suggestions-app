@@ -12,16 +12,17 @@
         </a>
     </div>
 
-    <form asp-controller="Suggestions" asp-action="@(Model.Id == null ? "CreateSuggestion" : "EditSuggestion")" method="post" class="col-11 card-body mx-auto">
+    <form asp-controller="Suggestions" asp-action="@(Model.Id == null ? "CreateSuggestion" : "EditSuggestion")" method="post" id="form-create" class="col-11 card-body mx-auto">
         <partial name="_StatusMessage" />
 
         <input type="hidden" asp-for="Id" />
 
         <fieldset class="mb-5">
             <legend class="fs-5 fw-bold text-primary text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Título de la sugerencia</legend>
-            <div class="form-group">
+            <div class="form-group has-danger">
                 <label class="col-form-label" for="Title"><span class="text-secondary small">Define el título de la forma más legible posible. (Max 100 caracteres):</span></label>
-                <input type="text" asp-for="Title" class="form-control" placeholder="Título">
+                <input type="text" asp-for="Title" id="input-title" class="form-control input-create" placeholder="Título">
+                <div id="feedback-title" class="invalid-feedback"></div>
             </div>
         </fieldset>
 
@@ -32,7 +33,7 @@
             {
                 <div class="form-check">
                     <label class="col-form-label">
-                        <input type="radio" asp-for="CategoryId" class="form-check-input" value="@category.Id" data-com.bitwarden.browser.user-edited="yes">
+                        <input type="radio" asp-for="CategoryId" class="form-check-input" value="@category.Id" required>
                         @category.Name
                     </label>
                 </div>
@@ -42,9 +43,10 @@
 
         <fieldset class="mb-5">
             <legend class="fs-5 fw-bold text-primary text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Descripción de la sugerencia</legend>
-            <div class="form-group">
+            <div class="form-group has-danger">
                 <label for="Description" class="col-form-label"><span class="text-secondary small">Una descripción puede ayudar a los demás usuarios a comprender de una mejor manera tu sugerencia.</span></label>
-                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <textarea asp-for="Description" id="input-suggestion-description" class="form-control input-create" rows="5"></textarea>
+                <div id="feedback-suggestion-description" class="invalid-feedback"></div>
             </div>
         </fieldset>
 
@@ -58,3 +60,18 @@
         </div>
     </form>
 </section>
+
+@section Scripts
+{
+    <script>
+        const formCreate = document.getElementById("form-create");
+    
+        formCreate.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (validateForm()) {                
+                formCreate.submit();
+            }
+        });
+    </script>
+}

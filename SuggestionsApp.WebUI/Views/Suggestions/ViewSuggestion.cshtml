@@ -95,27 +95,6 @@ else if (Model.Approved == false)
     </section>
 }
 
-@*<section class="card shadow border-0 p-4">
-    <h3 class="card-title h4 text-primary fw-bold border-bottom border-2 border-primary mb-2">Panel de administración</h3>
-
-    <p class="form-label text-primary fw-bold mt-4">Modificar estado:</p>
-    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-        <form asp-controller="Suggestions" asp-action="SetSuggestionStatus" method="post" class="btn-group col col-md-6" role="group">
-            <input type="hidden" name="suggestionId" value="@Model.Id" />
-
-            <button id="btnGroupDrop" type="button" class="btn text-white dropdown-toggle d-block w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: @Model.StateColorHexCode">@Model.StateName</button>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop" style="">
-                
-                @foreach(var state in Model.States)
-                {
-                    <button class="dropdown-item text-secondary" href="#" name="stateId" value="@state.Id"><i class="las la-square-full" style="color: @state.ColorHexCode"></i> @state.Name</button>
-                }
-
-            </div>
-        </form>
-    </div>
-</section>*@
-
 @if(Model.IsAdminOrModeratorUser)
 {
     <section class="card shadow border-0 overflow-hidden p-4">
@@ -146,25 +125,5 @@ else if (Model.Approved == false)
         // Button to upvote suggestion
         const buttonUpvote = document.getElementById('upvote-button');
         buttonUpvote.addEventListener('click', () => buttonUpvote.submit());
-
-        // Buttons to change state
-        const buttonChangeState = document.getElementById('change-state-button');
-        buttonChangeState.addEventListener('change', () => {
-            Swal.fire({
-                title: '¿Está seguro?',
-                text: "Cambiará el estado de la sugerencia",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si, cámbialo!',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    buttonChangeState.submit()
-                }
-            })
-        });
-
     </script>
 }

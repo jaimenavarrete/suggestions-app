@@ -41,6 +41,7 @@ namespace SuggestionsApp.WebUI.Controllers
             try
             {
                 var suggestion = await _suggestionsService.GetSuggestionById(id);
+                
                 var currentUserId = await _userService.GetLoggedUserId(User);
                 var currentUserRole = await _userService.GetUserRoleById(currentUserId);
                 var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestion.Id, currentUserId);
@@ -65,9 +66,17 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateSuggestion()
         {
+            var categoriesViewModel = await GetCategoriesViewModel();
+
+            if (categoriesViewModel.Count == 0)
+            {
+                TempData["error"] = "No se pueden crear sugerencias si no hay categorías disponibles.";
+                return RedirectToAction("Index", "Home");
+            }
+
             SuggestionFormViewModel viewModel = new()
             {
-                Categories = await GetCategoriesViewModel(),
+                Categories = categoriesViewModel,
             };
 
             return View(viewModel);
