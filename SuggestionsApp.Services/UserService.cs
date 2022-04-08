@@ -35,7 +35,7 @@ namespace SuggestionsApp.Services
         public async Task<string> GetUserNameById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            return user is null ? "Anonimo" : user.UserName;
+            return user is null ? "Anónimo" : user.UserName;
         }
 
         public async Task<string> GetUserRoleById(string userId)

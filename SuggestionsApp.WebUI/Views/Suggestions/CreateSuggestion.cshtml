@@ -20,7 +20,7 @@
         <fieldset class="mb-5">
             <legend class="fs-5 fw-bold text-primary text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Título de la sugerencia</legend>
             <div class="form-group has-danger">
-                <label class="col-form-label" for="Title"><span class="text-secondary small">Define el título de la forma más legible posible. (Max 100 caracteres):</span></label>
+                <label class="col-form-label" for="input-title"><span class="text-secondary small">Define el título de la forma más legible posible. (Max 100 caracteres):</span></label>
                 <input type="text" asp-for="Title" id="input-title" class="form-control input-create" placeholder="Título">
                 <div id="feedback-title" class="invalid-feedback"></div>
             </div>
@@ -29,7 +29,7 @@
         <fieldset class="form-group mb-5">
             <legend class="fs-5 fw-bold text-primary text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Categoría de la sugerencia</legend>
 
-            @foreach(var category in Model!.Categories)
+            @foreach(var category in Model.Categories)
             {
                 <div class="form-check">
                     <label class="col-form-label">
@@ -44,7 +44,7 @@
         <fieldset class="mb-5">
             <legend class="fs-5 fw-bold text-primary text-uppercase border-bottom border-2 border-primary pb-2 mb-2">Descripción de la sugerencia</legend>
             <div class="form-group has-danger">
-                <label for="Description" class="col-form-label"><span class="text-secondary small">Una descripción puede ayudar a los demás usuarios a comprender de una mejor manera tu sugerencia.</span></label>
+                <label for="input-suggestion-description" class="col-form-label"><span class="text-secondary small">Una descripción puede ayudar a los demás usuarios a comprender de una mejor manera tu sugerencia.</span></label>
                 <textarea asp-for="Description" id="input-suggestion-description" class="form-control input-create" rows="5"></textarea>
                 <div id="feedback-suggestion-description" class="invalid-feedback"></div>
             </div>

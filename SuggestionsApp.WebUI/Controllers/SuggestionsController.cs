@@ -224,7 +224,7 @@ namespace SuggestionsApp.WebUI.Controllers
             {
                 if (isFromViewSuggestion)
                 {
-                    return RedirectToAction("ViewSuggestion", "Suggestions", new { id = id });
+                    return RedirectToAction("ViewSuggestion", "Suggestions", new { id });
                 }
 
                 return RedirectToAction("Index", "Home");

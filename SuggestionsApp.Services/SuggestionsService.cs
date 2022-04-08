@@ -3,7 +3,6 @@ using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
-using System.Text;
 
 namespace SuggestionsApp.Services
 {

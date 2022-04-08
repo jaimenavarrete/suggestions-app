@@ -53,7 +53,7 @@ const validNameInput = () => {
     }
 
     if (nameInput.value.length > 50) {
-        nameInvalidLabel.innerHTML += `Debe tener menos de 50 caracteres (Actual: ${nameInput.value.length}).`;
+        nameInvalidLabel.innerHTML += `Debe tener 50 caracteres o menos (Actual: ${nameInput.value.length}).`;
         valid = false;
     }
 
@@ -75,7 +75,7 @@ const validTitleInput = () => {
     }
 
     if (titleInput.value.length > 100) {
-        titleInvalidLabel.innerHTML += `Debe tener menos de 100 caracteres (Actual: ${titleInput.value.length}).`;
+        titleInvalidLabel.innerHTML += `Debe tener 100 caracteres o menos (Actual: ${titleInput.value.length}).`;
         valid = false;
     }
 
@@ -97,7 +97,7 @@ const validDescriptionInput = () => {
     }
 
     if (descriptionInput.value.length > 100) {
-        descriptionInvalidLabel.innerHTML += `Debe tener menos de 100 caracteres (Actual: ${descriptionInput.value.length}).`;
+        descriptionInvalidLabel.innerHTML += `Debe tener 100 caracteres o menos (Actual: ${descriptionInput.value.length}).`;
         valid = false;
     }
 
@@ -113,13 +113,8 @@ const validSuggestionDescriptionInput = () => {
 
     clearFeedback(descriptionInput, descriptionInvalidLabel);
 
-    if (!descriptionInput.value) {
-        descriptionInvalidLabel.innerHTML += 'Debe agregar una descripción a la sugerencia.<br/>';
-        valid = false;
-    }
-
     if (descriptionInput.value.length > 1000) {
-        descriptionInvalidLabel.innerHTML += `Debe tener menos de 1000 caracteres (Actual: ${descriptionInput.value.length}).`;
+        descriptionInvalidLabel.innerHTML += `Debe tener 1000 caracteres o menos (Actual: ${descriptionInput.value.length}).`;
         valid = false;
     }
 

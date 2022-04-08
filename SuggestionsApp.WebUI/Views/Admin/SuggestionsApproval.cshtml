@@ -32,8 +32,15 @@
                     <p class="card-subtitle text-muted small">@suggestion.UserName - @suggestion.Date</p>
                 </header>
 
-                <p class="my-3">@suggestion.Description</p>
-
+                @if (string.IsNullOrEmpty(suggestion.Description))
+                {
+                    <p class="my-3 fw-bold">[Sin descripción]</p>
+                }
+                else
+                {
+                    <p class="my-3">@suggestion.Description</p>
+                }
+                
                 <footer class="d-flex justify-content-between align-items-center">
                     <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @suggestion.CategoryName</p>
                     <div class="d-flex">

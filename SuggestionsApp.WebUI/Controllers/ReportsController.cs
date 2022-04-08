@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore;
 using SuggestionsApp.Models.Interfaces;
@@ -51,7 +50,7 @@ namespace SuggestionsApp.WebUI.Controllers
             foreach (var user in usersViewModel)
             {
                 user.LockedOut = user.LockoutEnd > DateTime.UtcNow;
-                user.Role = await _userService.GetUserRoleById(user.Id);
+                user.Role = await _userService.GetUserRoleById(user.Id ?? "");
             }
             
             return CreatePdf(usersViewModel);

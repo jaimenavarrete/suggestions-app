@@ -3,11 +3,6 @@ using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuggestionsApp.Services
 {
@@ -22,7 +17,7 @@ namespace SuggestionsApp.Services
             _suggestionsService = suggestionsService;
         }
 
-        public async Task<Upvote> GetSuggestionUserUpvote(int suggestionId, string userId)
+        public async Task<Upvote?> GetSuggestionUserUpvote(int suggestionId, string userId)
         {
             var upvote = await _context.Upvotes
                                     .FirstOrDefaultAsync(p => p.SuggestionId == suggestionId && p.UserId == userId);
@@ -42,21 +37,18 @@ namespace SuggestionsApp.Services
             _context.Add(upvote);
             var affectedRows = await _context.SaveChangesAsync();
 
-            if(affectedRows > 0)
-            {
-                var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
-                suggestion.UpvotesAmount++;
-                var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+            if (affectedRows == 0) return false;
 
-                return succeeded;
-            }
+            var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
+            suggestion.UpvotesAmount++;
+            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
 
-            return affectedRows > 0;
+            return succeeded;
         }
 
-        public async Task<bool> DeleteUpvote(int suggesstionId, string userId)
+        public async Task<bool> DeleteUpvote(int suggestionId, string userId)
         {
-            var upvote = await GetSuggestionUserUpvote(suggesstionId, userId);
+            var upvote = await GetSuggestionUserUpvote(suggestionId, userId);
 
             if (upvote is null)
             {
@@ -66,16 +58,13 @@ namespace SuggestionsApp.Services
             _context.Upvotes.Remove(upvote);
             var affectedRows = await _context.SaveChangesAsync();
 
-            if (affectedRows > 0)
-            {
-                var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
-                suggestion.UpvotesAmount--;
-                var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+            if (affectedRows == 0) return false;
 
-                return succeeded;
-            }
+            var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
+            suggestion.UpvotesAmount--;
+            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
 
-            return affectedRows > 0;
+            return succeeded;
         }
     }
 }

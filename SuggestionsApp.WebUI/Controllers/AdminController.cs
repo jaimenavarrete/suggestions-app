@@ -211,7 +211,7 @@ namespace SuggestionsApp.WebUI.Controllers
             foreach(var user in usersViewModel)
             {
                 user.LockedOut = user.LockoutEnd > DateTime.UtcNow;
-                user.Role = await _userService.GetUserRoleById(user.Id);
+                user.Role = await _userService.GetUserRoleById(user.Id ?? "");
             }
 
             UsersListViewModel viewModel = new()
