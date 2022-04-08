@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SuggestionsApp.Models.Data.Identity;
 using SuggestionsApp.Models.DataModels;
@@ -8,6 +9,7 @@ using SuggestionsApp.WebUI.ViewModels;
 
 namespace SuggestionsApp.WebUI.Controllers
 {
+    [Authorize(Roles = "Admin,Moderador")]
     public class AdminController : Controller
     {
         private readonly ISuggestionsService _suggestionsService;

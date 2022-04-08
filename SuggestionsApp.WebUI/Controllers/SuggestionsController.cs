@@ -145,6 +145,7 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Moderador")]
         public async Task<IActionResult> SetSuggestionStatus([FromForm] int suggestionId, int stateId)
         {
             var succeeded = await _suggestionsService.SetSuggestionStatus(suggestionId, stateId);
