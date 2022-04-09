@@ -25,6 +25,11 @@ namespace SuggestionsApp.Services
         public async Task<Category?> GetCategoryById(int id)
         {
             var category = await _context.Categories.FindAsync(id);
+            
+            if (category is null)
+            {
+                throw new LogicException("La categoría que seleccionó no existe.");
+            }
 
             return category;
         }

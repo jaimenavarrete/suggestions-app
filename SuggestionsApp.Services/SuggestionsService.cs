@@ -10,9 +10,18 @@ namespace SuggestionsApp.Services
     {
         private readonly SuggestionsAppContext _context;
 
-        public SuggestionsService(SuggestionsAppContext context)
+        private readonly ICategoriesService _categoriesService;
+        private readonly IUserService _userService;
+
+        public SuggestionsService(
+            SuggestionsAppContext context, 
+            ICategoriesService categoriesService, 
+            IUserService userService)
         {
             _context = context;
+
+            _categoriesService = categoriesService;
+            _userService = userService;
         }
         
         public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved)
@@ -30,10 +39,10 @@ namespace SuggestionsApp.Services
 
             if (categoryId is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == categoryId);
-
+            
             if (stateId is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.StateId == stateId);
-
+            
             if (search is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.Title.Contains(search));
 
@@ -49,7 +58,7 @@ namespace SuggestionsApp.Services
 
             if(suggestion is null)
             {
-                throw new LogicException("La sugerencia que seleccionó no existe o ha sido borrada hace poco.");
+                throw new LogicException("La sugerencia que seleccionó no existe.");
             }
 
             return suggestion;
@@ -61,7 +70,17 @@ namespace SuggestionsApp.Services
             {
                 throw new LogicException("No existe una sugerencia para agregar.");
             }
-            
+
+            if (string.IsNullOrEmpty(suggestion.Title) || suggestion.CategoryId == 0)
+            {
+                throw new BusinessException("Debe agregar todos los campos requeridos.");
+            }
+
+            if (suggestion.Title.Length > 100 || suggestion.Description?.Length > 1000)
+            {
+                throw new BusinessException("El título debe tener 100 caracteres o menos y la descripción debe tener 1000 caracteres o menos.");
+            }
+
             suggestion.UserId = userId;
             suggestion.UpvotesAmount = 0;
             suggestion.Date = DateTime.Now;
@@ -72,14 +91,30 @@ namespace SuggestionsApp.Services
             return affectedRows > 0;
         }
 
-        public async Task<bool> UpdateSuggestion(Suggestion suggestion)
+        public async Task<bool> UpdateSuggestion(Suggestion suggestion, string userId)
         {
             if (suggestion is null)
             {
                 throw new LogicException("No existe una sugerencia para editar.");
             }
+            
+            if (string.IsNullOrEmpty(suggestion.Title) || suggestion.CategoryId == 0)
+            {
+                throw new BusinessException("Debe agregar todos los campos requeridos.");
+            }
+
+            if (suggestion.Title.Length > 100 || suggestion.Description?.Length > 1000)
+            {
+                throw new BusinessException("El título debe tener 100 caracteres o menos y la descripción debe tener 1000 caracteres o menos.");
+            }
 
             var oldSuggestion = await GetSuggestionById(suggestion.Id);
+
+            if (userId != oldSuggestion.UserId)
+            {
+                throw new BusinessException("No puede editar la sugerencia de otro usuario.");
+            }
+            
             oldSuggestion.Title = suggestion.Title;
             oldSuggestion.CategoryId = suggestion.CategoryId;
             oldSuggestion.Description = suggestion.Description;
@@ -90,7 +125,7 @@ namespace SuggestionsApp.Services
             return affectedRows > 0;
         }
 
-        public async Task<bool> DeleteSuggestion(int id)
+        public async Task<bool> DeleteSuggestion(int id, string userId)
         {
             var suggestion = await GetSuggestionById(id);
 
@@ -105,7 +140,7 @@ namespace SuggestionsApp.Services
             var suggestion = await GetSuggestionById(id);
             suggestion.Approved = approved;
 
-            var result = await UpdateSuggestion(suggestion);
+            var result = await UpdateSuggestion(suggestion, suggestion.UserId);
 
             return result;
         }
@@ -115,7 +150,7 @@ namespace SuggestionsApp.Services
             var suggestion = await GetSuggestionById(id);
             suggestion.StateId = stateId;
 
-            var result = await UpdateSuggestion(suggestion);
+            var result = await UpdateSuggestion(suggestion, suggestion.UserId);
 
             return result;
         }

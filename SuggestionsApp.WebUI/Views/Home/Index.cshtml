@@ -93,8 +93,6 @@
     <section class="col-md-3">
         <article class="mb-4 mb-md-5">
             <form class="input-group" asp-controller="Home" asp-action="Index" method="get" id="form-search-text">
-                <input type="hidden" name="categoryId" value="@Model.CategorySearchId" @(Model.CategorySearchId == null ? "disabled" : "") />
-                <input type="hidden" name="stateId" value="@Model.StateSearchId" @(Model.StateSearchId == null ? "disabled" : "") />
                 <input type="text" name="search" class="form-control" placeholder="Buscar" aria-label="Barra de busqueda" value="@Model.SearchText">
                 <button class="btn btn-primary"><i class="las la-search"></i></button>
             </form>
@@ -179,7 +177,7 @@
         const submitEmptySearchText = () => {
             const inputSearchText = formSearchText.elements["search"];
 
-            if(inputSearchText.value == "") {
+            if(inputSearchText.value === "") {
                 inputSearchText.setAttribute("disabled", "");
                 formSearchText.submit();
             }

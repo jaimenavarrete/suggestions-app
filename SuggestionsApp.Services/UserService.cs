@@ -29,6 +29,12 @@ namespace SuggestionsApp.Services
         public async Task<ApplicationUser> GetUserById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+            {
+                throw new LogicException("El usuario que seleccionó no existe.");
+            }
+            
             return user;
         }
 

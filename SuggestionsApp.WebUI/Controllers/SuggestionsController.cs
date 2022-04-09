@@ -108,7 +108,14 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> EditSuggestion(int id)
         {
+            var currentUserId = await _userService.GetLoggedUserId(User);
             var suggestion = await _suggestionsService.GetSuggestionById(id);
+
+            if (currentUserId != suggestion.UserId)
+            {
+                TempData["error"] = "No puede editar la sugerencia de otro usuario.";
+                return RedirectToAction("Index", "Home");
+            }
 
             SuggestionFormViewModel viewModel = new()
             {
@@ -127,9 +134,10 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
+                var currentUserId = await _userService.GetLoggedUserId(User);
                 var suggestion = _mapper.Map<Suggestion>(viewModel);
 
-                var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+                var succeeded = await _suggestionsService.UpdateSuggestion(suggestion, currentUserId);
 
                 if (succeeded)
                     TempData["success"] = "La sugerencia se ha editado correctamente.";
@@ -161,7 +169,8 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
-                var succeeded = await _suggestionsService.DeleteSuggestion(suggestionId);
+                var currentUserId = await _userService.GetLoggedUserId(User);
+                var succeeded = await _suggestionsService.DeleteSuggestion(suggestionId, currentUserId);
 
                 if (succeeded)
                     TempData["success"] = "La sugerencia se ha borrado correctamente.";
@@ -181,16 +190,16 @@ namespace SuggestionsApp.WebUI.Controllers
         {
             try
             {
-                var userId = await _userService.GetLoggedUserId(User);
-                var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestionId, userId);
+                var currentUserId = await _userService.GetLoggedUserId(User);
+                var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestionId, currentUserId);
 
                 if(currentUserUpvote is not null)
                 {
-                    await _upvotesService.DeleteUpvote(suggestionId, userId);
+                    await _upvotesService.DeleteUpvote(suggestionId, currentUserId);
                 }
                 else
                 {
-                    await _upvotesService.InsertUpvote(suggestionId, userId);
+                    await _upvotesService.InsertUpvote(suggestionId, currentUserId);
                 }
 
                 return GetUpvoteRedirect(suggestionId, isFromViewSuggestion);

@@ -41,7 +41,7 @@ namespace SuggestionsApp.Services
 
             var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
             suggestion.UpvotesAmount++;
-            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion, suggestion.UserId);
 
             return succeeded;
         }
@@ -62,7 +62,7 @@ namespace SuggestionsApp.Services
 
             var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
             suggestion.UpvotesAmount--;
-            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion);
+            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion, suggestion.UserId);
 
             return succeeded;
         }
