@@ -9,7 +9,7 @@ using SuggestionsApp.WebUI.ViewModels;
 
 namespace SuggestionsApp.WebUI.Controllers
 {
-    [Authorize(Roles = "Admin,Moderador")]
+    // [Authorize(Roles = "Admin,Moderador")]
     public class AdminController : Controller
     {
         private readonly ISuggestionsService _suggestionsService;
@@ -69,7 +69,7 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 return RedirectToAction("CategoriesList");
             }
-            catch (LogicException ex)
+            catch (BusinessException ex)
             {
                 TempData["error"] = ex.Message;
 

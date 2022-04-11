@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Exceptions;
@@ -22,19 +23,21 @@ namespace SuggestionsApp.Services
             return states;
         }
 
-        public async Task<State?> GetStateById(int id)
+        public async Task<State> GetStateById(int id)
         {
             var state = await _context.States.FindAsync(id);
+
+            if (state is null)
+            {
+                throw new LogicException("El estado que seleccionó no existe.");
+            }
             
             return state;
         }
 
         public async Task<bool> InsertState(State state)
         {
-            if (state is null)
-            {
-                throw new LogicException("No existe un estado para crear.");
-            }
+            ValidateStateFields(state);
 
             _context.Add(state);
             var affectedRows = await _context.SaveChangesAsync();
@@ -44,10 +47,7 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> UpdateState(State state)
         {
-            if (state is null)
-            {
-                throw new LogicException("No existe un estado para editar.");
-            }
+            ValidateStateFields(state);
 
             _context.Update(state);
             var affectedRows = await _context.SaveChangesAsync();
@@ -69,5 +69,33 @@ namespace SuggestionsApp.Services
 
             return affectedRows > 0;
         }
+        
+        #region HelperMethods
+
+        private void ValidateStateFields(State state)
+        {
+            if(state is null)
+            {
+                throw new LogicException("No existe un estado para crear o editar.");
+            }
+
+            if (string.IsNullOrEmpty(state.Name) || string.IsNullOrEmpty(state.Description) || string.IsNullOrEmpty(state.ColorHexCode))
+            {
+                throw new BusinessException("Debe agregar todos los campos requeridos.");
+            }
+
+            if (!ColorHexCodeValidation(state.ColorHexCode))
+            {
+                throw new BusinessException("Debe agregar un color válido.");
+            }
+        }
+
+        private bool ColorHexCodeValidation(string hexCode)
+        {
+            var regex = new Regex(@"^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
+            return regex.IsMatch(hexCode);
+        }
+
+        #endregion
     }
 }

@@ -22,7 +22,7 @@ namespace SuggestionsApp.Services
             return categories;
         }
 
-        public async Task<Category?> GetCategoryById(int id)
+        public async Task<Category> GetCategoryById(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             
@@ -36,11 +36,8 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> InsertCategory(Category category)
         {
-            if(category is null)
-            {
-                throw new LogicException("No existe una categoria para crear.");
-            }
-
+            ValidateCategoryFields(category);
+            
             _context.Add(category);
             var affectedRows = await _context.SaveChangesAsync();
 
@@ -49,10 +46,7 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> UpdateCategory(Category category)
         {
-            if (category is null)
-            {
-                throw new LogicException("No existe una categoria para editar.");
-            }
+            ValidateCategoryFields(category);
 
             _context.Update(category);
             var affectedRows = await _context.SaveChangesAsync();
@@ -63,16 +57,28 @@ namespace SuggestionsApp.Services
         public async Task<bool> DeleteCategory(int id)
         {
             var category = await GetCategoryById(id);
-
-            if (category is null)
-            {
-                throw new LogicException("No existe una categoría para borrar.");
-            }
-
-            _context.Categories.Remove(category);
+            
+            _context.Remove(category);
             var affectedRows = await _context.SaveChangesAsync();
 
             return affectedRows > 0;
         }
+
+        #region HelperMethods
+
+        private void ValidateCategoryFields(Category category)
+        {
+            if(category is null)
+            {
+                throw new LogicException("No existe una categoria para crear o editar.");
+            }
+
+            if (string.IsNullOrEmpty(category.Name))
+            {
+                throw new BusinessException("Debe agregar un nombre a la categoría.");
+            }
+        }
+
+        #endregion
     }
 }
