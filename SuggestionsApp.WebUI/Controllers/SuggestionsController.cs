@@ -186,7 +186,7 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeSuggestionUpvote([FromForm] int suggestionId, bool isFromViewSuggestion)
+        public async Task<IActionResult> ChangeSuggestionUpvote([FromForm] int suggestionId, bool isFromViewSuggestionPage)
         {
             try
             {
@@ -195,20 +195,21 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 if(currentUserUpvote is not null)
                 {
-                    await _upvotesService.DeleteUpvote(suggestionId, currentUserId);
+                    await _upvotesService.DeleteUpvote(currentUserUpvote);
                 }
                 else
                 {
-                    await _upvotesService.InsertUpvote(suggestionId, currentUserId);
+                    var upvote = new Upvote(suggestionId, currentUserId);
+                    await _upvotesService.InsertUpvote(upvote);
                 }
 
-                return GetUpvoteRedirect(suggestionId, isFromViewSuggestion);
+                return GetUpvoteRedirect(suggestionId, isFromViewSuggestionPage);
             }
             catch (LogicException ex)
             {
                 TempData["error"] = ex.Message;
 
-                return GetUpvoteRedirect(suggestionId, isFromViewSuggestion);
+                return GetUpvoteRedirect(suggestionId, isFromViewSuggestionPage);
             }
         }
 

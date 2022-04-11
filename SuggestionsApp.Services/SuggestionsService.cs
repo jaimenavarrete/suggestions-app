@@ -57,20 +57,7 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> InsertSuggestion(Suggestion suggestion, string userId)
         {
-            if(suggestion is null)
-            {
-                throw new LogicException("No existe una sugerencia para agregar.");
-            }
-
-            if (string.IsNullOrEmpty(suggestion.Title) || suggestion.CategoryId == 0)
-            {
-                throw new BusinessException("Debe agregar todos los campos requeridos.");
-            }
-
-            if (suggestion.Title.Length > 100 || suggestion.Description?.Length > 1000)
-            {
-                throw new BusinessException("El título debe tener 100 caracteres o menos y la descripción debe tener 1000 caracteres o menos.");
-            }
+            ValidateSuggestionFields(suggestion);
 
             suggestion.UserId = userId;
             suggestion.UpvotesAmount = 0;
@@ -84,20 +71,7 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> UpdateSuggestion(Suggestion suggestion, string userId)
         {
-            if (suggestion is null)
-            {
-                throw new LogicException("No existe una sugerencia para editar.");
-            }
-            
-            if (string.IsNullOrEmpty(suggestion.Title) || suggestion.CategoryId == 0)
-            {
-                throw new BusinessException("Debe agregar todos los campos requeridos.");
-            }
-
-            if (suggestion.Title.Length > 100 || suggestion.Description?.Length > 1000)
-            {
-                throw new BusinessException("El título debe tener 100 caracteres o menos y la descripción debe tener 1000 caracteres o menos.");
-            }
+            ValidateSuggestionFields(suggestion);
 
             var existingSuggestion = await GetSuggestionById(suggestion.Id);
 
@@ -160,6 +134,24 @@ namespace SuggestionsApp.Services
                                         .Include(p => p.State);
 
             return suggestionsQuery;
+        }
+
+        private void ValidateSuggestionFields(Suggestion suggestion)
+        {
+            if(suggestion is null)
+            {
+                throw new LogicException("No existe una sugerencia para agregar o editar.");
+            }
+
+            if (string.IsNullOrEmpty(suggestion.Title) || suggestion.CategoryId == 0)
+            {
+                throw new BusinessException("Debe agregar todos los campos requeridos.");
+            }
+
+            if (suggestion.Title.Length > 100 || suggestion.Description?.Length > 1000)
+            {
+                throw new BusinessException("El título debe tener 100 caracteres o menos y la descripción debe tener 1000 caracteres o menos.");
+            }
         }
 
         #endregion

@@ -25,37 +25,39 @@ namespace SuggestionsApp.Services
             return upvote;
         }
 
-        public async Task<bool> InsertUpvote(int suggestionId, string userId)
+        public async Task<bool> InsertUpvote(Upvote upvote)
         {
-            if (suggestionId == 0 || string.IsNullOrEmpty(userId))
+            if (upvote is null || upvote.SuggestionId == 0 || string.IsNullOrEmpty(upvote.UserId))
             {
                 throw new LogicException("No existe un voto positivo para agregar.");
             }
             
-            var upvote = new Upvote(suggestionId, userId);
-            
+            var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
+
+            if (suggestion.UserId == upvote.UserId)
+            {
+                throw new BusinessException("No puede votar una sugerencia que usted ha creado.");
+            }
+
             _context.Add(upvote);
             var affectedRows = await _context.SaveChangesAsync();
 
             if (affectedRows == 0) return false;
-
-            var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
+            
             suggestion.UpvotesAmount++;
             var succeeded = await _suggestionsService.UpdateSuggestion(suggestion, suggestion.UserId);
 
             return succeeded;
         }
 
-        public async Task<bool> DeleteUpvote(int suggestionId, string userId)
+        public async Task<bool> DeleteUpvote(Upvote upvote)
         {
-            var upvote = await GetSuggestionUserUpvote(suggestionId, userId);
-
             if (upvote is null)
             {
                 throw new LogicException("No existe un voto positivo para borrar.");
             }
 
-            _context.Upvotes.Remove(upvote);
+            _context.Remove(upvote);
             var affectedRows = await _context.SaveChangesAsync();
 
             if (affectedRows == 0) return false;
