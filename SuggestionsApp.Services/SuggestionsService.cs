@@ -10,18 +10,9 @@ namespace SuggestionsApp.Services
     {
         private readonly SuggestionsAppContext _context;
 
-        private readonly ICategoriesService _categoriesService;
-        private readonly IUserService _userService;
-
-        public SuggestionsService(
-            SuggestionsAppContext context, 
-            ICategoriesService categoriesService, 
-            IUserService userService)
+        public SuggestionsService(SuggestionsAppContext context)
         {
             _context = context;
-
-            _categoriesService = categoriesService;
-            _userService = userService;
         }
         
         public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved)
@@ -108,18 +99,18 @@ namespace SuggestionsApp.Services
                 throw new BusinessException("El título debe tener 100 caracteres o menos y la descripción debe tener 1000 caracteres o menos.");
             }
 
-            var oldSuggestion = await GetSuggestionById(suggestion.Id);
+            var existingSuggestion = await GetSuggestionById(suggestion.Id);
 
-            if (userId != oldSuggestion.UserId)
+            if (existingSuggestion.UserId != userId)
             {
                 throw new BusinessException("No puede editar la sugerencia de otro usuario.");
             }
             
-            oldSuggestion.Title = suggestion.Title;
-            oldSuggestion.CategoryId = suggestion.CategoryId;
-            oldSuggestion.Description = suggestion.Description;
+            existingSuggestion.Title = suggestion.Title;
+            existingSuggestion.CategoryId = suggestion.CategoryId;
+            existingSuggestion.Description = suggestion.Description;
 
-            _context.Update(oldSuggestion);
+            _context.Update(existingSuggestion);
             var affectedRows = await _context.SaveChangesAsync();
 
             return affectedRows > 0;
@@ -129,7 +120,12 @@ namespace SuggestionsApp.Services
         {
             var suggestion = await GetSuggestionById(id);
 
-            _context.Suggestions.Remove(suggestion);
+            if (suggestion.UserId != userId)
+            {
+                throw new BusinessException("No puede borrar la sugerencia de otro usuario.");
+            }
+
+            _context.Remove(suggestion);
             var affectedRows = await _context.SaveChangesAsync();
 
             return affectedRows > 0;
