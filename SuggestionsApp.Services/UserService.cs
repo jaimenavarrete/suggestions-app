@@ -69,6 +69,11 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> InsertUser(ApplicationUser user, string password, string role)
         {
+            if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(role))
+            {
+                throw new BusinessException("Debe agregar todos los campos requeridos.");
+            }
+            
             user.EmailConfirmed = true;
             
             var result = await _userManager.CreateAsync(user, password);
