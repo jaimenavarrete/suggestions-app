@@ -1,4 +1,6 @@
-﻿namespace SuggestionsApp.WebUI.ViewModels
+﻿using SuggestionsApp.Models.QueryFilters;
+
+namespace SuggestionsApp.WebUI.ViewModels
 {
     public class IndexViewModel
     {
@@ -7,6 +9,8 @@
         public int? CategorySearchId { get; set; }
 
         public int? StateSearchId { get; set; }
+
+        public OrderBy OrderBy { get; set; }
 
         public int SuggestionsAmount { get; set; }
 

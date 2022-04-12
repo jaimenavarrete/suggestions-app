@@ -6,6 +6,8 @@
 
         public string Title { get; set; } = null!;
 
+        public DateTime Date { get; set; }
+
         public int UpvotesAmount { get; set; }
 
         public bool IsUserUpvoteActive { get; set; }

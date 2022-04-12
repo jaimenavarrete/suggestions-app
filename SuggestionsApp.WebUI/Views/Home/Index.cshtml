@@ -1,4 +1,5 @@
-﻿@model IndexViewModel
+﻿@using SuggestionsApp.Models.QueryFilters
+@model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -28,8 +29,18 @@
             }
             
             <section class="col-md-5 btn-group" role="group" aria-label="Botones">
-                <button type="button" class="btn btn-light">Nuevos</button>
-                <button type="button" class="btn btn-light">Populares</button>
+                
+                @if (Model.OrderBy is OrderBy.DateAsc or OrderBy.PopularityAsc)
+                {
+                    <a asp-controller="Home" asp-action="Index" asp-route-OrderBy="@((int)Model.OrderBy + 1)" type="button" class="btn btn-light p-0"><i class="las la-sort-amount-down-alt fs-3"></i></a>
+                }
+                else
+                {
+                    <a asp-controller="Home" asp-action="Index" asp-route-OrderBy="@((int)Model.OrderBy - 1)" type="button" class="btn btn-light p-0"><i class="las la-sort-amount-down fs-3"></i></a>
+                }
+                
+                <a asp-controller="Home" asp-action="Index" type="button" class="btn btn-light @(Model.OrderBy is OrderBy.DateDesc or OrderBy.DateAsc ? "active" : "")">Nuevos</a>
+                <a asp-controller="Home" asp-action="Index" asp-route-OrderBy="4" type="button" class="btn btn-light @(Model.OrderBy is OrderBy.PopularityDesc or OrderBy.PopularityAsc ? "active" : "")">Populares</a>
             </section>
         </div>
 
@@ -63,7 +74,7 @@
                                 <span class="badge py-2 px-4 fs-6 mb-3 order-2" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
                                 <div class="order-1">
                                     <h5 class="card-title mb-2">@suggestion.Title</h5>
-                                    <h6 class="card-subtitle text-muted">@suggestion.UserName</h6>
+                                    <h6 class="card-subtitle text-muted">@suggestion.UserName - <time class="text-black-50 small">@suggestion.Date</time></h6>
                                 </div>
                             </header>
 
@@ -93,7 +104,7 @@
     <section class="col-md-3">
         <article class="mb-4 mb-md-5">
             <form class="input-group" asp-controller="Home" asp-action="Index" method="get" id="form-search-text">
-                <input type="text" name="search" class="form-control" placeholder="Buscar" aria-label="Barra de busqueda" value="@Model.SearchText">
+                <input type="text" name="searchText" class="form-control" placeholder="Buscar" aria-label="Barra de busqueda" value="@Model.SearchText">
                 <button class="btn btn-primary"><i class="las la-search"></i></button>
             </form>
         </article>
@@ -175,7 +186,7 @@
         const formSearchText = document.getElementById("form-search-text");
 
         const submitEmptySearchText = () => {
-            const inputSearchText = formSearchText.elements["search"];
+            const inputSearchText = formSearchText.elements["searchText"];
 
             if(inputSearchText.value === "") {
                 inputSearchText.setAttribute("disabled", "");

@@ -3,6 +3,7 @@ using SuggestionsApp.Models.Data.Database;
 using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
+using SuggestionsApp.Models.QueryFilters;
 
 namespace SuggestionsApp.Services
 {
@@ -23,19 +24,28 @@ namespace SuggestionsApp.Services
             return suggestions;
         }
 
-        public async Task<IEnumerable<Suggestion>> GetSearchedSuggestions(bool? isApproved, int? categoryId, int? stateId, string? search)
+        public async Task<IEnumerable<Suggestion>> GetSearchedSuggestions(bool? isApproved, SuggestionQueryFilter filters)
         {
             var suggestionsQuery = GetAllSuggestionsQuery()
                                         .Where(p => p.Approved == isApproved);
 
-            if (categoryId is not null)
-                suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == categoryId);
+            if (filters.CategoryId is not null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == filters.CategoryId);
             
-            if (stateId is not null)
-                suggestionsQuery = suggestionsQuery.Where(p => p.StateId == stateId);
+            if (filters.StateId is not null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.StateId == filters.StateId);
             
-            if (search is not null)
-                suggestionsQuery = suggestionsQuery.Where(p => p.Title.Contains(search));
+            if (filters.SearchText is not null)
+                suggestionsQuery = suggestionsQuery.Where(p => p.Title.Contains(filters.SearchText));
+
+            suggestionsQuery = filters.OrderBy switch
+            {
+                OrderBy.DateAsc => suggestionsQuery.OrderBy(p => p.Date),
+                OrderBy.DateDesc => suggestionsQuery.OrderByDescending(p => p.Date),
+                OrderBy.PopularityAsc => suggestionsQuery.OrderBy(p => p.UpvotesAmount),
+                OrderBy.PopularityDesc => suggestionsQuery.OrderByDescending(p => p.UpvotesAmount),
+                _ => suggestionsQuery
+            };
 
             var suggestions = await suggestionsQuery.ToListAsync();
 

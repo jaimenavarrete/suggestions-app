@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SuggestionsApp.Models.Interfaces;
 using SuggestionsApp.WebUI.ViewModels;
 using System.Diagnostics;
+using SuggestionsApp.Models.QueryFilters;
 
 namespace SuggestionsApp.WebUI.Controllers
 {
@@ -32,16 +33,17 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int? categoryId, int? stateId, string? search)
+        public async Task<IActionResult> Index(SuggestionQueryFilter filters)
         {
             // The categoryId, stateId and search parameters are to filter suggestions and they are optional
-            var suggestionsViewModel = await GetApprovedSuggestionsViewModel(categoryId, stateId, search);
+            var suggestionsViewModel = await GetApprovedSuggestionsViewModel(filters);
 
             IndexViewModel viewModel = new()
             {
-                SearchText = search,
-                CategorySearchId = categoryId,
-                StateSearchId = stateId,
+                SearchText = filters.SearchText,
+                CategorySearchId = filters.CategoryId,
+                StateSearchId = filters.StateId,
+                OrderBy = filters.OrderBy,
                 SuggestionsAmount = suggestionsViewModel.Count,
                 SuggestionsList = suggestionsViewModel,
                 CategoriesList = await GetCategoriesViewModel(),
@@ -65,9 +67,9 @@ namespace SuggestionsApp.WebUI.Controllers
 
         #region HelperMethods
 
-            private async Task<List<SuggestionViewModel>> GetApprovedSuggestionsViewModel(int? categoryId, int? stateId, string? search)
+            private async Task<List<SuggestionViewModel>> GetApprovedSuggestionsViewModel(SuggestionQueryFilter filters)
             {
-                var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, categoryId, stateId, search);
+                var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, filters);
                 var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
                 var currentUserId = await _userService.GetLoggedUserId(User);
 
