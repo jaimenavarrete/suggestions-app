@@ -4,6 +4,7 @@ using SuggestionsApp.Models.DataModels;
 using SuggestionsApp.Models.Exceptions;
 using SuggestionsApp.Models.Interfaces;
 using SuggestionsApp.Models.QueryFilters;
+using SuggestionsApp.Services.Shared;
 
 namespace SuggestionsApp.Services
 {
@@ -65,8 +66,9 @@ namespace SuggestionsApp.Services
             return suggestion;
         }
 
-        public async Task<bool> InsertSuggestion(Suggestion suggestion, string userId)
+        public async Task<bool> InsertSuggestion(Suggestion suggestion, string userId, string captchaToken)
         {
+            await ValidateCaptchaField(captchaToken);
             ValidateSuggestionFields(suggestion);
 
             suggestion.UserId = userId;
@@ -161,6 +163,16 @@ namespace SuggestionsApp.Services
             if (suggestion.Title.Length > 100 || suggestion.Description?.Length > 1000)
             {
                 throw new BusinessException("El título debe tener 100 caracteres o menos y la descripción debe tener 1000 caracteres o menos.");
+            }
+        }
+        
+        private async Task ValidateCaptchaField(string captchaToken)
+        {
+            var result = await CaptchaService.ValidateCaptchaToken(captchaToken);
+
+            if (!result)
+            {
+                throw new BusinessException("El captcha ingresado no es válido.");
             }
         }
 

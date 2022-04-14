@@ -49,6 +49,11 @@
                 <div id="feedback-suggestion-description" class="invalid-feedback"></div>
             </div>
         </fieldset>
+        
+        <div class="mb-5 form-group has-danger">
+            <div class="g-recaptcha" data-sitekey="6Ld_7W8fAAAAAGQDUx7IxTDw54loVakToolLaf5T"></div>
+            <div id="feedback-suggestion-captcha" class="invalid-feedback">Debe completar el captcha</div>
+        </div>
 
         <div class="d-flex justify-content-between">
             <button class="btn btn-primary"><i class='las la-plus'></i> @(Model.Id == null ? "Crear sugerencia" : "Editar sugerencia") </button>
@@ -65,13 +70,33 @@
 {
     <script>
         const formCreate = document.getElementById("form-create");
+        
+        const validateCaptcha = () => {
+            const captcha = document.querySelector('.g-recaptcha');
+            const captchaResponse = formCreate.elements['g-recaptcha-response'];
+            let valid = true;
+
+            // Clear elements
+            captcha.classList.remove('is-invalid');
+
+            if (!captchaResponse.value) {
+                captcha.classList.add('is-invalid');
+                valid = false;
+            }
+
+            return valid;
+        }
     
         formCreate.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            if (validateForm()) {                
+            let validCaptcha = validateCaptcha();
+            let validForm = validateForm();
+            
+            if (validCaptcha && validForm) {
                 formCreate.submit();
             }
         });
     </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 }

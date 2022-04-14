@@ -32,19 +32,19 @@
                 
                 @if (Model.OrderBy is OrderBy.DateAsc or OrderBy.PopularityAsc)
                 {
-                    <a asp-controller="Home" asp-action="Index" asp-route-OrderBy="@((int)Model.OrderBy + 1)" type="button" class="btn btn-light p-0"><i class="las la-sort-amount-down-alt fs-3"></i></a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-orderBy="@((int)Model.OrderBy + 1)" type="button" class="btn btn-light p-0"><i class="las la-sort-amount-down-alt fs-3"></i></a>
                 }
                 else
                 {
-                    <a asp-controller="Home" asp-action="Index" asp-route-OrderBy="@((int)Model.OrderBy - 1)" type="button" class="btn btn-light p-0"><i class="las la-sort-amount-down fs-3"></i></a>
+                    <a asp-controller="Home" asp-action="Index" asp-route-orderBy="@((int)Model.OrderBy - 1)" type="button" class="btn btn-light p-0"><i class="las la-sort-amount-down fs-3"></i></a>
                 }
                 
                 <a asp-controller="Home" asp-action="Index" type="button" class="btn btn-light @(Model.OrderBy is OrderBy.DateDesc or OrderBy.DateAsc ? "active" : "")">Nuevos</a>
-                <a asp-controller="Home" asp-action="Index" asp-route-OrderBy="4" type="button" class="btn btn-light @(Model.OrderBy is OrderBy.PopularityDesc or OrderBy.PopularityAsc ? "active" : "")">Populares</a>
+                <a asp-controller="Home" asp-action="Index" asp-route-orderBy="4" type="button" class="btn btn-light @(Model.OrderBy is OrderBy.PopularityDesc or OrderBy.PopularityAsc ? "active" : "")">Populares</a>
             </section>
         </div>
 
-        <section class="row p-2 mb-4">
+        <section class="row px-2 mb-4">
             
             <partial name="_StatusMessage" />
             

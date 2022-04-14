@@ -90,14 +90,14 @@ namespace SuggestionsApp.WebUI.Controllers
                 var currentUserId = await _userService.GetLoggedUserId(User);
                 var suggestion = _mapper.Map<Suggestion>(viewModel);
 
-                var succeeded = await _suggestionsService.InsertSuggestion(suggestion, currentUserId);
+                var succeeded = await _suggestionsService.InsertSuggestion(suggestion, currentUserId, viewModel.CaptchaToken);
 
                 if (succeeded)
                     TempData["success"] = "La sugerencia se ha creado correctamente.";
 
                 return RedirectToAction("Index", "Home");
             }
-            catch(LogicException ex)
+            catch(BusinessException ex)
             {
                 TempData["error"] = ex.Message;
 
