@@ -63,7 +63,7 @@ else if (Model.Approved == false)
             <footer class="d-flex justify-content-between align-items-center">
                 <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @Model.CategoryName</p>
 
-                @if(Model.IsUserSuggestion)
+                @if(Model.IsUserSuggestion || Model.IsAdminOrModeratorUser)
                 {
                     <div class="d-flex align-items-center">
                         <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>

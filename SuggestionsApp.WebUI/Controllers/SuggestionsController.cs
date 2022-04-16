@@ -43,12 +43,11 @@ namespace SuggestionsApp.WebUI.Controllers
                 var suggestion = await _suggestionsService.GetSuggestionById(id);
                 
                 var currentUserId = await _userService.GetLoggedUserId(User);
-                var currentUserRole = await _userService.GetUserRoleById(currentUserId);
                 var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestion.Id, currentUserId);
 
                 var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
                 viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                viewModel.IsAdminOrModeratorUser = currentUserRole is "Admin" or "Moderador";
+                viewModel.IsAdminOrModeratorUser = await _userService.HasAdministrationRole(currentUserId);
                 viewModel.IsUserSuggestion = suggestion.UserId == currentUserId;
                 viewModel.IsUserUpvoteActive = currentUserUpvote is not null;
                 viewModel.States = await GetStatesViewModel();
@@ -109,9 +108,10 @@ namespace SuggestionsApp.WebUI.Controllers
         public async Task<IActionResult> EditSuggestion(int id)
         {
             var currentUserId = await _userService.GetLoggedUserId(User);
+            var hasAdministrationRole = await _userService.HasAdministrationRole(currentUserId);
             var suggestion = await _suggestionsService.GetSuggestionById(id);
 
-            if (currentUserId != suggestion.UserId)
+            if (currentUserId != suggestion.UserId && !hasAdministrationRole)
             {
                 TempData["error"] = "No puede editar la sugerencia de otro usuario.";
                 return RedirectToAction("Index", "Home");
@@ -177,7 +177,7 @@ namespace SuggestionsApp.WebUI.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
-            catch(LogicException ex)
+            catch(BusinessException ex)
             {
                 TempData["error"] = ex.Message;
 

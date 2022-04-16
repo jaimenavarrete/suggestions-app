@@ -23,5 +23,7 @@
         public string UserName { get; set; } = null!;
 
         public bool IsUserSuggestion { get; set; }
+        
+        public bool IsAdminOrModeratorUser { get; set; }
     }
 }

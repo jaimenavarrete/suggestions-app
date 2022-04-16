@@ -7,11 +7,11 @@ public static class CaptchaService
 {
     private const string Url = "https://www.google.com/recaptcha/api/siteverify";
     private const string Secret = "6Ld_7W8fAAAAAOktQzP5tbMg-tpTK1l5ZsKn_gFe";
+    
+    private static readonly HttpClient HttpClient = new HttpClient();
 
     public static async Task<bool> ValidateCaptchaToken(string token)
     {
-        var httpClient = new HttpClient();
-
         var values = new Dictionary<string, string>
         {
             { "secret", Secret },
@@ -20,7 +20,7 @@ public static class CaptchaService
 
         var parameters = new FormUrlEncodedContent(values);
         
-        var response = await httpClient.PostAsync(Url, parameters);
+        var response = await HttpClient.PostAsync(Url, parameters);
         var text = await response.Content.ReadAsStringAsync();
 
         var result = JsonSerializer.Deserialize<CaptchaResponse>(text);

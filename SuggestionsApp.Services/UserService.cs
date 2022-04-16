@@ -55,6 +55,12 @@ namespace SuggestionsApp.Services
             return roles.First();
         }
 
+        public async Task<bool> HasAdministrationRole(string userId)
+        {
+            var role = await GetUserRoleById(userId);
+            return role is "Admin" or "Moderador";
+        }
+
         public async Task<IEnumerable<ApplicationUser>> GetUsers()
         {
             var users = await _userManager.Users.ToListAsync();

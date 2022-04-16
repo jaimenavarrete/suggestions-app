@@ -80,6 +80,7 @@ namespace SuggestionsApp.WebUI.Controllers
                     suggestion.UserName = await _userService.GetUserNameById(suggestion.UserId);
                     suggestion.IsUserUpvoteActive = currentUserUpvote is not null;
                     suggestion.IsUserSuggestion = suggestion.UserId == currentUserId;
+                    suggestion.IsAdminOrModeratorUser = await _userService.HasAdministrationRole(currentUserId);
                 }
 
                 return suggestionsViewModel;

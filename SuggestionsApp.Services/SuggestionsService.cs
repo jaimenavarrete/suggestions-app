@@ -11,10 +11,12 @@ namespace SuggestionsApp.Services
     public class SuggestionsService : ISuggestionsService
     {
         private readonly SuggestionsAppContext _context;
+        private readonly IUserService _userService;
 
-        public SuggestionsService(SuggestionsAppContext context)
+        public SuggestionsService(SuggestionsAppContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
         
         public async Task<IEnumerable<Suggestion>> GetSuggestions(bool? isApproved)
@@ -22,6 +24,7 @@ namespace SuggestionsApp.Services
             var suggestions = await GetAllSuggestionsQuery()
                                         .Where(p => p.Approved == isApproved)
                                         .ToListAsync();
+
             return suggestions;
         }
 
@@ -84,10 +87,11 @@ namespace SuggestionsApp.Services
         public async Task<bool> UpdateSuggestion(Suggestion suggestion, string userId)
         {
             ValidateSuggestionFields(suggestion);
-
+            
+            var hasAdministrationRole = await _userService.HasAdministrationRole(userId);
             var existingSuggestion = await GetSuggestionById(suggestion.Id);
 
-            if (existingSuggestion.UserId != userId)
+            if (existingSuggestion.UserId != userId && !hasAdministrationRole)
             {
                 throw new BusinessException("No puede editar la sugerencia de otro usuario.");
             }
@@ -95,6 +99,7 @@ namespace SuggestionsApp.Services
             existingSuggestion.Title = suggestion.Title;
             existingSuggestion.CategoryId = suggestion.CategoryId;
             existingSuggestion.Description = suggestion.Description;
+            existingSuggestion.Approved = hasAdministrationRole ? true : null;
 
             _context.Update(existingSuggestion);
             var affectedRows = await _context.SaveChangesAsync();
@@ -104,9 +109,10 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> DeleteSuggestion(int id, string userId)
         {
+            var hasAdministrationRole = await _userService.HasAdministrationRole(userId);
             var suggestion = await GetSuggestionById(id);
 
-            if (suggestion.UserId != userId)
+            if (suggestion.UserId != userId && !hasAdministrationRole)
             {
                 throw new BusinessException("No puede borrar la sugerencia de otro usuario.");
             }
