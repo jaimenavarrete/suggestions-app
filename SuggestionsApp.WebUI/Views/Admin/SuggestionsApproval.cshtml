@@ -23,6 +23,15 @@
                 </p>
             </div>
         }
+        
+        <section class="d-flex justify-content-between">
+            <a asp-controller="Reports" asp-action="PrintApprovedSuggestions" class="btn btn-sm btn-outline-dark mb-4" target="_blank">
+                <i class="las la-print fs-4"></i> Imprimir sugerencias aprobadas
+            </a>
+            <a asp-controller="Reports" asp-action="PrintPendingSuggestions" class="btn btn-sm btn-outline-dark mb-4" target="_blank">
+                <i class="las la-print fs-4"></i> Imprimir sugerencias pendientes
+            </a>
+        </section>
 
         @foreach (var suggestion in Model.PendingSuggestionsList)
         {
