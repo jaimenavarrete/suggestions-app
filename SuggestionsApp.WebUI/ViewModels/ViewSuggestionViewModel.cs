@@ -24,7 +24,7 @@
 
         public string UserName { get; set; } = null!;
 
-        public bool IsAdminOrModeratorUser { get; set; }
+        public bool IsUserInAdministrationRole { get; set; }
 
         public bool IsUserSuggestion { get; set; }
 

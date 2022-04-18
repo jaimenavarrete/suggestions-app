@@ -24,6 +24,6 @@
 
         public bool IsUserSuggestion { get; set; }
         
-        public bool IsAdminOrModeratorUser { get; set; }
+        public bool IsUserInAdministrationRole { get; set; }
     }
 }

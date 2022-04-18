@@ -24,6 +24,12 @@ namespace SuggestionsApp.Services
 
             return upvote;
         }
+        
+        public async Task<bool> SuggestionHasUserUpvote(int suggestionId, string userId)
+        {
+            var upvote = await GetSuggestionUserUpvote(suggestionId, userId);
+            return upvote is not null;
+        }
 
         public async Task<bool> InsertUpvote(Upvote upvote)
         {

@@ -35,8 +35,16 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(SuggestionQueryFilter filters)
         {
-            // The categoryId, stateId and search parameters are to filter suggestions and they are optional
-            var suggestionsViewModel = await GetApprovedSuggestionsViewModel(filters);
+            var suggestionsViewModel = await GetSuggestionsViewModel(filters);
+            var currentUserId = await _userService.GetLoggedUserId(User);
+
+            foreach (var suggestion in suggestionsViewModel)
+            {
+                suggestion.UserName = await _userService.GetUserNameById(suggestion.UserId);
+                suggestion.IsUserUpvoteActive = await _upvotesService.SuggestionHasUserUpvote(suggestion.Id ?? 0, currentUserId);
+                suggestion.IsUserSuggestion = suggestion.UserId == currentUserId;
+                suggestion.IsUserInAdministrationRole = await _userService.IsUserInAdministrationRole(currentUserId);
+            }
 
             IndexViewModel viewModel = new()
             {
@@ -66,41 +74,30 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         #region HelperMethods
+        
+        private async Task<List<SuggestionViewModel>> GetSuggestionsViewModel(SuggestionQueryFilter filters)
+        {
+            var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, filters);
+            var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
 
-            private async Task<List<SuggestionViewModel>> GetApprovedSuggestionsViewModel(SuggestionQueryFilter filters)
-            {
-                var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, filters);
-                var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
-                var currentUserId = await _userService.GetLoggedUserId(User);
+            return suggestionsViewModel;
+        }
 
-                foreach (var suggestion in suggestionsViewModel)
-                {
-                    var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestion.Id ?? 0, currentUserId);
+        private async Task<List<CategoryViewModel>> GetCategoriesViewModel()
+        {
+            var categories = await _categoriesService.GetCategories();
+            var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
 
-                    suggestion.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                    suggestion.IsUserUpvoteActive = currentUserUpvote is not null;
-                    suggestion.IsUserSuggestion = suggestion.UserId == currentUserId;
-                    suggestion.IsAdminOrModeratorUser = await _userService.HasAdministrationRole(currentUserId);
-                }
+            return categoriesViewModel;
+        }
 
-                return suggestionsViewModel;
-            }
+        private async Task<List<StateViewModel>> GetStatesViewModel()
+        {
+            var states = await _statesService.GetStates();
+            var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
 
-            private async Task<List<CategoryViewModel>> GetCategoriesViewModel()
-            {
-                var categories = await _categoriesService.GetCategories();
-                var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
-
-                return categoriesViewModel;
-            }
-
-            private async Task<List<StateViewModel>> GetStatesViewModel()
-            {
-                var states = await _statesService.GetStates();
-                var statesViewModel = _mapper.Map<List<StateViewModel>>(states);
-
-                return statesViewModel;
-            }
+            return statesViewModel;
+        }
 
         #endregion
     }

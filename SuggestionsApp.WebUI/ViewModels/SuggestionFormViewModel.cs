@@ -11,9 +11,9 @@ namespace SuggestionsApp.WebUI.ViewModels
         public int CategoryId { get; set; }
 
         public string? Description { get; set; }
-        
+
         [BindProperty(Name = "g-recaptcha-response")]
-        public string CaptchaToken { get; set; }
+        public string CaptchaToken { get; set; } = null!;
 
         public List<CategoryViewModel> Categories { get; set; } = null!;
     }

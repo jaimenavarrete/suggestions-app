@@ -13,7 +13,7 @@ namespace SuggestionsApp.Models.Interfaces
 
         Task<string> GetUserRoleById(string userId);
 
-        Task<bool> HasAdministrationRole(string userId);
+        Task<bool> IsUserInAdministrationRole(string userId);
 
         Task<IEnumerable<ApplicationUser>> GetUsers();
 

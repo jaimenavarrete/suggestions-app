@@ -32,12 +32,7 @@ namespace SuggestionsApp.WebUI.Controllers
             _userService = userService;
             _mapper = mapper;
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
+        
 
         // Categories section
 
@@ -322,12 +317,45 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> SuggestionsApproval(SuggestionsApprovalViewModel viewModel)
         {
+            var currentUserId = await _userService.GetLoggedUserId(User);
             var succeeded = await _suggestionsService.ChangeSuggestionApprovalStatus(viewModel.SuggestionId, viewModel.Approved);
 
             if (succeeded && viewModel.Approved)
                 TempData["success"] = "La sugerencia se ha aprobado correctamente.";
             else if (succeeded && !viewModel.Approved)
                 TempData["success"] = "La sugerencia se ha rechazado correctamente.";
+
+            return RedirectToAction();
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> RejectedSuggestions()
+        {
+            var rejectedSuggestions = await _suggestionsService.GetSuggestions(isApproved: false);
+            var rejectedSuggestionsViewModel = _mapper.Map<List<PendingSuggestionViewModel>>(rejectedSuggestions);
+
+            foreach (var suggestion in rejectedSuggestionsViewModel)
+            {
+                suggestion.UserName = await _userService.GetUserNameById(suggestion.UserId);
+            }
+
+            RejectedSuggestionsViewModel viewModel = new()
+            {
+                RejectedSuggestionsList = rejectedSuggestionsViewModel,
+                RejectedSuggestionsCount = rejectedSuggestionsViewModel.Count
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectedSuggestions(RejectedSuggestionsViewModel viewModel)
+        {
+            var currentUserId = await _userService.GetLoggedUserId(User);
+            var succeeded = await _suggestionsService.ChangeSuggestionApprovalStatus(viewModel.SuggestionId, null);
+
+            if (succeeded)
+                TempData["success"] = "La sugerencia ha sido enviada a aprobación correctamente.";
 
             return RedirectToAction();
         }

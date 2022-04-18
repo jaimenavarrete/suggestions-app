@@ -1,0 +1,66 @@
+﻿@model RejectedSuggestionsViewModel
+@{
+    Layout = "_AdminLayout";
+
+    ViewData["Title"] = "Sugerencias rechazadas";
+    ViewData["SubTitle"] = "Estas sugerencias no son visibles actualmente para los usuarios. Puede recuperar una sugerencia para ingresarla a aprobación o puede borrarla definitivamente.";
+    ViewData["ActivePage"] = ManageAdminNavPages.RejectedSuggestions;
+}
+
+<h3 class="fw-bold display-6">@ViewData["Title"]</h3>
+<p class="mb-4">@ViewData["SubTitle"]</p>
+
+<partial name="_StatusMessage" />
+
+<div class="row">
+    <section class="col">
+        @if (Model.RejectedSuggestionsCount == 0)
+        {
+            <div class="alert alert-light">
+                <p class="mb-0 text-primary fw-bold">
+                    <i class="las la-info-circle fs-4"></i>
+                    Actualmente no existen sugerencias rechazadas.
+                </p>
+            </div>
+        }
+        
+        @foreach (var suggestion in Model.RejectedSuggestionsList)
+        {
+            <article class="border border-2 border-primary rounded p-3 mb-3">
+                <header class="border-bottom border-2 border-primary mb-3 pb-2">
+                    <h5 class="card-title mb-2 text-primary">@suggestion.Title</h5>
+                    <p class="card-subtitle text-muted small">@suggestion.UserName - @suggestion.Date</p>
+                </header>
+
+                @if (string.IsNullOrEmpty(suggestion.Description))
+                {
+                    <p class="my-3 fw-bold">[Sin descripción]</p>
+                }
+                else
+                {
+                    <p class="my-3">@suggestion.Description</p>
+                }
+                
+                <footer class="d-flex justify-content-between align-items-center">
+                    <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @suggestion.CategoryName</p>
+                    <div class="d-flex">
+                        <form method="post">
+                            <input type="hidden" asp-for="SuggestionId" value="@suggestion.Id"/>
+                            <button type="submit" class="btn btn-sm btn-secondary mx-1"><i class="las la-undo-alt fs-4"></i> Recuperar</button>
+                        </form>
+
+                        <form asp-controller="Suggestions" asp-action="DeleteSuggestion" method="post">
+                            <input type="hidden" asp-for="SuggestionId" value="@suggestion.Id"/>
+                            <input type="hidden" name="isFromRejectedSuggestionsPage" value="true"/>
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="las la-trash fs-4 px-1"></i></button>
+                        </form>
+                    </div>
+                </footer>
+            </article>
+        }
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -41,15 +41,21 @@ namespace SuggestionsApp.WebUI.Controllers
             try
             {
                 var suggestion = await _suggestionsService.GetSuggestionById(id);
-                
                 var currentUserId = await _userService.GetLoggedUserId(User);
-                var currentUserUpvote = await _upvotesService.GetSuggestionUserUpvote(suggestion.Id, currentUserId);
+                var isUserInAdministrationRole = await _userService.IsUserInAdministrationRole(currentUserId);
+                var isUserSuggestion = suggestion.UserId == currentUserId;
+
+                if (suggestion.Approved != true && !isUserSuggestion && !isUserInAdministrationRole)
+                {
+                    TempData["error"] = "No puede ingresar a una sugerencia que no ha sido aprobada.";
+                    return RedirectToAction("Index", "Home");
+                }
 
                 var viewModel = _mapper.Map<ViewSuggestionViewModel>(suggestion);
                 viewModel.UserName = await _userService.GetUserNameById(suggestion.UserId);
-                viewModel.IsAdminOrModeratorUser = await _userService.HasAdministrationRole(currentUserId);
-                viewModel.IsUserSuggestion = suggestion.UserId == currentUserId;
-                viewModel.IsUserUpvoteActive = currentUserUpvote is not null;
+                viewModel.IsUserInAdministrationRole = isUserInAdministrationRole;
+                viewModel.IsUserSuggestion = isUserSuggestion;
+                viewModel.IsUserUpvoteActive = await _upvotesService.SuggestionHasUserUpvote(suggestion.Id, currentUserId);
                 viewModel.States = await GetStatesViewModel();
 
                 return View(viewModel);
@@ -92,7 +98,7 @@ namespace SuggestionsApp.WebUI.Controllers
                 var succeeded = await _suggestionsService.InsertSuggestion(suggestion, currentUserId, viewModel.CaptchaToken);
 
                 if (succeeded)
-                    TempData["success"] = "La sugerencia se ha creado correctamente.";
+                    TempData["success"] = "La sugerencia se ha creado correctamente. Debe ser aprobada.";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -108,7 +114,7 @@ namespace SuggestionsApp.WebUI.Controllers
         public async Task<IActionResult> EditSuggestion(int id)
         {
             var currentUserId = await _userService.GetLoggedUserId(User);
-            var hasAdministrationRole = await _userService.HasAdministrationRole(currentUserId);
+            var hasAdministrationRole = await _userService.IsUserInAdministrationRole(currentUserId);
             var suggestion = await _suggestionsService.GetSuggestionById(id);
 
             if (currentUserId != suggestion.UserId && !hasAdministrationRole)
@@ -165,7 +171,7 @@ namespace SuggestionsApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSuggestion([FromForm] int suggestionId)
+        public async Task<IActionResult> DeleteSuggestion([FromForm] int suggestionId, bool isFromRejectedSuggestionsPage)
         {
             try
             {
@@ -175,13 +181,13 @@ namespace SuggestionsApp.WebUI.Controllers
                 if (succeeded)
                     TempData["success"] = "La sugerencia se ha borrado correctamente.";
 
-                return RedirectToAction("Index", "Home");
+                return GetDeleteSuggestionRedirect(isFromRejectedSuggestionsPage);
             }
             catch(BusinessException ex)
             {
                 TempData["error"] = ex.Message;
 
-                return RedirectToAction("Index", "Home");
+                return GetDeleteSuggestionRedirect(isFromRejectedSuggestionsPage);
             }
         }
 
@@ -236,6 +242,16 @@ namespace SuggestionsApp.WebUI.Controllers
                 if (isFromViewSuggestion)
                 {
                     return RedirectToAction("ViewSuggestion", "Suggestions", new { id });
+                }
+
+                return RedirectToAction("Index", "Home");
+            }
+            
+            private RedirectToActionResult GetDeleteSuggestionRedirect(bool isFromRejectedSuggestionsPage)
+            {
+                if (isFromRejectedSuggestionsPage)
+                {
+                    return RedirectToAction("RejectedSuggestions", "Admin");
                 }
 
                 return RedirectToAction("Index", "Home");

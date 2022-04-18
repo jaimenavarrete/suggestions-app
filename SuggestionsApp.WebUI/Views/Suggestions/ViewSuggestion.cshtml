@@ -37,7 +37,7 @@ else if (Model.Approved == false)
         <aside class="col-2 text-center p-0 px-md-3">
             <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" id="upvote-button" class="upvote-button btn text-center border border-2 border-primary rounded d-flex flex-column justify-content-around p-1 mx-auto mb-2 @(Model.IsUserSuggestion ? "disabled" : "") @(Model.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
                 <input type="hidden" name="suggestionId" id="suggestionId" value="@Model.Id" />
-                <input type="hidden" name="isFromViewSuggestion" id="isFromViewSuggestion" value="true" />
+                <input type="hidden" name="isFromViewSuggestionPage" id="isFromViewSuggestion" value="true" />
                 <i class="las la-chevron-up fs-3"></i>
                 <p class="h5 fw-bold mb-0">@Model.UpvotesAmount</p>
                 <p class="fw-bold text-uppercase mb-0 d-none d-sm-block">@(Model.IsUserUpvoteActive ? "Votada" : "Votar")</p>
@@ -63,7 +63,7 @@ else if (Model.Approved == false)
             <footer class="d-flex justify-content-between align-items-center">
                 <p class="text-muted text-uppercase fw-bold mb-0"><i class="las la-tag fs-5"></i> @Model.CategoryName</p>
 
-                @if(Model.IsUserSuggestion || Model.IsAdminOrModeratorUser)
+                @if(Model.IsUserSuggestion || Model.IsUserInAdministrationRole)
                 {
                     <div class="d-flex align-items-center">
                         <a href="/Suggestions/EditSuggestion/@Model.Id"><i class="las la-pen text-muted fs-3 px-1"></i></a>
@@ -95,7 +95,7 @@ else if (Model.Approved == false)
     </section>
 }
 
-@if(Model.IsAdminOrModeratorUser)
+@if(Model.IsUserInAdministrationRole)
 {
     <section class="card shadow border-0 overflow-hidden p-4">
         <h3 class="card-title h4 text-primary fw-bold border-bottom border-2 border-primary mb-2">Panel de administración</h3>

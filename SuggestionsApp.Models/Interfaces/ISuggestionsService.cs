@@ -11,7 +11,7 @@ namespace SuggestionsApp.Models.Interfaces
         Task<bool> InsertSuggestion(Suggestion suggestion, string userId, string captchaToken);
         Task<bool> UpdateSuggestion(Suggestion suggestion, string userId);
         Task<bool> DeleteSuggestion(int id, string userId);
-        Task<bool> ChangeSuggestionApprovalStatus(int id, bool approved);
+        Task<bool> ChangeSuggestionApprovalStatus(int id, bool? approved);
         Task<bool> SetSuggestionStatus(int id, int stateId);
     }
 }

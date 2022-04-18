@@ -88,7 +88,7 @@ namespace SuggestionsApp.Services
         {
             ValidateSuggestionFields(suggestion);
             
-            var hasAdministrationRole = await _userService.HasAdministrationRole(userId);
+            var hasAdministrationRole = await _userService.IsUserInAdministrationRole(userId);
             var existingSuggestion = await GetSuggestionById(suggestion.Id);
 
             if (existingSuggestion.UserId != userId && !hasAdministrationRole)
@@ -109,7 +109,7 @@ namespace SuggestionsApp.Services
 
         public async Task<bool> DeleteSuggestion(int id, string userId)
         {
-            var hasAdministrationRole = await _userService.HasAdministrationRole(userId);
+            var hasAdministrationRole = await _userService.IsUserInAdministrationRole(userId);
             var suggestion = await GetSuggestionById(id);
 
             if (suggestion.UserId != userId && !hasAdministrationRole)
@@ -123,14 +123,15 @@ namespace SuggestionsApp.Services
             return affectedRows > 0;
         }
 
-        public async Task<bool> ChangeSuggestionApprovalStatus(int id, bool approved)
+        public async Task<bool> ChangeSuggestionApprovalStatus(int id, bool? approved)
         {
             var suggestion = await GetSuggestionById(id);
             suggestion.Approved = approved;
 
-            var result = await UpdateSuggestion(suggestion, suggestion.UserId);
+            _context.Update(suggestion);
+            var affectedRows = await _context.SaveChangesAsync();
 
-            return result;
+            return affectedRows > 0;
         }
 
         public async Task<bool> SetSuggestionStatus(int id, int stateId)
@@ -138,9 +139,10 @@ namespace SuggestionsApp.Services
             var suggestion = await GetSuggestionById(id);
             suggestion.StateId = stateId;
 
-            var result = await UpdateSuggestion(suggestion, suggestion.UserId);
+            _context.Update(suggestion);
+            var affectedRows = await _context.SaveChangesAsync();
 
-            return result;
+            return affectedRows > 0;
         }
 
         #region HelperMethods
