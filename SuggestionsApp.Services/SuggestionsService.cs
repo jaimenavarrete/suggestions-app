@@ -137,6 +137,25 @@ namespace SuggestionsApp.Services
             return affectedRows > 0;
         }
 
+        public async Task<bool> ChangeSuggestionUpvotesAmount(int id, bool isIncreased)
+        {
+            var suggestion = await GetSuggestionById(id);
+
+            if (isIncreased)
+            {
+                suggestion.UpvotesAmount++;
+            }
+            else
+            {
+                suggestion.UpvotesAmount--;
+            }
+
+            _context.Update(suggestion);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
+        }
+
         public async Task<bool> SetSuggestionStatus(int id, int stateId)
         {
             var suggestion = await GetSuggestionById(id);

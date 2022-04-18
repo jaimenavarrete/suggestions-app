@@ -12,6 +12,8 @@ namespace SuggestionsApp.Models.Interfaces
         Task<bool> UpdateSuggestion(Suggestion suggestion, string userId);
         Task<bool> DeleteSuggestion(int id, string userId);
         Task<bool> ChangeSuggestionApprovalStatus(int id, bool? approved);
+
+        Task<bool> ChangeSuggestionUpvotesAmount(int id, bool isIncreased);
         Task<bool> SetSuggestionStatus(int id, int stateId);
     }
 }

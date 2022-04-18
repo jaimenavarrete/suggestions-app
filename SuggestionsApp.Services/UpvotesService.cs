@@ -49,9 +49,8 @@ namespace SuggestionsApp.Services
             var affectedRows = await _context.SaveChangesAsync();
 
             if (affectedRows == 0) return false;
-            
-            suggestion.UpvotesAmount++;
-            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion, suggestion.UserId);
+
+            var succeeded = await _suggestionsService.ChangeSuggestionUpvotesAmount(upvote.SuggestionId, true);
 
             return succeeded;
         }
@@ -67,10 +66,8 @@ namespace SuggestionsApp.Services
             var affectedRows = await _context.SaveChangesAsync();
 
             if (affectedRows == 0) return false;
-
-            var suggestion = await _suggestionsService.GetSuggestionById(upvote.SuggestionId);
-            suggestion.UpvotesAmount--;
-            var succeeded = await _suggestionsService.UpdateSuggestion(suggestion, suggestion.UserId);
+            
+            var succeeded = await _suggestionsService.ChangeSuggestionUpvotesAmount(upvote.SuggestionId, false);
 
             return succeeded;
         }
