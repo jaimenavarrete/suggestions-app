@@ -35,8 +35,8 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(SuggestionQueryFilter filters)
         {
-            var suggestionsViewModel = await GetSuggestionsViewModel(filters);
             var currentUserId = await _userService.GetLoggedUserId(User);
+            var suggestionsViewModel = await GetSuggestionsViewModel(filters, currentUserId);
 
             foreach (var suggestion in suggestionsViewModel)
             {
@@ -75,8 +75,9 @@ namespace SuggestionsApp.WebUI.Controllers
 
         #region HelperMethods
         
-        private async Task<List<SuggestionViewModel>> GetSuggestionsViewModel(SuggestionQueryFilter filters)
+        private async Task<List<SuggestionViewModel>> GetSuggestionsViewModel(SuggestionQueryFilter filters, string userId)
         {
+            filters.UserId = userId;
             var suggestions = await _suggestionsService.GetSearchedSuggestions(isApproved: true, filters);
             var suggestionsViewModel = _mapper.Map<List<SuggestionViewModel>>(suggestions);
 

@@ -9,6 +9,8 @@
         public DateTime Date { get; set; }
 
         public int UpvotesAmount { get; set; }
+        
+        public bool? Approved { get; set; }
 
         public bool IsUserUpvoteActive { get; set; }
 

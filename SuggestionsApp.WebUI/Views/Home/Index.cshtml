@@ -60,7 +60,7 @@
 
             @foreach(var suggestion in Model.SuggestionsList)
             {
-                <article class="card shadow border-primary overflow-hidden mb-3">
+                <article class="card shadow @(suggestion.Approved is null ? "border-4 border-warning" : (suggestion.Approved == false ? "border-4 border-danger" : "")) overflow-hidden mb-3">
                     <div class="card-body row p-3 d-flex justify-content-between align-items-start">
                         <form asp-controller="Suggestions" asp-action="ChangeSuggestionUpvote" method="post" class="upvote-button col-2 btn text-center border border-2 border-primary rounded d-flex flex-column p-1 @(suggestion.IsUserSuggestion ? "disabled" : "") @(suggestion.IsUserUpvoteActive ? "bg-primary text-white" : "bg-white text-primary")">
                             <input type="hidden" name="suggestionId" id="suggestionId" value="@suggestion.Id" />
@@ -73,6 +73,16 @@
                             <header class="d-lg-flex justify-content-between align-items-start mb-3 pb-1">
                                 <span class="badge py-2 px-4 fs-6 mb-3 order-2" style="background:@suggestion.StateColorHexCode">@suggestion.StateName</span>
                                 <div class="order-1">
+                                    
+                                    @if (suggestion.Approved is null)
+                                    {
+                                        <p class="text-warning mb-0">EN APROBACIÓN</p>
+                                    }
+                                    else if (suggestion.Approved == false)
+                                    {
+                                        <p class="text-danger mb-0">RECHAZADA</p>
+                                    }
+                                    
                                     <h5 class="card-title mb-2">@suggestion.Title</h5>
                                     <h6 class="card-subtitle text-muted">@suggestion.UserName - <time class="text-black-50 small">@suggestion.Date</time></h6>
                                 </div>

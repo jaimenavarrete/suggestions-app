@@ -31,7 +31,7 @@ namespace SuggestionsApp.Services
         public async Task<IEnumerable<Suggestion>> GetSearchedSuggestions(bool? isApproved, SuggestionQueryFilter filters)
         {
             var suggestionsQuery = GetAllSuggestionsQuery()
-                                        .Where(p => p.Approved == isApproved);
+                                        .Where(p => p.Approved == isApproved || p.UserId == filters.UserId);
 
             if (filters.CategoryId is not null)
                 suggestionsQuery = suggestionsQuery.Where(p => p.CategoryId == filters.CategoryId);
@@ -73,10 +73,13 @@ namespace SuggestionsApp.Services
         {
             await ValidateCaptchaField(captchaToken);
             ValidateSuggestionFields(suggestion);
+            
+            var hasAdministrationRole = await _userService.IsUserInAdministrationRole(userId);
 
             suggestion.UserId = userId;
             suggestion.UpvotesAmount = 0;
             suggestion.Date = DateTime.Now;
+            suggestion.Approved = hasAdministrationRole ? true : null;
 
             _context.Add(suggestion);
             var affectedRows = await _context.SaveChangesAsync();

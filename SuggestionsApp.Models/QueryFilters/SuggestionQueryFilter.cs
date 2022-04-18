@@ -8,6 +8,8 @@ public class SuggestionQueryFilter
 
     public string? SearchText { get; set; }
 
+    public string? UserId { get; set; }
+
     public OrderBy OrderBy { get; set; } = OrderBy.DateDesc;
 }
 
