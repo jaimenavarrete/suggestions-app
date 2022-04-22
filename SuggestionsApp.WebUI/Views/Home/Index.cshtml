@@ -76,11 +76,11 @@
                                     
                                     @if (suggestion.Approved is null)
                                     {
-                                        <p class="text-warning mb-0">EN APROBACIÓN</p>
+                                        <p class="text-warning fw-bold mb-0">EN APROBACIÓN</p>
                                     }
                                     else if (suggestion.Approved == false)
                                     {
-                                        <p class="text-danger mb-0">RECHAZADA</p>
+                                        <p class="text-danger fw-bold mb-0">RECHAZADA</p>
                                     }
                                     
                                     <h5 class="card-title mb-2">@suggestion.Title</h5>

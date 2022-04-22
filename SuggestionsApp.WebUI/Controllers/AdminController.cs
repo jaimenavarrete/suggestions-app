@@ -9,7 +9,7 @@ using SuggestionsApp.WebUI.ViewModels;
 
 namespace SuggestionsApp.WebUI.Controllers
 {
-    // [Authorize(Roles = "Admin,Moderador")]
+    [Authorize(Roles = "Admin,Moderador")]
     public class AdminController : Controller
     {
         private readonly ISuggestionsService _suggestionsService;
@@ -317,7 +317,6 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> SuggestionsApproval(SuggestionsApprovalViewModel viewModel)
         {
-            var currentUserId = await _userService.GetLoggedUserId(User);
             var succeeded = await _suggestionsService.ChangeSuggestionApprovalStatus(viewModel.SuggestionId, viewModel.Approved);
 
             if (succeeded && viewModel.Approved)
@@ -351,7 +350,6 @@ namespace SuggestionsApp.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> RejectedSuggestions(RejectedSuggestionsViewModel viewModel)
         {
-            var currentUserId = await _userService.GetLoggedUserId(User);
             var succeeded = await _suggestionsService.ChangeSuggestionApprovalStatus(viewModel.SuggestionId, null);
 
             if (succeeded)
